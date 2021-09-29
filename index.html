@@ -15,7 +15,6 @@
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
 <script src="https://kit.fontawesome.com/362c37dd1b.js" crossorigin="anonymous"></script>
-<script src="dist/clipboard.min.js"></script>
 <script>
   var now = new Date();
   var current_year = now.getFullYear();
@@ -426,15 +425,15 @@
     updatedDate.setDate(selected.getDate() + (w_offset + d_offset));    
 
     document.getElementById("calculated_date").innerHTML = changeDateFormat(updatedDate);
-
+    
     //날짜 계산할 때, 복사 버튼의 텍스트도 모두 업데이트함
-    btn1_1 = copyDateFormat(selected, "DMmm");
+    btn1_1 = copyDateFormat(selected, "DMmm");    
     document.getElementById("f1-1").innerHTML = btn1_1;
 
-    btn1_2 = copyDateFormat(selected, "DMmmYY");
+    btn1_2 = copyDateFormat(selected, "DMmmYY");    
     document.getElementById("f1-2").innerHTML = btn1_2;
 
-    btn1_3 = copyDateFormat(selected, "MD");
+    btn1_3 = copyDateFormat(selected, "MD");    
     document.getElementById("f1-3").innerHTML = btn1_3;
 
     btn1_4 = copyDateFormat(selected, "YYMD");
@@ -479,7 +478,7 @@
     initial_date = new Date(current_year, 0, 1);
     generateCalendar(initial_date);
   })
-
+  
   //시작 날짜 복사 버튼 누를 시, 클립보드로 카피하는 이벤트 함수
   var sCopy1 = document.getElementById('f1-1');
   sCopy1.addEventListener('click', function(){
@@ -522,7 +521,7 @@
   var cCopy5 = document.getElementById('f2-5');
   cCopy5.addEventListener('click', function(){
     CopyToClipboard('f2-5');
-  })
+  })  
 
   //오늘 날짜 누를 시, 해당 년도로 이동
   var goToday = document.getElementById('showToday');
@@ -560,6 +559,17 @@
   }
 
   function CopyToClipboard(id){
+    var txt = document.getElementById(id).innerText;
+    console.log(txt);
+    const t = document.createElement("textarea");
+    document.body.appendChild(t);
+    t.value = txt;
+    t.select();
+    document.execCommand('copy');
+    document.body.removeChild(t);
+  }
+
+  function CopyToClipboard2(id){
     var r = document.createRange();
     r.selectNode(document.getElementById(id));
     window.getSelection().removeAllRanges();
@@ -572,7 +582,7 @@
     var year = date.getFullYear();
     var month = date.getMonth();
     var day = date.getDate();
-    var dateString = "";
+    var dateString = '';
 
     if(type == "DMmm"){
       dateString = day + " " + monthName[month];
@@ -580,8 +590,6 @@
       else{
         dateString = dateString + ".";
       }
-      
-      return dateString;
     }
 
     if(type == "DMmmYY"){
@@ -591,30 +599,25 @@
       else{
         dateString += ".";
       }
-
       dateString += " " + year.toString().substr(-2);
-
-      return dateString;
     }
 
     if(type == "MD"){
-      dateString = (month + 1) + "/" + day;
-
-      return dateString;
+      dateString = (month + 1) + "/" + day;      
     }
 
     if(type == "YYMD"){
-      dateString = "'" + year.toString().substr(-2) + "." + (month + 1) + "/" + day;
-
-      return dateString;      
+      dateString = "'" + year.toString().substr(-2) + "." + (month + 1) + "/" + day;      
     }
 
     if(type == "YYYYMMDD"){
       month = ('0' + (month + 1)).slice(-2);
       day = ('0' + day).slice(-2);
-      dateString = year + '-' + month  + '-' + day;
-      return dateString;
-    }    
+      dateString = year + '-' + month  + '-' + day;      
+    }
+
+    dateString = dateString.replace(/(\r\n|\n|\r)/gm, "");
+    return dateString;
   }
 
   function autoRotate(){
