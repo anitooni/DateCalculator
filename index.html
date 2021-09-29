@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset='utf-8' />
+<meta name="viewport" content="width=device-width, initial-scale=0.45, minimum-scale=0.45, maximum-scale=1.0, user-scalable=yes">
 <meta property="og:type" content="website"> 
 <meta property="og:title" content="Date Calculator for PM">
 <meta property="og:description" content="You can calculate the date in years, weeks and days.">
@@ -19,15 +20,15 @@
   var selected = now;
 </script>
 <style>
-  @media( orientation: portrait ){
+  @media (orientation: portrait) {
     html {
-      transform: rotate(90deg);
+      transform: rotate(-90deg);
       transform-origin: top left;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 98%;
-      height: 80%;
+      position:fixed;
+      top: 98%;
+      right: 0;
+      width: 100vh;
+      height: 100vw;
     }
   }
 
@@ -36,7 +37,10 @@
     width: 98%;
     margin: 10px 10px 10px 10px;
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-    text-align: center;    
+    text-align: center;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
   }
 
   #container{
@@ -113,7 +117,10 @@
   .fc .fc-toolbar.fc-header-toolbar {
     margin-bottom: 0.3em;
   }
-  .fc-col-header { background-color:rgb(231, 231, 231); }
+  .fc-col-header { background-color:rgb(231, 231, 231); width:100% !important;}
+  .fc-daygrid-body, .fc-daygrid-body-unbalanced, .fc-daygrid-body-natural, .fc-scrollgrid-sync-table {width:100% !important;}
+  .fc-daygrid-day-number {font-size: 1em;}
+  .fc-scrollgrid-sync-table {width:100% !important;}
   .fc-day-sun {color: rgb(223, 64, 98);}
   .fc-day-sat {color: rgb(62, 73, 218);}
   .fc-toolbar-title {font-size: 1.3em !important;}
