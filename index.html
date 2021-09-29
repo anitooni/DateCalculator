@@ -20,19 +20,27 @@
     width: 100%;
     margin: 10px 10px 10px 10px;
     font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    text-align: center;    
+  }
+
+  #container{
+    display:inline-block;
+    width: 1280px;
+    height: 768px;
   }
 
   #calculate{
-    width: 17%;
-    height: 85%;
+    width: 230px;
+    height: 738px;
     margin: 5px 10px 5px 5px;
     float: left;
-    background-color: rgb(221, 221, 221);
+    padding-top: 30px;    
+    background-color: rgb(235, 235, 235);
   }
 
   #calCanvas{
     float: left;
-    width: 80%;
+    width: 1000px;
     height: 100%;
     margin-left: 20px;
   }
@@ -49,12 +57,12 @@
   }
 
   #viewCal{
-    height: 80%;
+    height: 100%;
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 0px;
-    grid-auto-rows: minmax(100px, auto)
+    grid-auto-rows: minmax(250px, 500px)
   }
 
   #Jan, #Feb, #Mar, #Apr, #May, #Jun, #Jul, #Aug, #Sep, #Oct, #Nov, #Dec{
@@ -92,46 +100,56 @@
   .fc-col-header { background-color:rgb(231, 231, 231); }
   .fc-day-sun {color: rgb(223, 64, 98);}
   .fc-day-sat {color: rgb(62, 73, 218);}
+  .fc-toolbar-title {font-size: 1.3em !important;}
 
   #yearCont, #weekCont, #dayCont{
     font-size: 1em;
     font-weight: 600;
     width: 40%;
     text-align: center;
-    border: 1px solid #e6e6e6;
+    border: 1px solid #acacac;
   }
 
-  #selected_div, #calculated_div, #direction_down{
-    text-align: center;
-    font-size: 2em;    
+  #selected_div, #calculated_div, #direction_down1, #direction_down2 {
+    text-align: left;
+    font-size: 1.6em;    
     font-weight: 600;    
-    margin-top: 25px;
-    margin-bottom: 25px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 12px;
   }
 
   #calculated_date{
     color:rgb(41, 41, 187);
   }
 
-  #direction_down{    
+  #direction_down1, #direction_down2{    
     color:rgb(109, 109, 109);
+    text-align: center;
+    margin-left: 0px;
+    padding-top: 10px;
     padding-bottom: 10px;
+  }
+
+  #direction_down1{
     border-bottom: 1px solid #ffffff;
+  }
+  #direction_down2{
+    border-top: 1px solid #ffffff;
   }
 
   #yearCont_div, #weekCont_div, #dayCont_div{
-    font-size: 1.5em;
+    font-size: 1.2em;
     font-weight: 600;
     text-align: left;
-    margin-left: 45px;
+    margin-left: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
   }
 
   #indicator{
-    font-size: 0.5em;
-    text-align: left;
-    margin-left: 30px;
+    font-size: 0.45em;
+    text-align: left;    
   }
 
   #copyButton{
@@ -143,7 +161,7 @@
   #cBtn{
     display: table;
     border: 1px solid #ffffff;
-    background-color: #e6e6e6;
+    background-color: #d3d3d3;
     height: 30px;
     margin: 2px 2px 2px 2px;    
   }
@@ -165,6 +183,7 @@
 </style>
 </head>
 <body>
+  <div id="container">
     <div id="calculate">      
       <div id="selected_div">
         <div id="indicator"> START DATE </div>
@@ -179,11 +198,11 @@
         <div id = "cBtn"> <div class="txt" id="f1-5">(YYYY-MM-DD)</div></div>
       </div>
 
-      <div id="direction_down"><i class="fas fa-chevron-circle-down"></i></div>
-      <div id="yearCont_div"> <i class="fas fa-plus"></i>  <input type="number" id="yearCont" min="-30" max="30" value="0" oninput="calculateDate()"></input> year(s) </div>
-      <div id="weekCont_div"> <i class="fas fa-plus"></i>  <input type="number" id="weekCont" min="-200" max="200" value="0" oninput="calculateDate()"></input> week(s) </div>
-      <div id="dayCont_div"> <i class="fas fa-plus"></i>  <input type="number" id="dayCont" min="-3000" max="3000" value="0" oninput="calculateDate()"></input> day(s) </div>
-      <div id="direction_down"><i class="fas fa-chevron-circle-down"></i></div>      
+      <div id="direction_down1"><i class="fas fa-chevron-circle-down"></i></div>
+      <div id="yearCont_div"> + <input type="number" id="yearCont" min="-30" max="30" value="0" oninput="calculateDate()"></input> year(s) </div>
+      <div id="weekCont_div"> + <input type="number" id="weekCont" min="-200" max="200" value="0" oninput="calculateDate()"></input> week(s) </div>
+      <div id="dayCont_div"> + <input type="number" id="dayCont" min="-3000" max="3000" value="0" oninput="calculateDate()"></input> day(s) </div>
+      <div id="direction_down2"><i class="fas fa-chevron-circle-down"></i></div>      
 
       <div id="calculated_div">
         <div id="indicator"> END DATE </div>
@@ -223,6 +242,7 @@
       </div>
 
     </div>
+  </div>
     
 </body>
 
