@@ -14,10 +14,17 @@
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+
+
 <script src="https://kit.fontawesome.com/362c37dd1b.js" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@300;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
 
 <script>
   var now = new Date();
@@ -25,6 +32,24 @@
   var initial_date = new Date(current_year, 0, 1);
   var selected = now;
 </script>
+
+<script>
+  var mykey = 'AIzaSyCTyUto2el2DJ1oJ0hjk72AlPPA8xgDivw'; // typically like Gtg-rtZdsreUr_fLfhgPfgff
+  var calendarid = 'ko.south_korea#holiday@group.v.calendar.google.com'; // will look somewhat like 3ruy234vodf6hf4sdf5sd84f@group.calendar.google.com
+
+  $.ajax({
+      type: 'GET',
+      url: encodeURI('https://www.googleapis.com/calendar/v3/calendars/' + calendarid + '/events'),
+      dataType: 'json',
+      success: function (response) {
+        console.log(response);
+      },
+      error: function (response) {
+        console.log(response);
+      }
+  });
+</script>
+
 <style>
   /*
   @media only screen and (orientation: portrait) {
@@ -149,9 +174,9 @@
   }
 
   .fc-daygrid-day-events {
-    font-size: 0;
+    font-size: 0em;
     overflow: hidden;
-    height: 0;
+    height: 0em;
   }  
   .fc .fc-toolbar.fc-header-toolbar {
     margin-bottom: 0.3em;
@@ -161,6 +186,7 @@
   .fc-daygrid-day-number {
     font-size: 1em;
     font-weight: 600;
+    z-index: 20;
     /* user-select: none; */
   }
   .fc-scrollgrid-sync-table {width:100% !important;}
@@ -250,8 +276,127 @@
     text-align: center;
     vertical-align: middle;
   }
+
+  .fc-bg-event{
+    background: rgba(196, 52, 52, 0.2) !important;
+    border: 2px solid rgb(196, 52, 52) !important;
+    z-index: 800 !important;
+  }
+  .fc-event-title{
+    height: 0;
+  }
+  .fc-daygrid-day-top:hover, .fc-bg-event:hover, .fc-event:hover{
+    background-color: rgba(150, 150, 150, 0.6) !important;
+  }
+
+  .ko_holiday{
+    color: rgba(0, 0, 0, 0);   
+  }
   
 </style>
+
+<style>
+  .popper,
+  .tooltip {
+    font-family: 'Nanum Gothic', sans-serif;
+    font-weight: 400;
+    font-size: 0.8em;
+    position: absolute;
+    z-index: 9999;
+    background: #FFC107;
+    color: black;
+    width: 80px;
+    border-radius: 3px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.5);
+    padding: 10px;
+    text-align: center;
+  }
+  .style5 .tooltip {
+    background: #1E252B;
+    color: #FFFFFF;
+    max-width: 200px;
+    width: auto;
+    font-size: .8rem;
+    padding: .5em .5em;
+  }
+  .popper .popper__arrow,
+  .tooltip .tooltip-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+    margin: 5px;
+  }
+
+  .tooltip .tooltip-arrow,
+  .popper .popper__arrow {
+    border-color: #FFC107;
+  }
+  .style5 .tooltip .tooltip-arrow {
+    border-color: #1E252B;
+  }
+  .popper[x-placement^="top"],
+  .tooltip[x-placement^="top"] {
+    margin-bottom: 5px;
+  }
+  .popper[x-placement^="top"] .popper__arrow,
+  .tooltip[x-placement^="top"] .tooltip-arrow {
+    border-width: 5px 5px 0 5px;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    bottom: -5px;
+    left: calc(50% - 5px);
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .popper[x-placement^="bottom"],
+  .tooltip[x-placement^="bottom"] {
+    margin-top: 5px;
+  }
+  .tooltip[x-placement^="bottom"] .tooltip-arrow,
+  .popper[x-placement^="bottom"] .popper__arrow {
+    border-width: 0 5px 5px 5px;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    top: -5px;
+    left: calc(50% - 5px);
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .tooltip[x-placement^="right"],
+  .popper[x-placement^="right"] {
+    margin-left: 5px;
+  }
+  .popper[x-placement^="right"] .popper__arrow,
+  .tooltip[x-placement^="right"] .tooltip-arrow {
+    border-width: 5px 5px 5px 0;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    left: -5px;
+    top: calc(50% - 5px);
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .popper[x-placement^="left"],
+  .tooltip[x-placement^="left"] {
+    margin-right: 5px;
+  }
+  .popper[x-placement^="left"] .popper__arrow,
+  .tooltip[x-placement^="left"] .tooltip-arrow {
+    border-width: 5px 0 5px 5px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    right: -5px;
+    top: calc(50% - 5px);
+    margin-left: 0;
+    margin-right: 0;
+  }
+</style>
+
 </head>
 <body>
   <div id="container">
@@ -330,7 +475,7 @@
   function initialzeCalendar(initial_date){
     document.addEventListener('DOMContentLoaded', function() { 
       for (var i = 0; i < monthCal.length; i++){
-        monthCal[i] = new FullCalendar.Calendar(document.getElementById(monthName[i]), {
+        monthCal[i] = new FullCalendar.Calendar(document.getElementById(monthName[i]), {          
           initialDate: initial_date.setMonth(i),
 
           headerToolbar:{
@@ -343,24 +488,44 @@
           aspectRatio: 1,
           contentHeight: "auto",
           nowIndicator: true,
-          editable: true,
-          selectable: true,
+          editable: false,
+          selectable: false,
+          weekNumbers: false,
+          showNonCurrentDates: true,
+          
+          googleCalendarApiKey: 'AIzaSyCTyUto2el2DJ1oJ0hjk72AlPPA8xgDivw',
+          eventSources: [
+            {
+              googleCalendarId: 'qduatr3seur835pk4aolok2900@group.calendar.google.com',
+              overlap: false,
+              display: 'background',
+              className: 'ko_holiday',              
+            }
+          ],
+          eventDidMount: function(info) {
+            var tooltip = new Tooltip(info.el, {
+              title: info.event.title,
+              placement: 'top',
+              trigger: 'hover',
+              container: 'body'
+            });
+           },
 
           //날짜 선택 시, 시작날짜/종료날짜 모두 수정
           dateClick: function(info) {
             document.getElementById("selected_date").innerHTML = changeDateFormat(info.date);
             selected = info.date;
             calculateDate();
-          }
-        })
-        console.log(monthCal[i]);
+          },
+        })        
       }
 
-      for (let i = 0; i < monthCal.length; i++){
-        console.log(monthCal[i]);
+      for (let i = 0; i < monthCal.length; i++){        
         monthCal[i].render();
-
+        var eventList = monthCal[i].getEventSources();        
      }
+
+     
 
      calculateDate();
     })
@@ -382,8 +547,28 @@
           aspectRatio: 1,
           contentHeight: "auto",
           nowIndicator: true,
-          editable: true,
-          selectable: true,
+          editable: false,
+          selectable: false,
+          weekNumbers: false,
+          showNonCurrentDates: true,
+          
+          googleCalendarApiKey: 'AIzaSyCTyUto2el2DJ1oJ0hjk72AlPPA8xgDivw',
+          eventSources: [
+            {
+              googleCalendarId: 'qduatr3seur835pk4aolok2900@group.calendar.google.com',
+              overlap: false,
+              display: 'background',
+              className: 'ko_holiday',              
+            }
+          ],
+          eventDidMount: function(info) {
+            var tooltip = new Tooltip(info.el, {
+              title: info.event.title,
+              placement: 'top',
+              trigger: 'hover',
+              container: 'body'
+            });
+           },
 
           //날짜 선택 시, 시작날짜/종료날짜 모두 수정
           dateClick: function(info) {
@@ -391,13 +576,11 @@
             selected = info.date;
             calculateDate();      
           }
-        })
-        console.log(monthCal[i]);
+        })        
       }
 
       for (let i = 0; i < monthCal.length; i++){
-        console.log(monthCal[i]);
-        monthCal[i].render();
+        monthCal[i].render(); 
      }
 
      calculateDate();
