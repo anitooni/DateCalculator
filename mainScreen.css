@@ -1,0 +1,242 @@
+html, body {
+    height: 80%;
+    width: 98%;
+    margin: 10px 10px 10px 10px;
+    font-family: 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 300;
+    text-align: center;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+
+  #container{
+    display:inline-block;
+    width: 1280px;
+    height: 768px;
+  }
+
+  #calculate{
+    width: 230px;
+    height: 738px;
+    margin: 5px 10px 5px 5px;
+    float: left;
+    padding-top: 30px;    
+    background-color: rgb(235, 235, 235);
+  }
+
+  #calCanvas{
+    float: left;
+    width: 1000px;
+    height: 100%;
+    margin-left: 20px;
+  }
+
+  #year{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 2.5em;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  #yearSelector{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  #viewToday{
+    display: flex;
+    width: 77%;
+    height: 100%;
+    align-content: center;
+    justify-content: right;
+  }
+
+  #showToday{    
+    width: 200px;
+    height: 1.5em;
+    font-size: 0.55em;
+    padding-top: 10px;
+    padding-right: 5px;
+    text-align: right;
+    /* user-select: none; */
+  }
+
+  #showToday:hover{
+    background-color: rgb(235, 235, 235);
+  }
+
+  #showToday:active{
+    background-color: rgb(197, 197, 197);
+  }  
+
+  #viewCal{
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0px;
+    grid-auto-rows: minmax(250px, 500px)
+  }
+
+  #Jan, #Feb, #Mar, #Apr, #May, #Jun, #Jul, #Aug, #Sep, #Oct, #Nov, #Dec{
+    float: left;
+    width: 90%;
+    font-size: 0.8em;
+    margin: 0 10px 10px 0;
+    text-align: center;
+  }
+
+  #selected_year{
+    user-select: none;
+  }
+
+  #prev,#next{
+    font-size: 0.7em;
+    border: none;
+    background: none;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  #prev:hover, #next:hover{
+    color: rgb(168, 89, 89);
+  }
+
+  #prev:active, #next:active{
+    color: rgb(185, 22, 22);
+  }
+
+  .fc-daygrid-day-events {
+    font-size: 0em;
+    overflow: hidden;
+    height: 0em;
+  }  
+  .fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 0.3em;
+  }
+  .fc-col-header { background-color:rgb(231, 231, 231); width:100% !important;}
+  .fc-daygrid-body, .fc-daygrid-body-unbalanced, .fc-daygrid-body-natural, .fc-scrollgrid-sync-table {width:100% !important;}
+  .fc-daygrid-day-number {
+    font-size: 1em;
+    font-weight: 600;
+    z-index: 20;
+    /* user-select: none; */
+  }
+  .fc-scrollgrid-sync-table {width:100% !important;}
+  .fc-day-sun {color: rgb(223, 64, 98);}
+  .fc-day-sat {color: rgb(62, 73, 218);}
+  .fc-toolbar-title {
+    font-size: 1.3em !important;
+    /* user-select: none; */
+  }
+  .fc-highlight{background: rgba(188, 213, 241, 0.7) !important;}
+
+  #yearCont, #weekCont, #dayCont{
+    font-size: 1em;
+    font-weight: 600;
+    width: 40%;
+    text-align: center;
+    border: 1px solid #acacac;
+  }
+
+  #selected_div, #calculated_div, #direction_down1, #direction_down2 {
+    text-align: left;
+    font-size: 1.6em;    
+    font-weight: 600;    
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 12px;
+  }
+
+  #calculated_date{
+    color:rgb(41, 41, 187);
+  }
+
+  #direction_down1, #direction_down2{    
+    color:rgb(109, 109, 109);
+    text-align: center;
+    margin-left: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  #direction_down1{
+    border-bottom: 1px solid #ffffff;
+  }
+  #direction_down2{
+    border-top: 1px solid #ffffff;
+  }
+
+  #yearCont_div, #weekCont_div, #dayCont_div{
+    font-size: 1.2em;
+    font-weight: 600;
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  #indicator{
+    font-size: 0.45em;
+    text-align: left;    
+  }
+
+  #copyButton{
+    display:grid;    
+    grid-template-columns: 1fr 1fr;    
+    width: 100%;    
+  }
+
+  #cBtn{
+    display: table;
+    font-weight: 600;
+    border: 1px solid #ffffff;
+    background-color: #d3d3d3;
+    height: 30px;
+    margin: 2px 2px 2px 2px;    
+  }
+
+  #cBtn:hover{
+    background-color: rgb(200, 199, 201);
+  }
+
+  #cBtn:active{
+    background-color: rgb(109, 109, 109);
+  }
+
+  .txt{
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .fc-bg-event{
+    background: rgba(196, 52, 52, 0.2) !important;
+    border: 2px solid rgb(196, 52, 52) !important;
+    z-index: 800 !important;
+  }
+  .fc-event-title{
+    height: 0;
+  }
+  .fc-daygrid-day-top:hover, .fc-bg-event:hover, .fc-event:hover{
+    background-color: rgba(150, 150, 150, 0.6) !important;
+  }
+
+  .ko_holiday{
+    color: rgba(0, 0, 0, 0);
+  }
+
+  #holiday{
+    color: rgb(70, 70, 70);
+    font-family: 'Nanum Gothic', 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 0.6em;
+    font-weight: 700;
+    padding-top: 2px;
+    height: 25px;
+    user-select: none;
+  }
