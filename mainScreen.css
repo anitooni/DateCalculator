@@ -12,22 +12,22 @@ html, body {
 
   #container{
     display:inline-block;
-    width: 1280px;
+    width: 1600px;
     height: 768px;
   }
 
   #calculate{
     width: 230px;
-    height: 738px;
+    height: 768px;
     margin: 5px 10px 5px 5px;
     float: left;
-    padding-top: 30px;    
+    padding-top: 10px;    
     background-color: rgb(235, 235, 235);
   }
 
   #calCanvas{
     float: left;
-    width: 1000px;
+    width: 1300px;
     height: 100%;
     margin-left: 20px;
   }
@@ -50,7 +50,7 @@ html, body {
 
   #viewToday{
     display: flex;
-    width: 77%;
+    width: 83%;
     height: 100%;
     align-content: center;
     justify-content: right;
@@ -85,7 +85,7 @@ html, body {
 
   #Jan, #Feb, #Mar, #Apr, #May, #Jun, #Jul, #Aug, #Sep, #Oct, #Nov, #Dec{
     float: left;
-    width: 90%;
+    width: 95%;
     font-size: 0.8em;
     margin: 0 10px 10px 0;
     text-align: center;
@@ -135,6 +135,15 @@ html, body {
     /* user-select: none; */
   }
   .fc-highlight{background: rgba(188, 213, 241, 0.7) !important;}
+  .fc-daygrid-week-number{
+    width: 18px;
+    font-size: 0.5em;
+    font-weight: 300;
+    margin-top: 3px;
+    background-color: #0000000e !important;
+    border-radius: 6px !important;
+    user-select: none;   
+  }
 
   #yearCont, #weekCont, #dayCont{
     font-size: 1em;
@@ -234,9 +243,24 @@ html, body {
   #holiday{
     color: rgb(70, 70, 70);
     font-family: 'Nanum Gothic', 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
-    font-size: 0.6em;
-    font-weight: 700;
+    font-size: 0.75em;
+    font-weight: 600;
     padding-top: 2px;
     height: 25px;
     user-select: none;
+  }
+
+  #global_holiday{
+    width: 200px;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+
+  #CN_holiday, #GE_holiday, #JP_holiday, #UK_holiday, #US_holiday{
+    font-size: 0.8em;
+    font-weight: 600;
+    display:grid;    
+    grid-template-columns: 28px 3fr;
+    text-align: left;
+    margin-bottom: 3px;
   }

@@ -6,52 +6,6 @@ var selected = now;
 var monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var monthCal = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-var holiday_ko = [
-  ['2020-10-09' , '한글날'], ['2020-10-03' , '개천절'], ['2021-09-21' , '추석'], ['2020-06-06' , '현충일'], ['2020-10-01' , '추석'], ['2020-09-30' , '추석 연휴'], ['2020-10-02' , '추석 연휴'],
-  ['2020-12-25' , '크리스마스'], ['2020-01-01' , '신정'], ['2020-08-15' , '광복절'], ['2020-05-05' , '어린이날'], ['2021-02-12' , '설날'], ['2021-02-11' , '설날 연휴'], ['2021-02-13' , '설날 연휴'],
-  ['2021-05-19' , '석가탄신일'], ['2020-03-01' , '삼일절'], ['2020-01-24' , '설날 연휴'], ['2020-01-25' , '설날'], ['2020-01-26' , '설날 연휴'], ['2020-01-27' , '설날 대체공휴일'],
-  ['2022-01-31' , '설날 연휴'], ['2022-02-01' , '설날'], ['2022-02-02' , '설날 연휴'], ['2022-06-01' , '제8회 전국동시지방선거'], ['2023-01-21' , '설날 연휴'], ['2023-01-22' , '설날'],
-  ['2023-01-23' , '설날 연휴'], ['2023-01-24' , '설날 대체공휴일'], ['2023-09-28' , '추석 연휴'], ['2023-09-29' , '추석'], ['2023-09-30' , '추석 연휴'], ['2024-02-09' , '설날 연휴'],
-  ['2024-02-10' , '설날'], ['2024-02-11' , '설날 연휴'], ['2024-02-12' , '설날 대체공휴일'], ['2024-04-10' , '제22대 국회의원 선거'], ['2024-05-06' , '어린이날 대체공휴일'],
-  ['2024-09-16' , '추석 연휴'], ['2024-09-17' , '추석'], ['2024-09-18' , '추석 연휴'], ['2025-01-29' , '설날'], ['2025-01-28' , '설날 연휴'], ['2025-01-30' , '설날 연휴'],
-  ['2025-05-06' , '어린이날 대체공휴일'], ['2025-10-05' , '추석 연휴'], ['2020-04-30' , '석가탄신일'], ['2021-09-20' , '추석 연휴'], ['2021-09-22' , '추석 연휴'], ['2022-05-08' , '석가탄신일'],
-  ['2023-05-27' , '석가탄신일'], ['2024-05-15' , '석가탄신일'], ['2025-05-05' , '석가탄신일'], ['2025-10-06' , '추석'], ['2025-10-07' , '추석 연휴'], ['2025-10-08' , '추석 대체공휴일'],
-  ['2022-03-09' , '제20대 대통령 선거'], ['2020-04-15' , '제21대 국회의원 선거'], ['2026-02-16' , '설날'], ['2026-02-15' , '설날 연휴'], ['2026-02-17' , '설날 연휴'],
-  ['2026-02-18' , '설날 대체공휴일'], ['2026-09-24' , '추석 연휴'], ['2026-09-25' , '추석'], ['2026-09-26' , '추석 연휴'], ['2027-02-05' , '설날'], ['2027-02-04' , '설날 연휴'],
-  ['2027-02-06' , '설날 연휴'], ['2026-05-24' , '석가탄신일'], ['2027-05-13' , '석가탄신일'], ['2027-09-15' , '추석'], ['2027-09-14' , '추석 연휴'], ['2027-09-16' , '추석 연휴'],
-  ['2028-01-25' , '설날'], ['2028-01-24' , '설날 연휴'], ['2028-01-26' , '설날 연휴'], ['2028-05-02' , '석가탄신일'], ['2028-10-03' , '추석'], ['2028-10-02' , '추석 연휴'],
-  ['2028-10-04' , '추석 연휴'], ['2028-10-05' , '추석 대체공휴일'], ['2029-02-12' , '설날'], ['2029-02-11' , '설날 연휴'], ['2029-02-13' , '설날 연휴'], ['2029-02-14' , '설날 대체공휴일'],
-  ['2029-05-20' , '석가탄신일'], ['2029-09-22' , '추석'], ['2029-09-23' , '추석 연휴'], ['2029-09-21' , '추석 연휴'], ['2029-09-24' , '추석 대체공휴일'], ['2030-02-02' , '설날'],
-  ['2030-02-03' , '설날 연휴'], ['2030-02-01' , '설날 연휴'], ['2030-02-04' , '설날 대체공휴일'], ['2030-05-09' , '석가탄신일'], ['2030-09-12' , '추석'], ['2030-09-13' , '추석 연휴'],
-  ['2030-09-11' , '추석 연휴'], ['2031-01-22' , '설날'], ['2031-01-21' , '설날 연휴'], ['2031-01-23' , '설날 연휴'], ['2028-04-12' , '제23대 국회의원 선거'], ['2032-04-14' , '제24대 국회의원 선거'],
-  ['2026-06-03' , '제9회 전국동시지방선거'], ['2030-06-05' , '제10회 전국동시지방선거'], ['2027-03-03' , '제21대 대통령 선거'], ['2020-08-17' , '광복절 임시공휴일'], ['2021-08-16' , '광복절 대체공휴일'],
-  ['2021-10-04' , '개천절 대체공휴일'], ['2021-10-11' , '한글날 대체공휴일'], ['2022-10-10' , '한글날 대체공휴일'], ['2026-03-02' , '삼일절 대체공휴일'], ['2025-03-03' , '삼일절 대체공휴일'],
-  ['2026-08-17' , '광복절 대체공휴일'], ['2026-10-05' , '개천절 대체공휴일'], ['2027-08-16' , '광복절 대체공휴일'], ['2027-10-04' , '개천절 대체공휴일'], ['2027-10-11' , '한글날 대체공휴일'],
-  ['2029-05-07' , '어린이날 대체공휴일'], ['2022-09-10' , '추석'], ['2022-09-09' , '추석 연휴'], ['2022-09-11' , '추석 연휴'], ['2022-09-12' , '추석 대체공휴일'], ['2030-05-06' , '어린이날 대체공휴일'],
-  ['2031-03-03' , '삼일절 대체공휴일'], ['2032-02-10' , '설날'], ['2032-02-09' , '설날 휴일'], ['2032-02-11' , '설날 휴일'], ['2031-10-01' , '추석'], ['2031-10-02' , '추석 연휴'], ['2031-09-30' , '추석 연휴']
-]
-
-//계산된 날짜가 한국의 공휴일과 맞는지 확인해서 return 해 주는 함수
-function holidayMatching(date){
-  var result = "Working day";    
-  var MonthDay = date.substr(5, 5);     
-  for (var i = 0 ; i < holiday_ko.length ; i++){
-    if(date == holiday_ko[i][0]){
-      result = holiday_ko[i][1];
-    }
-    else{
-      if(MonthDay == "01-01"){ result = "신정" }
-      if(MonthDay == "03-01"){ result = "삼일절" }
-      if(MonthDay == "05-05"){ result = "어린이날" }
-      if(MonthDay == "06-06"){ result = "현충일" }
-      if(MonthDay == "08-15"){ result = "광복절" }
-      if(MonthDay == "10-03"){ result = "개천절" }
-      if(MonthDay == "10-09"){ result = "한글날" }
-      if(MonthDay == "12-25"){ result = "크리스마스" }        
-    }
-  }
-  return result;
-}
 
 //최초 실행 시, FullCalendar로부터 오늘 날짜 기준의 1년치 달력을 불러오는 함수
 function initialzeCalendar(initial_date){
@@ -72,7 +26,8 @@ function initialzeCalendar(initial_date){
         nowIndicator: true,
         editable: false,
         selectable: false,
-        weekNumbers: false,
+        weekNumbers: true,
+        weekText: "",
         showNonCurrentDates: true,
         
         googleCalendarApiKey: 'AIzaSyCTyUto2el2DJ1oJ0hjk72AlPPA8xgDivw',
@@ -129,7 +84,8 @@ function generateCalendar(initial_date){
         nowIndicator: true,
         editable: false,
         selectable: false,
-        weekNumbers: false,
+        weekNumbers: true,
+        weekText: "",
         showNonCurrentDates: true,
         
         googleCalendarApiKey: 'AIzaSyCTyUto2el2DJ1oJ0hjk72AlPPA8xgDivw',
@@ -219,7 +175,8 @@ function calculateDate(){
   document.getElementById("f2-5").innerHTML = btn2_5;
 
   //공휴일 여부 파악하여 화면에 표시
-  var holidayName = holidayMatching(btn2_5);
+  var dateformat = changeDateFormat(updatedDate);
+  var holidayName = holidayMatching_ko(dateformat);
   document.getElementById("holiday").innerHTML = holidayName;
   if(holidayName != "Working day"){
     document.getElementById("holiday").style.color = "rgb(196, 52, 52)";
@@ -229,6 +186,36 @@ function calculateDate(){
     document.getElementById("holiday").style.color = "rgb(70, 70, 70)";
     document.getElementById("calculated_date").style.color = "rgb(41, 41, 187)";
   }
+
+  //중국 공휴일 여부 파악하여 화면에 표시
+  holidayName = holidayMatching_cn(dateformat);
+  document.getElementById("CN_result").innerHTML = holidayName;
+  if(holidayName != "Working day"){ document.getElementById("CN_holiday").style.color = "rgb(196, 52, 52)"; }
+  else{ document.getElementById("CN_holiday").style.color = "rgb(70, 70, 70)"; }
+
+  //독일 공휴일 여부 파악하여 화면에 표시
+  holidayName = holidayMatching_ge(dateformat);
+  document.getElementById("GE_result").innerHTML = holidayName;
+  if(holidayName != "Working day"){ document.getElementById("GE_holiday").style.color = "rgb(196, 52, 52)"; }
+  else{ document.getElementById("GE_holiday").style.color = "rgb(70, 70, 70)"; }
+
+  //일본 공휴일 여부 파악하여 화면에 표시
+  holidayName = holidayMatching_jp(dateformat);
+  document.getElementById("JP_result").innerHTML = holidayName;
+  if(holidayName != "Working day"){ document.getElementById("JP_holiday").style.color = "rgb(196, 52, 52)"; }
+  else{ document.getElementById("JP_holiday").style.color = "rgb(70, 70, 70)"; }
+
+  //영국 공휴일 여부 파악하여 화면에 표시
+  holidayName = holidayMatching_uk(dateformat);
+  document.getElementById("UK_result").innerHTML = holidayName;
+  if(holidayName != "Working day"){ document.getElementById("UK_holiday").style.color = "rgb(196, 52, 52)"; }
+  else{ document.getElementById("UK_holiday").style.color = "rgb(70, 70, 70)"; }
+  
+  //미국 공휴일 여부 파악하여 화면에 표시
+  holidayName = holidayMatching_us(dateformat);
+  document.getElementById("US_result").innerHTML = holidayName;
+  if(holidayName != "Working day"){ document.getElementById("US_holiday").style.color = "rgb(196, 52, 52)"; }
+  else{ document.getElementById("US_holiday").style.color = "rgb(70, 70, 70)"; }
 }
 
 document.getElementById("selected_year").innerHTML = current_year;

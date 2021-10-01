@@ -20,6 +20,8 @@
 <script src="https://kit.fontawesome.com/362c37dd1b.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
+<script src='./holiday.js'></script>
+
 <link href='./mainScreen.css' rel='stylesheet'>
 <link href='./toolTip.css' rel='stylesheet'>
 
@@ -53,7 +55,7 @@
       <div id="calculated_div">
         <div id="indicator"> END DATE </div>
         <div><label id="calculated_date"></label></div>
-        <div id = "holiday">Normal Day</div>        
+        <div id = "holiday">Working day</div>        
       </div>
 
       <div id="copyButton">
@@ -62,7 +64,25 @@
         <div id = "cBtn"> <div class="txt" id="f2-3">(M/D)</div> </div>
         <div id = "cBtn"> <div class="txt" id="f2-4">('YY.M/D)</div> </div>
         <div id = "cBtn"> <div class="txt" id="f2-5">(YYYY-MM-DD)</div></div>
-      </div>      
+      </div>    
+
+      <div id="global_holiday">
+        <div id = "CN_holiday">
+          <div>CN:</div> <div id="CN_result">Working day</div>
+        </div>
+        <div id = "GE_holiday">
+          <div>GE:</div> <div id="GE_result">Working day</div>
+        </div>
+        <div id = "JP_holiday">
+          <div>JP:</div> <div id="JP_result">Working day</div>
+        </div>
+        <div id = "UK_holiday">
+          <div>UK:</div> <div id="UK_result">Working day</div>
+        </div>
+        <div id = "US_holiday">
+          <div>US:</div> <div id="US_result">Working day</div>
+        </div>
+      </div>
     </div>
 
     <div id="calCanvas">
