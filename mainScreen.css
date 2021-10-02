@@ -85,7 +85,7 @@ html, body {
 
   #Jan, #Feb, #Mar, #Apr, #May, #Jun, #Jul, #Aug, #Sep, #Oct, #Nov, #Dec{
     float: left;
-    width: 90%;
+    width: 93%;
     font-size: 0.8em;
     margin: 0 10px 10px 0;
     text-align: center;
@@ -130,7 +130,8 @@ html, body {
   .fc-scrollgrid-sync-table {width:100% !important;}
   .fc-day-sun{
     color: rgb(223, 64, 98);
-    width: 20%;
+    text-align: right;
+    width: 18%;
   }
   .fc-day-sat {color: rgb(62, 73, 218);}
   .fc-toolbar-title {
