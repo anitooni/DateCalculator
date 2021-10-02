@@ -12,7 +12,7 @@ html, body {
 
   #container{
     display:inline-block;
-    width: 1600px;
+    width: 1280px;
     height: 768px;
   }
 
@@ -27,7 +27,7 @@ html, body {
 
   #calCanvas{
     float: left;
-    width: 1300px;
+    width: 1000px;
     height: 100%;
     margin-left: 20px;
   }
@@ -85,7 +85,7 @@ html, body {
 
   #Jan, #Feb, #Mar, #Apr, #May, #Jun, #Jul, #Aug, #Sep, #Oct, #Nov, #Dec{
     float: left;
-    width: 95%;
+    width: 90%;
     font-size: 0.8em;
     margin: 0 10px 10px 0;
     text-align: center;
@@ -128,7 +128,10 @@ html, body {
     /* user-select: none; */
   }
   .fc-scrollgrid-sync-table {width:100% !important;}
-  .fc-day-sun {color: rgb(223, 64, 98);}
+  .fc-day-sun{
+    color: rgb(223, 64, 98);
+    width: 20%;
+  }
   .fc-day-sat {color: rgb(62, 73, 218);}
   .fc-toolbar-title {
     font-size: 1.3em !important;
