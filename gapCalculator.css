@@ -21,10 +21,14 @@
 
 #start_datepicker, #end_datepicker{
   text-align: center;
-  width: 253px;    
+  width: 253px;
   font-size: 1.5em;
   font-weight: 600;
-  border: 1px solid rgb(209, 209, 209);
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-bottom: 1px solid rgb(209, 209, 209);
+  pointer-events:none;
 }
 
 #gap_indicator{
