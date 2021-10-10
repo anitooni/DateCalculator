@@ -1,35 +1,80 @@
-html, body {
+  html, body {
     height: 80%;
-    width: 98%;
+    width: 100%;
     margin: 10px 10px 10px 10px;
     font-family: 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
-    font-weight: 300;
+    font-weight: 500;
     text-align: center;
     -webkit-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
   }
 
+  nav{
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    width: 100%;    
+  }
+  nav div {
+    display: flex;
+    position: relative;
+    width: 1280px;
+    height: 50px;
+    margin:0 auto;
+  }
+  nav div a{
+    flex: 1;
+    display: block;
+    color: #8f8f8f;
+    text-decoration: none;    
+    line-height: 50px;
+    text-align: center;    
+  }
+  nav div a.on{
+    color: black;    
+  }
+
+  nav div > span{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    background: coral;
+    width: 50%;
+    opacity: 0;
+    transition: all 0.25s;
+  }
+
+  nav div a:nth-child(1).on ~ span{ left: 0; opacity: 1;}
+  nav div a:nth-child(2).on ~ span{ left: 50%; opacity: 1;}
+
   #container{
     display:inline-block;
+    margin-top: 50px;
     width: 1280px;
     height: 768px;
   }
 
   #calculate{
+    display:block;
     width: 230px;
     height: 768px;
-    margin: 5px 10px 5px 5px;
+    font-weight: 500;
+    margin: 5px 10px 5px 5px;    
     float: left;
     padding-top: 10px;    
     background-color: rgb(235, 235, 235);
   }
 
   #calCanvas{
+    display:block;
     float: left;
     width: 1000px;
     height: 100%;
-    margin-left: 20px;
+    margin-left: 20px;    
   }
 
   #year{
@@ -38,7 +83,7 @@ html, body {
     justify-content: flex-start;
     align-items: center;
     font-size: 2.5em;
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 10px;
   }
 
@@ -61,18 +106,18 @@ html, body {
     height: 1.5em;
     font-size: 0.55em;
     padding-top: 10px;
-    padding-right: 5px;
+    padding-right: 10px;
     text-align: right;
     /* user-select: none; */
   }
-
+   
   #showToday:hover{
     background-color: rgb(235, 235, 235);
   }
 
   #showToday:active{
     background-color: rgb(197, 197, 197);
-  }  
+  }
 
   #viewCal{
     height: 100%;
@@ -86,6 +131,7 @@ html, body {
   #Jan, #Feb, #Mar, #Apr, #May, #Jun, #Jul, #Aug, #Sep, #Oct, #Nov, #Dec{
     float: left;
     width: 93%;
+    font-weight: 500;
     font-size: 0.8em;
     margin: 0 10px 10px 0;
     text-align: center;
@@ -118,16 +164,19 @@ html, body {
   }  
   .fc .fc-toolbar.fc-header-toolbar {
     margin-bottom: 0.3em;
+    font-weight: 500 !important;   
   }
   .fc-col-header { background-color:rgb(231, 231, 231); width:100% !important;}
   .fc-daygrid-body, .fc-daygrid-body-unbalanced, .fc-daygrid-body-natural, .fc-scrollgrid-sync-table {width:100% !important;}
   .fc-daygrid-day-number {
     font-size: 1em;
-    font-weight: 600;
+    font-weight: 500;
     z-index: 20;
     /* user-select: none; */
   }
+  .fc-daygrid-day  {border: 1px solid white !important;}
   .fc-scrollgrid-sync-table {width:100% !important;}
+  .fc-day{font-weight: 500;}
   .fc-day-sun{
     color: rgb(223, 64, 98);
     text-align: right;
@@ -136,42 +185,69 @@ html, body {
   .fc-day-sat {color: rgb(62, 73, 218);}
   .fc-toolbar-title {
     font-size: 1.3em !important;
+    font-weight: 500 !important;
     /* user-select: none; */
   }
   .fc-highlight{background: rgba(188, 213, 241, 0.7) !important;}
   .fc-daygrid-week-number{
     width: 18px;
     font-size: 0.5em;
-    font-weight: 300;
+    font-weight: 500;
     margin-top: 3px;
     background-color: #0000000e !important;
     border-radius: 6px !important;
     user-select: none;   
   }
 
+  .fc-day {border: none !important;}
+
   #yearCont, #weekCont, #dayCont{
     font-size: 1em;
-    font-weight: 600;
+    font-weight: 500;
     width: 40%;
     text-align: center;
-    border: 1px solid #acacac;
+    border: 1px solid #ffffff;
   }
 
   #selected_div, #calculated_div, #direction_down1, #direction_down2 {
     text-align: left;
-    font-size: 1.6em;    
-    font-weight: 600;    
+    font-size: 1.55em;    
+    font-weight: 500 !important;
     margin-top: 15px;
     margin-bottom: 15px;
-    margin-left: 12px;
+    margin-left: 10px;
+    margin-right: 8px;
+    padding: 5px 3px 5px 3px;
   }
 
-  #calculated_date{
-    color:rgb(41, 41, 187);
+  #selected_div, #calculated_div{
+    border-bottom: 1px solid rgb(165, 165, 165);
   }
+
+  /*
+  #selected_div:hover, #calculated_div:hover{
+    background-color: rgb(241, 241, 241);
+    border-top: 1px solid ghostwhite;
+    border-left: 1px solid ghostwhite;
+    border-right: 1px solid rgb(165, 165, 165);
+    border-bottom: 1px solid rgb(165, 165, 165);
+    padding-top: 4px;
+    padding-left: 2px;
+  }  
+
+  #selected_div:active, #calculated_div:active{
+    background-color: rgb(200, 199, 201);
+    border-right: 1px solid ghostwhite;
+    border-bottom: 1px solid ghostwhite;
+    border-top: 1px solid rgb(165, 165, 165);
+    border-left: 1px solid rgb(165, 165, 165);
+    padding-top: 4px;
+    padding-left: 2px;
+  }
+  */
 
   #direction_down1, #direction_down2{    
-    color:rgb(109, 109, 109);
+    color:rgb(139, 139, 139);
     text-align: center;
     margin-left: 0px;
     padding-top: 10px;
@@ -187,9 +263,9 @@ html, body {
 
   #yearCont_div, #weekCont_div, #dayCont_div{
     font-size: 1.2em;
-    font-weight: 600;
+    font-weight: 400;
     text-align: left;
-    margin-left: 20px;
+    margin-left: 30px;
     margin-top: 10px;
     margin-bottom: 10px;
   }
@@ -207,7 +283,7 @@ html, body {
 
   #cBtn{
     display: table;
-    font-weight: 600;
+    font-weight: 500;
     border: 1px solid #ffffff;
     background-color: #d3d3d3;
     height: 30px;
@@ -229,8 +305,8 @@ html, body {
   }
 
   .fc-bg-event{
-    background: rgba(196, 52, 52, 0.2) !important;
-    border: 2px solid rgb(196, 52, 52) !important;
+    background: rgba(196, 52, 52, 0.35) !important;
+    /* border: 2px solid rgb(196, 52, 52) !important; */
     z-index: 800 !important;
   }
   .fc-event-title{
@@ -238,6 +314,10 @@ html, body {
   }
   .fc-daygrid-day-top:hover, .fc-bg-event:hover, .fc-event:hover{
     background-color: rgba(150, 150, 150, 0.6) !important;
+  }
+
+  .fc-dayGridMonth-view, .fc-day{
+    border: 1px solid white;
   }
 
   .ko_holiday{
@@ -248,7 +328,8 @@ html, body {
     color: rgb(70, 70, 70);
     font-family: 'Nanum Gothic', 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
     font-size: 0.75em;
-    font-weight: 600;
+    font-weight: 500;
+    margin-left: 5px;
     padding-top: 2px;
     height: 25px;
     user-select: none;
@@ -262,7 +343,7 @@ html, body {
 
   #CN_holiday, #GE_holiday, #JP_holiday, #UK_holiday, #US_holiday{
     font-size: 0.8em;
-    font-weight: 600;
+    font-weight: 500;
     display:grid;    
     grid-template-columns: 28px 3fr;
     text-align: left;

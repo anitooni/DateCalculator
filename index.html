@@ -18,24 +18,42 @@
 <script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
 
 <script src="https://kit.fontawesome.com/362c37dd1b.js" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment-precise-range-plugin@1.3.0/moment-precise-range.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
 
 <script src='./holiday.js'></script>
 
 <link href='./mainScreen.css' rel='stylesheet'>
+<link href='./gapCalculator.css' rel='stylesheet'>
 <link href='./toolTip.css' rel='stylesheet'>
+<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@300;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
 
 </head>
+
 <body>
+  <nav>
+    <div>        
+      <a href="javascript:screenOnOff('menu1')" class="on" id="menu1"> <span>End Date Calculator</span></a>
+      <a href="javascript:screenOnOff('menu2')" id="menu2"> <span>Duration Calculator</span></a>
+      <span></span>        
+    </div>
+  </nav>
+
   <div id="container">
     <div id="calculate">      
       <div id="selected_div">
         <div id="indicator"> START DATE </div>
-        <div> <label id="selected_date"></label> </div>
+        <div> <label id="selected_date"></label></div>
       </div>
 
       <div id="copyButton">
@@ -55,7 +73,7 @@
       <div id="calculated_div">
         <div id="indicator"> END DATE </div>
         <div><label id="calculated_date"></label></div>
-        <div id = "holiday">Working day</div>        
+        <div id = "holiday"> Working day</div>        
       </div>
 
       <div id="copyButton">
@@ -98,25 +116,51 @@
         </div>
       </div>
 
-      <div id="viewCal">
-        <div id='Jan'></div>
-        <div id='Feb'></div>
-        <div id='Mar'></div>
-        <div id='Apr'></div>
-        <div id='May'></div>
-        <div id='Jun'></div>
-        <div id='Jul'></div>
-        <div id='Aug'></div>
-        <div id='Sep'></div>
-        <div id='Oct'></div>
-        <div id='Nov'></div>
-        <div id='Dec'></div>
+        <div id="viewCal">
+          <div id='Jan'></div>
+          <div id='Feb'></div>
+          <div id='Mar'></div>
+          <div id='Apr'></div>
+          <div id='May'></div>
+          <div id='Jun'></div>
+          <div id='Jul'></div>
+          <div id='Aug'></div>
+          <div id='Sep'></div>
+          <div id='Oct'></div>
+          <div id='Nov'></div>
+          <div id='Dec'></div>
+        </div>
+    </div>
+
+    <div id="gap_calculate">
+      <div id = "start_to_end">
+        <div id="startDate_div">
+          <div id="gap_indicator"> START DATE </div>
+          <div><input type="text" id = "start_datepicker" readonly/></div>
+        </div>
+
+        <div id="minus"><i class="fas fa-minus"></i></div>
+
+        <div id="endDate_div">
+          <div id="gap_indicator"> END DATE </div>
+          <div><input type="text" id="end_datepicker" readonly/></div>
+        </div>
       </div>
 
-    </div>
+      <div id="cal_result">
+        <div id="result-all"></div>
+        <div id="result-month"></div>
+        <div id="result-week"></div>
+        <div id="result-day"></div>
+      </div>
+
+      </div>
+
   </div>    
 </body>
 
 <script src='./calculate.js'></script>
+<script src='./datePicker.js'></script>
+
 
 </html>

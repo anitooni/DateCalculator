@@ -1,0 +1,62 @@
+#gap_calculate{
+  width: 100%;
+  display: flex;    
+  justify-content: center;
+  margin-top: 30px;  
+  padding-bottom: 30px;
+}
+
+#start_to_end{
+  display: flex;    
+}
+
+#gap_indicator{
+  font-size: 0.8em;
+}
+
+#startDate_div,#endDate_div{
+  display:block;
+  text-align: left;
+}
+
+#start_datepicker, #end_datepicker{
+  text-align: center;
+  width: 253px;    
+  font-size: 1.5em;
+  font-weight: 600;
+  border: 1px solid rgb(209, 209, 209);
+}
+
+#gap_indicator{
+  width: 80px;
+}
+
+#minus{
+  padding-top: 1.4em;    
+  width: 40px;
+}
+
+#cal_result{
+  width: 500px;
+  font-size: 2.0em;
+  font-weight: 500;
+  display: block;
+  text-align: left;    
+  margin-left: 30px;
+}
+
+#result-all, #result-month, #result-week, #result-day{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.pika-single{
+  margin-top: 10px;
+  font-family: 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif !important;
+  height: 220px;
+}
+
+.pika-table th, .pika-table td{
+  width: 12% !important;
+  color: black !important;
+}

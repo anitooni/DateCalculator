@@ -1,11 +1,32 @@
 var now = new Date();
 var current_year = now.getFullYear();
 var initial_date = new Date(current_year, 0, 1);
-var selected = now;
+var startDate = new Date(now);
+var endDate = new Date(now);
 
 var monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var monthCal = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+$(document).ready(function(){
+  $('nav a').on('click',function(){
+    $(this).addClass('on');
+    $(this).siblings().removeClass('on');
+  });
+});
+
+function screenOnOff(id){
+  if(id == "menu1"){
+    document.getElementById('calculate').style.display = 'block';
+    document.getElementById('calCanvas').style.display = 'block';
+    document.getElementById('gap_calculate').style.display = 'none';
+  }
+  else if(id == "menu2"){
+    document.getElementById('calculate').style.display = 'none';
+    document.getElementById('calCanvas').style.display = 'none';
+    document.getElementById('gap_calculate').style.display = 'flex';
+  }  
+}
 
 //최초 실행 시, FullCalendar로부터 오늘 날짜 기준의 1년치 달력을 불러오는 함수
 function initialzeCalendar(initial_date){
@@ -51,7 +72,7 @@ function initialzeCalendar(initial_date){
         //날짜 선택 시, 시작날짜/종료날짜 모두 수정
         dateClick: function(info) {
           document.getElementById("selected_date").innerHTML = changeDateFormat(info.date);
-          selected = info.date;
+          startDate = info.date;
           calculateDate();
         },
       })        
@@ -109,7 +130,7 @@ function generateCalendar(initial_date){
         //날짜 선택 시, 시작날짜/종료날짜 모두 수정
         dateClick: function(info) {
           document.getElementById("selected_date").innerHTML = changeDateFormat(info.date);
-          selected = info.date;
+          startDate = info.date;
           calculateDate();      
         }
       })        
@@ -137,45 +158,45 @@ function calculateDate(){
 
   console.log(w_offset);
 
-  var updatedDate = new Date(selected);
-  updatedDate.setYear(selected.getFullYear() + y_offset);    
-  updatedDate.setDate(selected.getDate() + (w_offset + d_offset));    
+  endDate = new Date(startDate);
+  endDate.setYear(startDate.getFullYear() + y_offset);    
+  endDate.setDate(startDate.getDate() + (w_offset + d_offset));    
 
-  document.getElementById("calculated_date").innerHTML = changeDateFormat(updatedDate);
+  document.getElementById("calculated_date").innerHTML = changeDateFormat(endDate);
   
   //날짜 계산할 때, 복사 버튼의 텍스트도 모두 업데이트함
-  btn1_1 = copyDateFormat(selected, "DMmm");    
+  btn1_1 = copyDateFormat(startDate, "DMmm");    
   document.getElementById("f1-1").innerHTML = btn1_1;
 
-  btn1_2 = copyDateFormat(selected, "DMmmYY");    
+  btn1_2 = copyDateFormat(startDate, "DMmmYY");    
   document.getElementById("f1-2").innerHTML = btn1_2;
 
-  btn1_3 = copyDateFormat(selected, "MD");    
+  btn1_3 = copyDateFormat(startDate, "MD");    
   document.getElementById("f1-3").innerHTML = btn1_3;
 
-  btn1_4 = copyDateFormat(selected, "YYMD");
+  btn1_4 = copyDateFormat(startDate, "YYMD");
   document.getElementById("f1-4").innerHTML = btn1_4;
 
-  btn1_5 = copyDateFormat(selected, "YYYYMMDD");
+  btn1_5 = copyDateFormat(startDate, "YYYYMMDD");
   document.getElementById("f1-5").innerHTML = btn1_5;
 
-  btn2_1 = copyDateFormat(updatedDate, "DMmm");
+  btn2_1 = copyDateFormat(endDate, "DMmm");
   document.getElementById("f2-1").innerHTML = btn2_1;
 
-  btn2_2 = copyDateFormat(updatedDate, "DMmmYY");
+  btn2_2 = copyDateFormat(endDate, "DMmmYY");
   document.getElementById("f2-2").innerHTML = btn2_2;
 
-  btn2_3 = copyDateFormat(updatedDate, "MD");
+  btn2_3 = copyDateFormat(endDate, "MD");
   document.getElementById("f2-3").innerHTML = btn2_3;
 
-  btn2_4 = copyDateFormat(updatedDate, "YYMD");
+  btn2_4 = copyDateFormat(endDate, "YYMD");
   document.getElementById("f2-4").innerHTML = btn2_4;
 
-  btn2_5 = copyDateFormat(updatedDate, "YYYYMMDD");
+  btn2_5 = copyDateFormat(endDate, "YYYYMMDD");
   document.getElementById("f2-5").innerHTML = btn2_5;
 
   //공휴일 여부 파악하여 화면에 표시
-  var dateformat = changeDateFormat(updatedDate);
+  var dateformat = changeDateFormat(endDate);
   var holidayName = holidayMatching_ko(dateformat);
   document.getElementById("holiday").innerHTML = holidayName;
   if(holidayName != "Working day"){
@@ -222,6 +243,7 @@ document.getElementById("selected_year").innerHTML = current_year;
 document.getElementById("selected_date").innerHTML = changeDateFormat(now);
 document.getElementById("calculated_date").innerHTML = changeDateFormat(now);
 document.getElementById("showToday").innerHTML = showToday(now);
+document.getElementById("gap_calculate").style.display = 'none';
 
 //이전 년도 버튼을 눌렀을 때 실행하는 함수
 var btnPrev = document.getElementById('prev');

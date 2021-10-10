@@ -30,7 +30,7 @@ function holidayMatching_ko(date){
   var dateOnly = date.substr(0, 10);
   var weekday = date.substr(12, 3);
 
-  console.log(MonthDay, dateOnly, weekday);
+  //console.log(MonthDay, dateOnly, weekday);
 
   if(weekday == "Sat" || weekday == "Sun" ){ result = "Weekend" }
   
