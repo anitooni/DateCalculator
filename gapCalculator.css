@@ -57,6 +57,7 @@
 .pika-single{
   margin-top: 10px;
   font-family: 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif !important;
+  z-index: 500 !important;
   height: 220px;
 }
 

@@ -16,7 +16,8 @@
     top: 0;
     background: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    width: 100%;    
+    width: 100%;
+    z-index: 999;
   }
   nav div {
     display: flex;
