@@ -17,14 +17,14 @@ $(document).ready(function(){
 
 function screenOnOff(id){
   if(id == "menu1"){
-    document.getElementById('calculate').style.display = 'block';
-    document.getElementById('calCanvas').style.display = 'block';
-    document.getElementById('gap_calculate').style.display = 'none';
+    document.getElementById('calculate').style.content-visibility = 'visible';
+    document.getElementById('calCanvas').style.content-visibility = 'visible';
+    document.getElementById('gap_calculate').style.content-visibility = 'hidden';
   }
   else if(id == "menu2"){
-    document.getElementById('calculate').style.display = 'none';
-    document.getElementById('calCanvas').style.display = 'none';
-    document.getElementById('gap_calculate').style.display = 'flex';
+    document.getElementById('calculate').style.style.content-visibility = 'hidden';
+    document.getElementById('calCanvas').style.style.content-visibility = 'hidden';
+    document.getElementById('gap_calculate').style.style.content-visibility = 'visible';
   }  
 }
 
