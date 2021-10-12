@@ -22,9 +22,9 @@ function screenOnOff(id){
     document.getElementById('gap_calculate').style.display = 'none';
   }
   else if(id == "menu2"){
-    document.getElementById('calculate').style.style.display = 'none';
-    document.getElementById('calCanvas').style.style.display = 'none';
-    document.getElementById('gap_calculate').style.style.display = 'flex';
+    document.getElementById('calculate').style.display = 'none';
+    document.getElementById('calCanvas').style.display = 'none';
+    document.getElementById('gap_calculate').style.display = 'flex';
   }  
 }
 
