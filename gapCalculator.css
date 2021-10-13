@@ -27,7 +27,7 @@
   border-top: 0px;
   border-left: 0px;
   border-right: 0px;
-  border-bottom: 1px solid rgb(209, 209, 209);
+  border-bottom: 1px solid #ced4da;
   pointer-events:none;
 }
 
@@ -47,6 +47,7 @@
   display: block;
   text-align: left;    
   margin-left: 30px;
+  color: #343a40;
 }
 
 #result-all, #result-month, #result-week, #result-day{
@@ -63,5 +64,5 @@
 
 .pika-table th, .pika-table td{
   width: 12% !important;
-  color: black !important;
+  color: #343a40 !important;
 }

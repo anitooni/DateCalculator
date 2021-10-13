@@ -16,14 +16,19 @@ $(document).ready(function(){
 });
 
 function screenOnOff(id){
-  if(id == "menu1"){
-    document.getElementById('calculate').style.display = 'block';
-    document.getElementById('calCanvas').style.display = 'block';
+  if(id == "menu1"){        
+    document.getElementById('end_date_calculator').style.display = 'block';
+    document.getElementById('cal_4y').style.display = 'none';
     document.getElementById('gap_calculate').style.display = 'none';
   }
   else if(id == "menu2"){
-    document.getElementById('calculate').style.display = 'none';
-    document.getElementById('calCanvas').style.display = 'none';
+    document.getElementById('end_date_calculator').style.display = 'none';
+    document.getElementById('cal_4y').style.display = 'block';
+    document.getElementById('gap_calculate').style.display = 'none';
+  }
+  else if(id == "menu3"){
+    document.getElementById('end_date_calculator').style.display = 'none';
+    document.getElementById('cal_4y').style.display = 'none';
     document.getElementById('gap_calculate').style.display = 'flex';
   }  
 }
@@ -200,50 +205,51 @@ function calculateDate(){
   var holidayName = holidayMatching_ko(dateformat);
   document.getElementById("holiday").innerHTML = holidayName;
   if(holidayName != "Working day"){
-    document.getElementById("holiday").style.color = "rgb(196, 52, 52)";
-    document.getElementById("calculated_date").style.color = "rgb(196, 52, 52)";
+    document.getElementById("holiday").style.color = "#f03e3e";
+    document.getElementById("calculated_date").style.color = "#f03e3e";
   }
   else{
-    document.getElementById("holiday").style.color = "rgb(70, 70, 70)";
-    document.getElementById("calculated_date").style.color = "rgb(41, 41, 187)";
+    document.getElementById("holiday").style.color = "#4263eb";
+    document.getElementById("calculated_date").style.color = "#4263eb";
   }
 
   //중국 공휴일 여부 파악하여 화면에 표시
   holidayName = holidayMatching_cn(dateformat);
   document.getElementById("CN_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("CN_holiday").style.color = "rgb(196, 52, 52)"; }
-  else{ document.getElementById("CN_holiday").style.color = "rgb(70, 70, 70)"; }
+  if(holidayName != "Working day"){ document.getElementById("CN_holiday").style.color = "#f03e3e"; }
+  else{ document.getElementById("CN_holiday").style.color = "#343a40"; }
 
   //독일 공휴일 여부 파악하여 화면에 표시
   holidayName = holidayMatching_ge(dateformat);
   document.getElementById("GE_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("GE_holiday").style.color = "rgb(196, 52, 52)"; }
-  else{ document.getElementById("GE_holiday").style.color = "rgb(70, 70, 70)"; }
+  if(holidayName != "Working day"){ document.getElementById("GE_holiday").style.color = "#f03e3e"; }
+  else{ document.getElementById("GE_holiday").style.color = "#343a40"; }
 
   //일본 공휴일 여부 파악하여 화면에 표시
   holidayName = holidayMatching_jp(dateformat);
   document.getElementById("JP_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("JP_holiday").style.color = "rgb(196, 52, 52)"; }
-  else{ document.getElementById("JP_holiday").style.color = "rgb(70, 70, 70)"; }
+  if(holidayName != "Working day"){ document.getElementById("JP_holiday").style.color = "#f03e3e"; }
+  else{ document.getElementById("JP_holiday").style.color = "#343a40"; }
 
   //영국 공휴일 여부 파악하여 화면에 표시
   holidayName = holidayMatching_uk(dateformat);
   document.getElementById("UK_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("UK_holiday").style.color = "rgb(196, 52, 52)"; }
-  else{ document.getElementById("UK_holiday").style.color = "rgb(70, 70, 70)"; }
+  if(holidayName != "Working day"){ document.getElementById("UK_holiday").style.color = "#f03e3e"; }
+  else{ document.getElementById("UK_holiday").style.color = "#343a40"; }
   
   //미국 공휴일 여부 파악하여 화면에 표시
   holidayName = holidayMatching_us(dateformat);
   document.getElementById("US_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("US_holiday").style.color = "rgb(196, 52, 52)"; }
-  else{ document.getElementById("US_holiday").style.color = "rgb(70, 70, 70)"; }
+  if(holidayName != "Working day"){ document.getElementById("US_holiday").style.color = "#f03e3e"; }
+  else{ document.getElementById("US_holiday").style.color = "#343a40"; }
 }
 
 document.getElementById("selected_year").innerHTML = current_year;
 document.getElementById("selected_date").innerHTML = changeDateFormat(now);
 document.getElementById("calculated_date").innerHTML = changeDateFormat(now);
 document.getElementById("showToday").innerHTML = showToday(now);
-document.getElementById("gap_calculate").style.display = 'none';
+document.getElementById('gap_calculate').style.display = 'none';
+document.getElementById('cal_4y').style.display = 'none';
 
 //이전 년도 버튼을 눌렀을 때 실행하는 함수
 var btnPrev = document.getElementById('prev');

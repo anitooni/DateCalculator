@@ -1,12 +1,12 @@
 .popper,
 .tooltip {
   font-family: 'Nanum Gothic', 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
-  font-weight: 400;
+  font-weight: 700;
   font-size: 0.8em;
   position: absolute;
-  z-index: 9999;
-  background: #FFC107;
-  color: black;
+  z-index: 8000;
+  background: #ff922b;
+  color: #343a40;
   width: 80px;
   border-radius: 3px;
   box-shadow: 0 0 2px rgba(0,0,0,0.5);
@@ -15,7 +15,7 @@
 }
 .style5 .tooltip {
   background: #1E252B;
-  color: #FFFFFF;
+  color: #343a40;
   max-width: 200px;
   width: auto;
   font-size: .8rem;
@@ -32,10 +32,10 @@
 
 .tooltip .tooltip-arrow,
 .popper .popper__arrow {
-  border-color: #FFC107;
+  border-color: #ffa94d;
 }
 .style5 .tooltip .tooltip-arrow {
-  border-color: #1E252B;
+  border-color: #343a40;
 }
 .popper[x-placement^="top"],
 .tooltip[x-placement^="top"] {
