@@ -4,6 +4,7 @@
   justify-content: center;
   margin-top: 30px;  
   padding-bottom: 30px;
+  position: sticky;
 }
 
 #start_to_end{
