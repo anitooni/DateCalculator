@@ -334,6 +334,27 @@ goToday.addEventListener('click', function(){
   }
 })
 
+//오늘 날짜 누를 시, 해당 년도로 이동
+var end_date_to_start_date = document.getElementById('calculated_div');
+end_date_to_start_date.addEventListener('click', function(){
+  var end_date = document.getElementById("calculated_date").innerHTML
+  document.getElementById("selected_date").innerHTML = end_date
+  document.getElementById("yearCont").value = 0;
+  document.getElementById("weekCont").value = 0;
+  document.getElementById("dayCont").value = 0;
+  startDate = new Date(end_date)
+  console.log(startDate)
+  var eYear = end_date.substr(0,4)
+  if(eYear == current_year){}
+  else{
+    initial_date = new Date(eYear, 0, 1)
+    current_year = eYear;
+    document.getElementById("selected_year").innerHTML = current_year;
+    generateCalendar(initial_date);
+  }
+  calculateDate()
+})
+
 //날짜 포맷 변경하여 'selected_date' 또는 'calculated_date'에 표시하기 위해 리턴: YYYY-MM-DD (weekday)
 function changeDateFormat(date){
   var year = date.getFullYear();
@@ -367,6 +388,34 @@ function CopyToClipboard(id){
   document.execCommand('copy');
   document.body.removeChild(t);
 }
+
+//copy 버튼 눌렀을 때 토스트 팝업 띄우는 함수
+$(".txt").click(function(){
+  var selection = $(this).text();
+  toastr.options = {
+      closeButton: false,
+      progressBar: false,
+      showMethod: 'fadeIn',
+      closeMethod: 'fadeOut',
+      positionClass: "toast-bottom-center",
+      timeOut: 500
+  };
+  output = "'" + selection + "'" + "   is copied"
+  toastr.success(output);
+});
+
+$("#calculated_div").click(function(){
+  toastr.options = {
+      closeButton: false,
+      progressBar: false,
+      showMethod: 'fadeIn',
+      closeMethod: 'fadeOut',
+      positionClass: "toast-bottom-full-width",
+      timeOut: 2000
+  };
+  output = "END DATE is moved to START DATE."
+  toastr.success(output);
+});
 
 //Copy 버튼에 표시되는 날짜 포맷으로 변환하여 리턴하는 함수
 function copyDateFormat(date, type){

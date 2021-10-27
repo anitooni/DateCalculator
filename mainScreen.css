@@ -223,8 +223,8 @@
     text-align: left;
     font-size: 1.55em;    
     font-weight: 500 !important;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: 10px;
     margin-right: 8px;
     padding: 5px 3px 5px 3px;
@@ -234,9 +234,8 @@
     border-bottom: 1px solid #ced4da;
   }
 
-  /*
-  #selected_div:hover, #calculated_div:hover{
-    background-color: rgb(241, 241, 241);
+  #calculated_div:hover{
+    background-color: #e2e6eb;
     border-top: 1px solid ghostwhite;
     border-left: 1px solid ghostwhite;
     border-right: 1px solid rgb(165, 165, 165);
@@ -245,8 +244,8 @@
     padding-left: 2px;
   }  
 
-  #selected_div:active, #calculated_div:active{
-    background-color: rgb(200, 199, 201);
+  #calculated_div:active{
+    background-color: #c9cfd3;
     border-right: 1px solid ghostwhite;
     border-bottom: 1px solid ghostwhite;
     border-top: 1px solid rgb(165, 165, 165);
@@ -254,14 +253,14 @@
     padding-top: 4px;
     padding-left: 2px;
   }
-  */
+
 
   #direction_down1, #direction_down2{    
     color: #ced4da;
     text-align: center;
     margin-left: 0px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   #direction_down1{
@@ -286,10 +285,18 @@
   }
 
   #copyButton{
-    display:grid;    
+    display:grid;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
     width: 100%;    
+  }
+
+  #btn_info{
+    font-size: 0.7em;
+    font-weight: 400;
+    text-align: left;
+    padding-left: 10px;
+    padding-bottom: 4px;
   }
 
   #cBtn{

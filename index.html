@@ -39,6 +39,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@300;600&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 </head>
 
 <body>
@@ -60,7 +63,9 @@
           <div> <label id="selected_date"></label></div>
         </div>
 
-        <div id="copyButton">
+        
+        <div id="btn_info">Button click to copy in clipboard</div>
+        <div id="copyButton">          
           <div id = "cBtn"> <div class="txt" id="f1-1" data-clipboard-target="#f1-1" >(D Mmm)</div> </div>
           <div id = "cBtn"> <div class="txt" id="f1-2">(D Mmm, YY)</div> </div>
           <div id = "cBtn"> <div class="txt" id="f1-3">(M/D)</div> </div>
@@ -80,7 +85,8 @@
           <div id = "holiday"> Working day</div>        
         </div>
 
-        <div id="copyButton">
+        <div id="btn_info">Button click to copy in clipboard</div>
+        <div id="copyButton">          
           <div id = "cBtn"> <div class="txt" id="f2-1">(D Mmm)</div> </div>
           <div id = "cBtn"> <div class="txt" id="f2-2">(D Mmm, YY)</div> </div>
           <div id = "cBtn"> <div class="txt" id="f2-3">(M/D)</div> </div>
