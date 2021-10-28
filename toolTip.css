@@ -7,7 +7,7 @@
   z-index: 8000;
   background: #ff922b;
   color: #343a40;
-  width: 80px;
+  width: auto;
   border-radius: 3px;
   box-shadow: 0 0 2px rgba(0,0,0,0.5);
   padding: 10px;
