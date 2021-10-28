@@ -210,6 +210,13 @@
   }
 
   .fc-day {border: none !important;}
+  .fc-daygrid-day-events{
+    display: none;
+  }
+  .fc-day-today{    
+    box-shadow: 0 0 0 3px #e8590c94 inset;
+    /* background-color: white !important; */
+  }
 
   #yearCont, #weekCont, #dayCont{
     font-size: 1em;
@@ -330,9 +337,14 @@
   }
   .fc-event-title{
     height: 0;
+    display: none;
   }
   .fc-daygrid-day-top:hover, .fc-bg-event:hover, .fc-event:hover{
     background-color: #e8590c8c !important;
+  }
+
+  .fc-daygrid-day-top:active, .fc-bg-event:active, .fc-event:active{
+    background-color: #7535128c !important;
   }
 
   .fc-dayGridMonth-view, .fc-day{
