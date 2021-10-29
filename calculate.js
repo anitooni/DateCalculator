@@ -75,10 +75,11 @@ function initialzeCalendar(initial_date){
          },
 
         //날짜 선택 시, 시작날짜/종료날짜 모두 수정
-        dateClick: function(info) {
+        dateClick: function(info) {          
+          blink_text();
           document.getElementById("selected_date").innerHTML = changeDateFormat(info.date);
           startDate = info.date;
-          calculateDate();
+          calculateDate();          
         },
       })        
     }
@@ -90,6 +91,16 @@ function initialzeCalendar(initial_date){
 
    calculateDate();
   })
+}
+
+function blink_text() {
+  $('#selected_date').fadeOut(300);
+  $('#selected_date').fadeIn(300);
+}
+
+function sleep(ms) {
+  const wakeUpTime = Date.now() + ms;
+  while (Date.now() < wakeUpTime) {}
 }
 
 //년도 변경 시, 달력 전체 재생성
@@ -134,8 +145,9 @@ function generateCalendar(initial_date){
 
         //날짜 선택 시, 시작날짜/종료날짜 모두 수정
         dateClick: function(info) {
+          blink_text();
           document.getElementById("selected_date").innerHTML = changeDateFormat(info.date);
-          startDate = info.date;
+          startDate = info.date;          
           calculateDate();      
         }
       })        
@@ -334,9 +346,10 @@ goToday.addEventListener('click', function(){
   }
 })
 
-//오늘 날짜 누를 시, 해당 년도로 이동
+//End Date 누를 시, Start Date로 변경
 var end_date_to_start_date = document.getElementById('calculated_div');
 end_date_to_start_date.addEventListener('click', function(){
+  blink_text();
   var end_date = document.getElementById("calculated_date").innerHTML
   document.getElementById("selected_date").innerHTML = end_date
   document.getElementById("yearCont").value = 0;
@@ -351,8 +364,8 @@ end_date_to_start_date.addEventListener('click', function(){
     current_year = eYear;
     document.getElementById("selected_year").innerHTML = current_year;
     generateCalendar(initial_date);
-  }
-  calculateDate()
+  }  
+  calculateDate();
 })
 
 //날짜 포맷 변경하여 'selected_date' 또는 'calculated_date'에 표시하기 위해 리턴: YYYY-MM-DD (weekday)
