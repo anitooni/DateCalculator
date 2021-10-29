@@ -41,7 +41,7 @@
 }
 .popper[x-placement^="top"],
 .tooltip[x-placement^="top"] {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .popper[x-placement^="top"] .popper__arrow,
 .tooltip[x-placement^="top"] .tooltip-arrow {
