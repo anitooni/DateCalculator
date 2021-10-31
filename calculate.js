@@ -76,7 +76,7 @@ function initialzeCalendar(initial_date){
 
         //날짜 선택 시, 시작날짜/종료날짜 모두 수정
         dateClick: function(info) {          
-          blink_text();
+          blink_text();          
           document.getElementById("selected_date").innerHTML = changeDateFormat(info.date);
           startDate = info.date;
           calculateDate();          
@@ -94,8 +94,10 @@ function initialzeCalendar(initial_date){
 }
 
 function blink_text() {
-  $('#selected_date').fadeOut(300);
-  $('#selected_date').fadeIn(300);
+  $('#selected_date').fadeOut(150);
+  $('#selected_date').fadeIn(150);
+  $('#selected_date').fadeOut(150);
+  $('#selected_date').fadeIn(150);
 }
 
 function sleep(ms) {
@@ -145,7 +147,7 @@ function generateCalendar(initial_date){
 
         //날짜 선택 시, 시작날짜/종료날짜 모두 수정
         dateClick: function(info) {
-          blink_text();
+          blink_text();          
           document.getElementById("selected_date").innerHTML = changeDateFormat(info.date);
           startDate = info.date;          
           calculateDate();      
@@ -356,7 +358,6 @@ end_date_to_start_date.addEventListener('click', function(){
   document.getElementById("weekCont").value = 0;
   document.getElementById("dayCont").value = 0;
   startDate = new Date(end_date)
-  console.log(startDate)
   var eYear = end_date.substr(0,4)
   if(eYear == current_year){}
   else{
@@ -423,7 +424,7 @@ $("#calculated_div").click(function(){
       progressBar: false,
       showMethod: 'fadeIn',
       closeMethod: 'fadeOut',
-      positionClass: "toast-bottom-full-width",
+      positionClass: "toast-bottom-center",
       timeOut: 2000
   };
   output = "END DATE is moved to START DATE."
