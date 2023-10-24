@@ -109,9 +109,9 @@
 
         <div id="year">
           <div id="yearSelector">
-            <div id="prev"><<</div>
+            <div id="prev"><i class="fas fa-angle-double-left"></i></div>
             <div id="selected_year"></div>
-            <div id="next">>></div>
+            <div id="next"><i class="fas fa-angle-double-right"></i></div>
           </div>        
           <div id="viewToday">
             <div id="showToday"> Today: YYYY-MM-DD </div>
@@ -195,9 +195,27 @@
   </div>    
 </body>
 
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script> 
+
 <script src='./calculate.js'></script>
 <script src='./datePicker.js'></script>
 <script src='./years4_calendar.js'></script>
+<script type="module" src="./con_counter.js"></script>
+<script>
+  var pageName = "DateCalculator"
+
+  var today = new Date();
+  var today_year = today.getFullYear();
+  var today_month = dateReturn(today.getMonth() + 1);
+  var today_day = dateReturn(today.getDate());
+  var today_num = Number("" + today_year + today_month + today_day);
+  var today_str = today_year + "-" + today_month + "-" + today_day;
+
+  function dateReturn(n) {
+    return n < 10 ? "0" + n : n;
+  }
+</script>
 
 
 </html>

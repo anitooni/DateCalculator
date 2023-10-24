@@ -5,8 +5,8 @@
   font-size: 0.8em;
   position: absolute;
   z-index: 8000;
-  background: #ff922b;
-  color: #343a40;
+  background: #b33109;
+  color: #fff;
   width: auto;
   border-radius: 3px;
   box-shadow: 0 0 2px rgba(0,0,0,0.5);
@@ -34,10 +34,10 @@
 
 .tooltip .tooltip-arrow,
 .popper .popper__arrow {
-  border-color: #ffa94d;
+  border-color: #b33109;
 }
 .style5 .tooltip .tooltip-arrow {
-  border-color: #343a40;
+  border-color: #b33109;
 }
 .popper[x-placement^="top"],
 .tooltip[x-placement^="top"] {
