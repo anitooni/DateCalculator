@@ -122,11 +122,11 @@
   }
    
   #showToday:hover{
-    background-color: #adb5bd;
+    color: #e8590c
   }
 
   #showToday:active{
-    background-color: #868e96;
+    transform: translateY(2px);
   }
 
   #viewCal{
@@ -160,11 +160,15 @@
   }
 
   #prev:hover, #next:hover{
-    color: #adb5bd;
+    color: #e8590c;
   }
 
-  #prev:active, #next:active{
-    color: #868e96;
+  #prev:active{
+    transform: translateX(-2px);
+  }
+
+  #next:active{
+    transform: translateX(2px);
   }
 
   .fc-daygrid-day-events {
