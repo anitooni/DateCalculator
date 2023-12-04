@@ -40,14 +40,14 @@ export function checkCounter(pageName){
 
 function addDB(){
     // 데이터 저장  
-  database.ref(today_str+"/DateCalculator").set({
+  database.ref("DailyConnection/" + today_str+"/DateCalculator").set({
     "DayCount": 0,    
   })  
 }
 
 export function countUp(pageName) {
   const updates = {};  
-  updates[today_str + "/" + pageName + "/DayCount"] = firebase.database.ServerValue.increment(1);    
+  updates["DailyConnection/" + today_str + "/" + pageName + "/DayCount"] = firebase.database.ServerValue.increment(1);    
   firebase.database().ref().update(updates);
 }
 
