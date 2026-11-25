@@ -7,7 +7,7 @@
   left: 0;
   z-index: 8000;
   background: var(--tooltip-bg, #111111);
-  color: #fff;
+  color: var(--tooltip-text, #fff);
   border-radius: 3px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
   padding: 6px 10px;
@@ -32,7 +32,7 @@
   transform: translateX(-50%) translateY(10px);
   z-index: 9000;
   background: var(--toast-bg, #2f9e44);
-  color: #fff;
+  color: var(--toast-text, #fff);
   font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   font-size: 0.9em;
   font-weight: 500;

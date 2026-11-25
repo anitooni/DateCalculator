@@ -70,8 +70,8 @@
     --btn-text: #111111;
     --input-bg: #ffffff;
     --input-border: #111111;
-    --th-bg: #f5f5f5;
-    --wk-bg: #f5f5f5;
+    --th-bg: transparent;
+    --wk-bg: transparent;
     --sun: #d90429;
     --sat: #1d4ed8;
     --holiday: #d90429;
@@ -123,6 +123,42 @@
     border: none;
     border-right: 1px solid #e5e5e5;
     padding-right: 16px;
+  }
+
+  html[data-theme="pure-edge"] .num-stepper {
+    border: none;
+    border-bottom: 1px solid #cccccc;
+  }
+
+  html[data-theme="pure-edge"] .num-stepper:focus-within {
+    border-bottom-color: #111111;
+  }
+
+  html[data-theme="pure-edge"] .stepper-btns {
+    border-left: none;
+  }
+
+  html[data-theme="pure-edge"] .step-btn {
+    background-color: transparent;
+    border-bottom: none;
+  }
+
+  html[data-theme="pure-edge"] #font_selector,
+  html[data-theme="pure-edge"] #theme_selector,
+  html[data-theme="pure-edge"] #region_selector {
+    border: none;
+    outline: none;
+  }
+
+  html[data-theme="pure-edge"] .ncal-table th {
+    background-color: transparent;
+    border: none;
+  }
+
+  html[data-theme="pure-edge"] .ncal-table td.ncal-wk,
+  html[data-theme="pure-edge"] .ncal-wk {
+    background-color: transparent;
+    border: none;
   }
 
   html[data-theme="pure-edge"] .cBtn {
@@ -187,6 +223,12 @@
     border-left-color: rgb(165, 165, 165);
   }
 
+  html[data-theme="classic"] .ncal-table th,
+  html[data-theme="classic"] .ncal-table td {
+    border: 1px solid #f1f3f5;
+    border-radius: 0;
+  }
+
   html[data-theme="saas"] {
     --bg: #f4f6f9;
     --nav-bg: rgba(255, 255, 255, 0.92);
@@ -199,7 +241,8 @@
     --cal-card-border: #e2e8f0;
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
-    --cal-row-gap: 24px;
+    --cal-row-gap: 6px;
+    --cal-col-gap: 6px;
     --cal-td-pad: 6.5px;
     --border: #e2e8f0;
     --text: #0f172a;
@@ -225,42 +268,48 @@
   }
 
   html[data-theme="dark"] {
-    --bg: #0b1120;
-    --nav-bg: rgba(19, 28, 49, 0.94);
-    --nav-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
-    --sidebar-bg: #131c31;
-    --sidebar-border: #24324f;
-    --card-bg: #1b2640;
-    --card-border: #2b3b5e;
-    --cal-card-bg: #131c31;
-    --cal-card-border: #24324f;
+    --bg: #000000;
+    --nav-bg: rgba(10, 10, 10, 0.94);
+    --nav-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    --sidebar-bg: #0d0d0d;
+    --sidebar-border: #222222;
+    --card-bg: #161616;
+    --card-border: #262626;
+    --cal-card-bg: #0d0d0d;
+    --cal-card-border: #222222;
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: none;
-    --cal-row-gap: 24px;
+    --cal-row-gap: 6px;
+    --cal-col-gap: 6px;
     --cal-td-pad: 6.5px;
-    --border: #2b3b5e;
-    --text: #f1f5f9;
-    --weekday-text: #f1f5f9;
-    --text-muted: #94a3b8;
-    --nav-inactive: #94a3b8;
+    --border: #262626;
+    --text: #f5f5f5;
+    --weekday-text: #f5f5f5;
+    --text-muted: #8e8e93;
+    --nav-inactive: #737373;
     --accent: #f97316;
-    --accent-hover: rgba(249, 115, 22, 0.28);
-    --accent-active: #ea580c;
-    --btn-bg: #1b2640;
-    --btn-hover: #28375a;
-    --btn-active: #33456e;
-    --btn-text: #f1f5f9;
-    --input-bg: #0b1120;
-    --input-border: #3b4f78;
-    --th-bg: #1b2640;
-    --wk-bg: rgba(148, 163, 184, 0.12);
+    --accent-hover: rgba(255, 255, 255, 0.14);
+    --accent-active: #ffffff;
+    --focus: #e5e5e5;
+    --selected-bg: #e5e5e5;
+    --selected-text: #111111;
+    --btn-bg: #1a1a1a;
+    --btn-hover: #262626;
+    --btn-active: #333333;
+    --btn-text: #f5f5f5;
+    --input-bg: #000000;
+    --input-border: #333333;
+    --th-bg: #161616;
+    --wk-bg: rgba(255, 255, 255, 0.06);
     --sun: #fb7185;
-    --sat: #60a5fa;
+    --sat: #93c5fd;
     --holiday: #fb7185;
     --holiday-bg: rgba(251, 113, 133, 0.16);
-    --end-hover-bg: #233152;
-    --tooltip-bg: #0f172a;
-    --toast-bg: #0f172a;
+    --end-hover-bg: #1f1f1f;
+    --tooltip-bg: #e5e5e5;
+    --tooltip-text: #111111;
+    --toast-bg: #e5e5e5;
+    --toast-text: #111111;
   }
 
   html[data-theme="bento"] {
@@ -275,7 +324,8 @@
     --cal-card-border: #e7e2da;
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 3px rgba(38, 35, 32, 0.04);
-    --cal-row-gap: 24px;
+    --cal-row-gap: 6px;
+    --cal-col-gap: 6px;
     --cal-td-pad: 6.5px;
     --border: #e7e2da;
     --text: #262320;
@@ -566,7 +616,7 @@
    
   #showToday:hover{
     background-color: var(--focus, #111111);
-    color: #ffffff;
+    color: var(--selected-text, #ffffff);
   }
 
   #showToday:active{
@@ -578,8 +628,8 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    row-gap: var(--cal-row-gap, 14px);
-    column-gap: 26px;
+    row-gap: var(--cal-row-gap, 24px);
+    column-gap: var(--cal-col-gap, 26px);
     align-items: start;
   }
 
@@ -822,15 +872,14 @@
 
   .step-btn:active {
     background-color: var(--focus, #111111);
-    color: #ffffff;
+    color: var(--selected-text, #ffffff);
   }
 
   #selected_div {    
     text-align: left;
     font-size: 1.38em;    
     font-weight: 500 !important;
-    margin: 2px 4px 4px;
-    border: 1px solid var(--card-border);
+    margin: 2px 4px 4px;    
     border-radius: 7px;
     background: var(--card-bg);
     padding: 6px 8px;
@@ -838,8 +887,7 @@
 
   /* END DATE + GLOBAL HOLIDAYS 통합 영역 */
   .end-date-group {
-    margin: 2px 4px 4px;
-    border: 1px solid var(--card-border);
+    margin: 2px 4px 4px;    
     border-radius: 7px;
     background: var(--card-bg);
     padding: 6px 8px 8px;
@@ -899,9 +947,11 @@
 
   .copyButton{
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
-    width: 100%;    
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    width: 100%;
+    padding: 0 4px;
+    box-sizing: border-box;
   }
 
   .btn_info{
@@ -937,18 +987,21 @@
   }
 
   .cBtn{
-    display: table;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 5px;
     font-family: var(--font-mono);
     font-size: 0.8em;
     font-weight: 700;
     background-color: var(--btn-bg);
     color: var(--btn-text);
-    height: 25px;
-    width: 94%;
-    margin: 2px;
-    padding: 0 3px;
+    height: 34px;
+    width: 100%;
+    min-width: 0;
+    padding: 0 4px;
     box-sizing: border-box;
+    overflow: hidden;
     cursor: pointer;
     transition: background-color 0.12s ease;
   }
@@ -965,10 +1018,12 @@
   .blink { animation: blinkFade 0.6s ease; }
 
   .txt{
-    display: table-cell;
+    display: block;
+    width: 100%;
     text-align: center;
-    vertical-align: middle;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   #holiday{
@@ -992,6 +1047,16 @@
     grid-template-columns: 28px 1fr;
     text-align: left;
     margin-bottom: 2px;
+  }
+
+  html[data-theme="dark"] #calculated_date[style*="rgb(66, 99, 235)"],
+  html[data-theme="dark"] #holiday[style*="rgb(66, 99, 235)"] {
+    color: #93c5fd !important;
+  }
+
+  html[data-theme="dark"] #calculated_date[style*="rgb(240, 62, 62)"],
+  html[data-theme="dark"] #holiday[style*="rgb(240, 62, 62)"] {
+    color: #fb7185 !important;
   }
 
   html[data-theme="dark"] .global-holiday-row {

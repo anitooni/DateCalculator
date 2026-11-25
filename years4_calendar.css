@@ -24,6 +24,13 @@
   scroll-margin-top: 66px;
 }
 
+.year-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
 #year_1, #year_2, #year_3, #year_4{
   font-family: var(--font-mono);
   font-size: 28px;
@@ -31,7 +38,6 @@
   letter-spacing: -0.02em;
   color: var(--text);
   text-align: left;
-  margin-bottom: 20px;
   padding-left: 2px;
 }
 
@@ -42,6 +48,22 @@
   grid-template-columns: repeat(4, 1fr);
   row-gap: 28px;
   column-gap: 34px;
+}
+
+html[data-theme="saas"] #viewCal_y1,
+html[data-theme="saas"] #viewCal_y2,
+html[data-theme="saas"] #viewCal_y3,
+html[data-theme="saas"] #viewCal_y4,
+html[data-theme="dark"] #viewCal_y1,
+html[data-theme="dark"] #viewCal_y2,
+html[data-theme="dark"] #viewCal_y3,
+html[data-theme="dark"] #viewCal_y4,
+html[data-theme="bento"] #viewCal_y1,
+html[data-theme="bento"] #viewCal_y2,
+html[data-theme="bento"] #viewCal_y3,
+html[data-theme="bento"] #viewCal_y4 {
+  row-gap: 6px;
+  column-gap: 6px;
 }
 
 #viewCal_y1 > div,
@@ -63,40 +85,23 @@ html[data-theme="pure-edge"] #viewCal_y4 > div {
   border-radius: 0 !important;
 }
 
-.year-scroll-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin: 34px 0 28px;
-}
-
-.year-scroll-wrap::before,
-.year-scroll-wrap::after {
-  content: '';
-  flex: 1;
-  height: 1px;
-  background-color: var(--border);
-  opacity: 0.65;
-}
-
 .year-scroll-btns {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .year-scroll-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background-color: var(--card-bg);
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
@@ -104,7 +109,7 @@ html[data-theme="pure-edge"] #viewCal_y4 > div {
 .year-scroll-btn:hover {
   background-color: var(--focus, #111111);
   border-color: var(--focus, #111111);
-  color: #ffffff;
+  color: var(--selected-text, #ffffff);
 }
 
 .year-scroll-btn.scroll-down:hover {
@@ -187,9 +192,19 @@ html[data-theme="pure-edge"] .year-scroll-btn {
     scroll-margin-top: 106px;
   }
 
+  .year-header {
+    margin-bottom: 12px;
+    gap: 10px;
+  }
+
   #year_1, #year_2, #year_3, #year_4 {
     font-size: 20px;
-    margin-bottom: 12px;
+  }
+
+  .year-scroll-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
   }
 
   #viewCal_y1, #viewCal_y2, #viewCal_y3, #viewCal_y4 {
