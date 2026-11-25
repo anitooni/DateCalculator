@@ -1,67 +1,25 @@
 (function (global) {
   'use strict';
 
-  var MONTH_IDS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  var COUNTRIES = [
-    { key: 'cn', rowId: 'CN_holiday', resultId: 'CN_result' },
-    { key: 'ge', rowId: 'GE_holiday', resultId: 'GE_result' },
-    { key: 'jp', rowId: 'JP_holiday', resultId: 'JP_result' },
-    { key: 'uk', rowId: 'UK_holiday', resultId: 'UK_result' },
-    { key: 'us', rowId: 'US_holiday', resultId: 'US_result' }
-  ];
-  var COPY_FORMATS = ['DMmm', 'DMmmYY', 'MD', 'YYMD', 'YYYYMMDD'];
+  var COPY_BTN_COUNT = 6;
 
   var now = new Date();
+  var todayKey = '';
   var currentYear = now.getFullYear();
+  var activeRegion = 'KR';
   var startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   var endDate = new Date(startDate.getTime());
-  var calendars = [];
   var toastTimer = null;
 
   var dom = {};
 
-  function pad2(n) {
-    return n < 10 ? '0' + n : String(n);
-  }
-
   function formatDisplayDate(date) {
-    return (
-      date.getFullYear() + '-' +
-      pad2(date.getMonth() + 1) + '-' +
-      pad2(date.getDate()) +
-      ' (' + WEEKDAYS[date.getDay()] + ')'
-    );
+    return global.HolidayService.formatDateByRegion(date, activeRegion) + ' (' + WEEKDAYS[date.getDay()] + ')';
   }
 
   function formatTodayLabel(date) {
-    return (
-      'Today: ' +
-      date.getFullYear() + '-' +
-      pad2(date.getMonth() + 1) + '-' +
-      pad2(date.getDate())
-    );
-  }
-
-  function formatCopyDate(date, type) {
-    var year = date.getFullYear();
-    var month = date.getMonth();
-    var day = date.getDate();
-
-    switch (type) {
-      case 'DMmm':
-        return day + ' ' + MONTH_IDS[month] + (month === 4 ? '' : '.');
-      case 'DMmmYY':
-        return day + ' ' + MONTH_IDS[month] + (month === 4 ? '' : '.') + ' ' + String(year).slice(-2);
-      case 'MD':
-        return (month + 1) + '/' + day;
-      case 'YYMD':
-        return "'" + String(year).slice(-2) + '.' + (month + 1) + '/' + day;
-      case 'YYYYMMDD':
-        return year + '-' + pad2(month + 1) + '-' + pad2(day);
-      default:
-        return '';
-    }
+    return 'Today: ' + global.HolidayService.formatDateByRegion(date, activeRegion);
   }
 
   function showToast(message, durationMs) {
@@ -74,35 +32,10 @@
     }, durationMs || 800);
   }
 
-  function showTooltip(targetEl, text) {
-    var tip = dom.tooltip;
-    if (!tip || !text) return;
-    tip.textContent = text;
-    tip.classList.add('visible');
-
-    var rect = targetEl.getBoundingClientRect();
-    var tipRect = tip.getBoundingClientRect();
-    var left = rect.left + (rect.width - tipRect.width) / 2 + window.scrollX;
-    var top = rect.top - tipRect.height - 8 + window.scrollY;
-
-    if (left < 4) left = 4;
-    if (top < 4) top = rect.bottom + 8 + window.scrollY;
-
-    tip.style.left = left + 'px';
-    tip.style.top = top + 'px';
-  }
-
-  function hideTooltip() {
-    if (dom.tooltip) {
-      dom.tooltip.classList.remove('visible');
-    }
-  }
-
   function blinkSelectedDate() {
     var el = dom.selectedDate;
     if (!el) return;
     el.classList.remove('blink');
-    // Reflow to restart CSS animation cleanly
     void el.offsetWidth;
     el.classList.add('blink');
   }
@@ -129,6 +62,56 @@
     document.body.removeChild(textarea);
   }
 
+  function renderGlobalHolidays() {
+    var countries = global.HolidayService.REGION_ORDER;
+
+    for (var i = 0; i < dom.globalRows.length; i++) {
+      var code = countries[i];
+      var row = dom.globalRows[i];
+      if (!code) continue;
+
+      var hName = global.HolidayService.match(code, endDate);
+      row.codeEl.textContent = code + ':';
+      row.resultEl.textContent = hName;
+      row.rowEl.style.color = hName !== 'Working day' ? '#f03e3e' : '#343a40';
+    }
+  }
+
+  function updateHolidayLabels() {
+    var primaryHoliday = global.HolidayService.match(activeRegion, endDate);
+    dom.holiday.textContent = primaryHoliday;
+    var primaryColor = primaryHoliday !== 'Working day' ? '#f03e3e' : '#4263eb';
+    dom.holiday.style.color = primaryColor;
+    dom.calculatedDate.style.color = primaryColor;
+
+    renderGlobalHolidays();
+  }
+
+  function renderYearCalendar() {
+    var holidayMap = global.CalendarCore.buildYearHolidayLookup(activeRegion, currentYear);
+    var selectedKey = global.CalendarCore.formatDateKey(startDate);
+
+    for (var m = 0; m < 12; m++) {
+      dom.monthEls[m].innerHTML = global.CalendarCore.buildMonthTableHtml({
+        year: currentYear,
+        monthIndex: m,
+        holidayMap: holidayMap,
+        todayKey: todayKey,
+        selectedKey: selectedKey,
+        clickable: true,
+        variant: 'year'
+      });
+    }
+  }
+
+  function updateSelectedCellHighlight() {
+    var prev = dom.viewCal.querySelector('td.ncal-selected');
+    if (prev) prev.classList.remove('ncal-selected');
+    var targetKey = global.CalendarCore.formatDateKey(startDate);
+    var next = dom.viewCal.querySelector('td.ncal-day:not(.ncal-other)[data-date="' + targetKey + '"]');
+    if (next) next.classList.add('ncal-selected');
+  }
+
   function calculateDate() {
     var yOffset = parseInt(dom.yearCont.value, 10) || 0;
     var wOffset = (parseInt(dom.weekCont.value, 10) || 0) * 7;
@@ -136,87 +119,73 @@
 
     endDate = new Date(startDate.getFullYear() + yOffset, startDate.getMonth(), startDate.getDate() + wOffset + dOffset);
 
-    var endDateFormatted = formatDisplayDate(endDate);
-    dom.calculatedDate.textContent = endDateFormatted;
+    dom.selectedDate.textContent = formatDisplayDate(startDate);
+    dom.calculatedDate.textContent = formatDisplayDate(endDate);
 
-    for (var i = 0; i < COPY_FORMATS.length; i++) {
-      var fmt = COPY_FORMATS[i];
-      dom.startCopyBtns[i].textContent = formatCopyDate(startDate, fmt);
-      dom.endCopyBtns[i].textContent = formatCopyDate(endDate, fmt);
+    var includeYear = !!(dom.includeYearChks && dom.includeYearChks[0] && dom.includeYearChks[0].checked);
+    var startFormats = global.HolidayService.getCopyFormatsByRegion(startDate, activeRegion, includeYear);
+    var endFormats = global.HolidayService.getCopyFormatsByRegion(endDate, activeRegion, includeYear);
+
+    for (var i = 0; i < COPY_BTN_COUNT; i++) {
+      dom.startCopyBtns[i].textContent = startFormats[i] || '';
+      dom.endCopyBtns[i].textContent = endFormats[i] || '';
     }
 
-    var koHoliday = global.HolidayService.match('ko', endDateFormatted);
-    dom.holiday.textContent = koHoliday;
-    var koColor = koHoliday !== 'Working day' ? '#f03e3e' : '#4263eb';
-    dom.holiday.style.color = koColor;
-    dom.calculatedDate.style.color = koColor;
+    updateHolidayLabels();
 
-    for (var c = 0; c < dom.countryNodes.length; c++) {
-      var item = dom.countryNodes[c];
-      var hName = global.HolidayService.match(item.key, endDateFormatted);
-      item.resultEl.textContent = hName;
-      item.rowEl.style.color = hName !== 'Working day' ? '#f03e3e' : '#343a40';
-    }
+    var targetYear = endDate.getFullYear();
+    global.HolidayService.ensureAllCountriesLoaded(targetYear).then(function () {
+      if (endDate.getFullYear() === targetYear) {
+        updateHolidayLabels();
+      }
+    });
+  }
+
+  function loadHolidaysForCalendarYear(year) {
+    global.HolidayService.ensureYearLoaded(activeRegion, year).then(function () {
+      if (currentYear === year) {
+        renderYearCalendar();
+        updateHolidayLabels();
+      }
+    });
   }
 
   function updateCalendarYear(targetYear) {
-    if (targetYear === currentYear && calendars.length === 12) return;
+    if (targetYear === currentYear) return;
     currentYear = targetYear;
     dom.selectedYear.textContent = currentYear;
-    hideTooltip();
-
-    for (var i = 0; i < calendars.length; i++) {
-      calendars[i].gotoDate(new Date(currentYear, i, 1));
-    }
+    global.CalendarCore.hideTooltip();
+    renderYearCalendar();
+    loadHolidaysForCalendarYear(currentYear);
   }
 
-  function initCalendars() {
-    var holidayEventsSource = function (fetchInfo, successCallback) {
-      successCallback(global.HolidayService.getKoreanHolidayEvents(fetchInfo.start, fetchInfo.end));
-    };
-
-    for (var i = 0; i < MONTH_IDS.length; i++) {
-      var cal = new FullCalendar.Calendar(document.getElementById(MONTH_IDS[i]), {
-        initialDate: new Date(currentYear, i, 1),
-        headerToolbar: { start: 'title', center: '', end: '' },
-        titleFormat: { month: 'long' },
-        aspectRatio: 1,
-        contentHeight: 'auto',
-        nowIndicator: true,
-        editable: false,
-        selectable: false,
-        weekNumbers: true,
-        weekText: '',
-        showNonCurrentDates: true,
-        events: holidayEventsSource,
-        eventDidMount: function (info) {
-          var title = info.event.title;
-          info.el.addEventListener('mouseenter', function () {
-            showTooltip(info.el, title);
-          });
-          info.el.addEventListener('mouseleave', hideTooltip);
-        },
-        dateClick: function (info) {
-          blinkSelectedDate();
-          startDate = new Date(info.date.getFullYear(), info.date.getMonth(), info.date.getDate());
-          dom.selectedDate.textContent = formatDisplayDate(startDate);
-          calculateDate();
-        }
-      });
-      calendars.push(cal);
+  function applyRegion(regionCode, savePreference) {
+    if (!global.HolidayService.SUPPORTED_REGIONS[regionCode]) return;
+    activeRegion = regionCode;
+    if (savePreference) {
+      global.HolidayService.saveUserRegion(regionCode);
+    }
+    if (dom.regionSelector) {
+      dom.regionSelector.value = activeRegion;
     }
 
-    for (var j = 0; j < calendars.length; j++) {
-      calendars[j].render();
-    }
-
+    dom.showToday.textContent = formatTodayLabel(now);
     calculateDate();
+    renderYearCalendar();
+    loadHolidaysForCalendarYear(currentYear);
+
+    if (typeof global.onRegionChange === 'function') {
+      global.onRegionChange(activeRegion);
+    }
+    if (typeof global.refreshFourYearCalendarHolidays === 'function') {
+      global.refreshFourYearCalendarHolidays();
+    }
   }
 
   function switchTab(tabId) {
-    hideTooltip();
+    global.CalendarCore.hideTooltip();
 
-    dom.endDatePanel.style.display = tabId === 'menu1' ? 'block' : 'none';
+    dom.endDatePanel.style.display = tabId === 'menu1' ? 'flex' : 'none';
     dom.cal4yPanel.style.display = tabId === 'menu2' ? 'block' : 'none';
     dom.gapCalcPanel.style.display = tabId === 'menu3' ? 'flex' : 'none';
 
@@ -224,20 +193,22 @@
       dom.navLinks[i].classList.toggle('on', dom.navLinks[i].id === tabId);
     }
 
-    // 지연 초기화: 사용자가 해당 탭을 처음 열 때만 무거운 4년 달력 / 피커를 생성
     if (tabId === 'menu2' && typeof global.initFourYearCalendar === 'function') {
       global.initFourYearCalendar(now.getFullYear());
     } else if (tabId === 'menu3' && typeof global.initDurationCalculator === 'function') {
-      global.initDurationCalculator();
+      global.initDurationCalculator(activeRegion);
     }
   }
 
   function cacheDom() {
     dom.navLinks = document.querySelectorAll('nav a[data-tab]');
+    dom.themeSelector = document.getElementById('theme_selector');
+    dom.regionSelector = document.getElementById('region_selector');
     dom.endDatePanel = document.getElementById('end_date_calculator');
     dom.cal4yPanel = document.getElementById('cal_4y');
     dom.gapCalcPanel = document.getElementById('gap_calculate');
 
+    dom.viewCal = document.getElementById('viewCal');
     dom.selectedYear = document.getElementById('selected_year');
     dom.selectedDate = document.getElementById('selected_date');
     dom.calculatedDate = document.getElementById('calculated_date');
@@ -248,27 +219,33 @@
     dom.yearCont = document.getElementById('yearCont');
     dom.weekCont = document.getElementById('weekCont');
     dom.dayCont = document.getElementById('dayCont');
+    dom.includeYearChks = document.querySelectorAll('.include-year-chk');
 
     dom.btnPrev = document.getElementById('prev');
     dom.btnNext = document.getElementById('next');
     dom.calculateSidebar = document.getElementById('calculate');
     dom.toast = document.getElementById('toast-container');
-    dom.tooltip = document.getElementById('holiday-tooltip');
+
+    dom.monthEls = global.CalendarCore.MONTH_IDS.map(function (id) {
+      return document.getElementById(id);
+    });
 
     dom.startCopyBtns = [];
     dom.endCopyBtns = [];
-    for (var i = 1; i <= COPY_FORMATS.length; i++) {
+    for (var i = 1; i <= COPY_BTN_COUNT; i++) {
       dom.startCopyBtns.push(document.getElementById('f1-' + i));
       dom.endCopyBtns.push(document.getElementById('f2-' + i));
     }
 
-    dom.countryNodes = COUNTRIES.map(function (c) {
-      return {
-        key: c.key,
-        rowEl: document.getElementById(c.rowId),
-        resultEl: document.getElementById(c.resultId)
-      };
-    });
+    dom.globalRows = [];
+    var rowEls = document.querySelectorAll('#global_holiday .global-holiday-row');
+    for (var r = 0; r < rowEls.length; r++) {
+      dom.globalRows.push({
+        rowEl: rowEls[r],
+        codeEl: rowEls[r].querySelector('.country-code'),
+        resultEl: rowEls[r].querySelector('.country-result')
+      });
+    }
   }
 
   function bindEvents() {
@@ -279,9 +256,37 @@
       });
     }
 
+    if (dom.themeSelector) {
+      dom.themeSelector.addEventListener('change', function () {
+        var theme = this.value;
+        document.documentElement.setAttribute('data-theme', theme);
+        try {
+          global.localStorage.setItem('dc_theme', theme);
+        } catch (_) {}
+        showToast('Theme: ' + this.options[this.selectedIndex].text, 1000);
+      });
+    }
+
+    if (dom.regionSelector) {
+      dom.regionSelector.addEventListener('change', function () {
+        applyRegion(this.value, true);
+        var info = global.HolidayService.SUPPORTED_REGIONS[activeRegion];
+        showToast('Region changed to ' + info.shortLabel + ' (' + info.dateFormat + ')', 1400);
+      });
+    }
+
     dom.yearCont.addEventListener('input', calculateDate);
     dom.weekCont.addEventListener('input', calculateDate);
     dom.dayCont.addEventListener('input', calculateDate);
+    for (var y = 0; y < dom.includeYearChks.length; y++) {
+      dom.includeYearChks[y].addEventListener('change', function () {
+        var checked = this.checked;
+        for (var k = 0; k < dom.includeYearChks.length; k++) {
+          dom.includeYearChks[k].checked = checked;
+        }
+        calculateDate();
+      });
+    }
 
     dom.btnPrev.addEventListener('click', function () {
       updateCalendarYear(currentYear - 1);
@@ -295,20 +300,50 @@
       updateCalendarYear(now.getFullYear());
     });
 
+    // 단일 이벤트 위임으로 12개월 모든 날짜 클릭 처리
+    dom.viewCal.addEventListener('click', function (e) {
+      var cell = e.target.closest('td[data-date]');
+      if (!cell) return;
+      var parts = cell.getAttribute('data-date').split('-');
+      startDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      blinkSelectedDate();
+      updateSelectedCellHighlight();
+      calculateDate();
+    });
+
+    global.CalendarCore.bindDelegatedTooltip(dom.viewCal);
+
     dom.calculatedDiv.addEventListener('click', function () {
       blinkSelectedDate();
       startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-      dom.selectedDate.textContent = formatDisplayDate(startDate);
       dom.yearCont.value = 0;
       dom.weekCont.value = 0;
       dom.dayCont.value = 0;
-      updateCalendarYear(startDate.getFullYear());
+      if (startDate.getFullYear() !== currentYear) {
+        updateCalendarYear(startDate.getFullYear());
+      } else {
+        updateSelectedCellHighlight();
+      }
       calculateDate();
       showToast('END DATE is moved to START DATE.', 1800);
     });
 
-    // 이벤트 위임으로 복사 버튼 10개를 단일 리스너로 처리
     dom.calculateSidebar.addEventListener('click', function (e) {
+      var stepBtn = e.target.closest('.step-btn');
+      if (stepBtn) {
+        var targetInput = document.getElementById(stepBtn.getAttribute('data-target'));
+        if (!targetInput) return;
+        var delta = parseInt(stepBtn.getAttribute('data-step'), 10) || 0;
+        var minVal = parseInt(targetInput.min, 10);
+        var maxVal = parseInt(targetInput.max, 10);
+        var nextVal = (parseInt(targetInput.value, 10) || 0) + delta;
+        if (!isNaN(minVal) && nextVal < minVal) nextVal = minVal;
+        if (!isNaN(maxVal) && nextVal > maxVal) nextVal = maxVal;
+        targetInput.value = nextVal;
+        calculateDate();
+        return;
+      }
+
       var btn = e.target.closest('.txt');
       if (!btn) return;
       var text = btn.textContent.trim();
@@ -317,16 +352,31 @@
     });
   }
 
+  global.getActiveRegion = function () {
+    return activeRegion;
+  };
+
   document.addEventListener('DOMContentLoaded', function () {
+    todayKey = global.CalendarCore.formatDateKey(now);
     cacheDom();
+    if (dom.themeSelector) {
+      var initialTheme = document.documentElement.getAttribute('data-theme') || 'classic';
+      dom.themeSelector.value = initialTheme;
+    }
+    activeRegion = global.HolidayService.detectUserRegion();
+    if (dom.regionSelector) {
+      dom.regionSelector.value = activeRegion;
+    }
+
     dom.selectedYear.textContent = currentYear;
-    dom.selectedDate.textContent = formatDisplayDate(startDate);
-    dom.calculatedDate.textContent = formatDisplayDate(endDate);
     dom.showToday.textContent = formatTodayLabel(now);
+    dom.endDatePanel.style.display = 'flex';
     dom.gapCalcPanel.style.display = 'none';
     dom.cal4yPanel.style.display = 'none';
 
     bindEvents();
-    initCalendars();
+    renderYearCalendar();
+    calculateDate();
+    loadHolidaysForCalendarYear(currentYear);
   });
 })(window);

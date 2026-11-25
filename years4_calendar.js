@@ -1,57 +1,69 @@
 (function (global) {
   'use strict';
 
-  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var initialized = false;
-  var fourYearCalendars = [];
+  var baseYearCache = new Date().getFullYear();
 
-  function renderYearRow(baseYear, offset) {
-    var yearNum = baseYear + offset;
-    var suffix = '_y' + (offset + 1);
-    var yearLabel = document.getElementById('year_' + (offset + 1));
-    if (yearLabel) {
-      yearLabel.textContent = yearNum;
-    }
+  function getRegion() {
+    return typeof global.getActiveRegion === 'function' ? global.getActiveRegion() : 'KR';
+  }
 
-    for (var m = 0; m < MONTHS.length; m++) {
-      var el = document.getElementById(MONTHS[m] + suffix);
-      if (!el) continue;
+  function renderAllFourYears() {
+    var region = getRegion();
+    var todayKey = global.CalendarCore.formatDateKey(new Date());
+    var monthIds = global.CalendarCore.MONTH_IDS;
 
-      var cal = new FullCalendar.Calendar(el, {
-        initialDate: new Date(yearNum, m, 1),
-        headerToolbar: { start: 'title', center: '', end: '' },
-        titleFormat: { month: 'long' },
-        aspectRatio: 1,
-        contentHeight: 'auto',
-        nowIndicator: true,
-        editable: false,
-        selectable: false,
-        weekNumbers: true,
-        weekText: '',
-        showNonCurrentDates: true
-      });
-      cal.render();
-      fourYearCalendars.push(cal);
+    for (var offset = 0; offset < 4; offset++) {
+      var yearNum = baseYearCache + offset;
+      var suffix = '_y' + (offset + 1);
+      var yearLabel = document.getElementById('year_' + (offset + 1));
+      if (yearLabel) {
+        yearLabel.textContent = yearNum;
+      }
+
+      var holidayMap = global.CalendarCore.buildYearHolidayLookup(region, yearNum);
+      for (var m = 0; m < 12; m++) {
+        var el = document.getElementById(monthIds[m] + suffix);
+        if (el) {
+          el.innerHTML = global.CalendarCore.buildMonthTableHtml({
+            year: yearNum,
+            monthIndex: m,
+            holidayMap: holidayMap,
+            todayKey: todayKey,
+            clickable: false,
+            variant: 'mini'
+          });
+        }
+      }
     }
   }
 
-  // 탭 진입 시 1회만 실행하며, 연도 단위로 프레임을 분할 렌더링해 UI 멈춤 방지
+  function loadAllFourYearsHolidays() {
+    var region = getRegion();
+    var tasks = [];
+    for (var i = 0; i < 4; i++) {
+      tasks.push(global.HolidayService.ensureYearLoaded(region, baseYearCache + i));
+    }
+    return Promise.all(tasks).then(function () {
+      if (getRegion() === region) {
+        renderAllFourYears();
+      }
+    });
+  }
+
+  global.refreshFourYearCalendarHolidays = function () {
+    if (!initialized) return;
+    renderAllFourYears();
+    loadAllFourYearsHolidays();
+  };
+
   global.initFourYearCalendar = function (startYear) {
     if (initialized) return;
     initialized = true;
 
-    var baseYear = startYear || new Date().getFullYear();
-    var offset = 0;
-
-    function renderNextYear() {
-      if (offset >= 4) return;
-      renderYearRow(baseYear, offset);
-      offset += 1;
-      if (offset < 4) {
-        global.requestAnimationFrame(renderNextYear);
-      }
-    }
-
-    renderNextYear();
+    baseYearCache = startYear || new Date().getFullYear();
+    global.CalendarCore.bindDelegatedTooltip(document.getElementById('cal_4y'));
+    renderAllFourYears();
+    loadAllFourYearsHolidays();
   };
 })(window);

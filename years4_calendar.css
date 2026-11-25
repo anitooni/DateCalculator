@@ -1,9 +1,9 @@
 .separator{
   border: none;
   height: 1px;
-  background-color: #adb5bd; /* Modern Browsers */
-  margin-top: 25px;
-  margin-bottom: 25px;
+  background-color: var(--border);
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 #cal_4y{
@@ -17,7 +17,7 @@
   display: flex;
   align-items: flex-start;
   width: 100%;
-  color: #343a40;
+  color: var(--text);
   font-size: 2.5em;
   font-weight: 500;
   margin-bottom: 10px;
@@ -27,9 +27,9 @@
   height: 100%;
   width: 100%;
   display: grid;
-  align-items:flex-start ;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  font-size: 0.25em;
+  align-items: flex-start;
+  grid-template-columns: repeat(6, 1fr);
+  font-size: 12px;
   gap: 10px;    
   margin-left: 20px;
 }
@@ -37,5 +37,32 @@
 #year_1, #year_2, #year_3, #year_4{        
   height: 100%;    
   font-size: 0.7em;
-  color:#343a40;
+  color: var(--text);
+  min-width: 68px;
+}
+
+.ncal-mini .ncal-title {
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.ncal-mini .ncal-table {
+  font-size: 11px;
+}
+
+.ncal-mini .ncal-table th {
+  padding: 2px 0;
+  font-size: 10px;
+}
+
+.ncal-mini .ncal-table td {
+  padding: 3px 0;
+}
+
+.ncal-mini .ncal-wk-col {
+  width: 18px;
+}
+
+.ncal-mini .ncal-wk {
+  font-size: 9px;
 }

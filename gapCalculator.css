@@ -26,16 +26,28 @@
   width: 253px;
   font-size: 1.5em;
   font-weight: 600;
-  border-top: 0px;
-  border-left: 0px;
-  border-right: 0px;
-  border-bottom: 1px solid #ced4da;
-  pointer-events:none;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1.5px solid var(--input-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+#start_datepicker:focus, #end_datepicker:focus{
+  border-color: var(--focus, #111111);
+}
+
+#start_datepicker.input-invalid, #end_datepicker.input-invalid{
+  border-color: var(--sun);
 }
 
 #minus{
   padding-top: 1.4em;    
   width: 40px;
+  color: var(--text-muted);
 }
 
 #cal_result{
@@ -45,7 +57,7 @@
   display: block;
   text-align: left;    
   margin-left: 30px;
-  color: #343a40;
+  color: var(--text);
 }
 
 #result-all, #result-month, #result-week, #result-day{
@@ -53,14 +65,62 @@
   margin-bottom: 15px;
 }
 
-.pika-single{
-  margin-top: 10px;
-  font-family: 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif !important;
-  z-index: 500 !important;
-  height: 220px;
+.npicker {
+  margin-top: 12px;
+  width: 253px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 6px;
+  padding: 10px;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.pika-table th, .pika-table td{
-  width: 12% !important;
-  color: #343a40 !important;
+.npicker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 4px;
+}
+
+.npicker-selects {
+  display: flex;
+  gap: 4px;
+}
+
+.npicker-month,
+.npicker-year {
+  font-family: 'Roboto', 'Noto Sans Display', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 3px 5px;
+  cursor: pointer;
+}
+
+.npicker-nav {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  cursor: pointer;
+  padding: 4px 7px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.npicker-nav:hover {
+  background: var(--btn-hover);
+  color: var(--accent);
+}
+
+.ncal-picker .ncal-table {
+  font-size: 12px;
+}
+
+.ncal-picker .ncal-table td {
+  padding: 5px 0;
 }
