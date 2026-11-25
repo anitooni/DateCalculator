@@ -1,7 +1,7 @@
 (function (global) {
   'use strict';
 
-  var CACHE_PREFIX = 'dc_holidays_v1_';
+  var CACHE_PREFIX = 'dc_holidays_v3_';
   var CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30일 캐시
   var REGION_STORAGE_KEY = 'dc_region';
 
@@ -258,6 +258,96 @@
     });
   }
 
+  var EN_TRANSLATIONS = {
+    KR: {
+      '1월 1일': "New Year's Day",
+      '신정': "New Year's Day",
+      '설날': 'Lunar New Year',
+      '설날 연휴': 'Lunar New Year Holiday',
+      '삼일절': 'Independence Movement Day',
+      '3·1절': 'Independence Movement Day',
+      '어린이날': "Children's Day",
+      '부처님 오신 날': "Buddha's Birthday",
+      '석가탄신일': "Buddha's Birthday",
+      '현충일': 'Memorial Day',
+      '광복절': 'Liberation Day',
+      '추석': 'Chuseok',
+      '추석 연휴': 'Chuseok Holiday',
+      '개천절': 'National Foundation Day',
+      '한글날': 'Hangul Day',
+      '기독탄신일': 'Christmas Day',
+      '크리스마스': 'Christmas Day'
+    },
+    CN: {
+      '元旦': "New Year's Day",
+      '除夕': "Lunar New Year's Eve",
+      '春节': 'Spring Festival',
+      '春节假期': 'Spring Festival Holiday',
+      '清明节': 'Qingming Festival',
+      '劳动节': 'Labour Day',
+      '端午节': 'Dragon Boat Festival',
+      '中秋节': 'Mid-Autumn Festival',
+      '国庆节': 'National Day',
+      '国庆节假期': 'National Day Holiday'
+    },
+    JP: {
+      '元日': "New Year's Day",
+      '成人の日': 'Coming of Age Day',
+      '建国記念の日': 'National Foundation Day',
+      '天皇誕生日': "Emperor's Birthday",
+      '春分の日': 'Vernal Equinox Day',
+      '昭和の日': 'Showa Day',
+      '憲法記念日': 'Constitution Memorial Day',
+      'みどりの日': 'Greenery Day',
+      'こどもの日': "Children's Day",
+      '海の日': 'Marine Day',
+      '山の日': 'Mountain Day',
+      '敬老の日': 'Respect for the Aged Day',
+      '秋分の日': 'Autumnal Equinox Day',
+      'スポーツの日': 'Sports Day',
+      '文化の日': 'Culture Day',
+      '勤労感謝の日': 'Labour Thanksgiving Day',
+      '振替休日': 'Substitute Holiday',
+      '国民の休日': "Citizens' Holiday"
+    },
+    DE: {
+      'Neujahr': "New Year's Day",
+      'Karfreitag': 'Good Friday',
+      'Ostermontag': 'Easter Monday',
+      'Tag der Arbeit': 'Labour Day',
+      'Christi Himmelfahrt': 'Ascension Day',
+      'Pfingstmontag': 'Whit Monday',
+      'Tag der Deutschen Einheit': 'German Unity Day',
+      '1. Weihnachtstag': 'Christmas Day',
+      '2. Weihnachtstag': 'St. Stephen\'s Day'
+    }
+  };
+
+  function formatBilingualName(country, localName, englishName) {
+    if (!localName) return englishName || '';
+    if (country === 'US' || country === 'IN') return localName;
+    if (localName.indexOf('(') !== -1 && localName.indexOf(')') !== -1) return localName;
+
+    var en = englishName;
+    if (!en) {
+      var dict = EN_TRANSLATIONS[country];
+      if (dict && dict[localName]) {
+        en = dict[localName];
+      } else if (country === 'KR') {
+        if (localName.indexOf('대체') !== -1) en = 'Substitute Holiday';
+        else if (localName.indexOf('임시공휴일') !== -1) en = 'Temporary Holiday';
+        else if (localName.indexOf('선거') !== -1) en = 'Election Day';
+      } else if (country === 'JP') {
+        if (localName.indexOf('休日') !== -1) en = 'Substitute Holiday';
+      }
+    }
+
+    if (en && en.toLowerCase() !== localName.toLowerCase()) {
+      return localName + ' (' + en + ')';
+    }
+    return localName;
+  }
+
   // 1) 한국: 우주항공청(구 천문연) 월력요항 기반 오픈소스 holidays-kr
   function parseHolidaysKr(json) {
     var map = Object.create(null);
@@ -267,10 +357,10 @@
       var val = json[date];
       if (Array.isArray(val)) {
         for (var j = 0; j < val.length; j++) {
-          addHolidayEntry(map, date, val[j]);
+          addHolidayEntry(map, date, formatBilingualName('KR', val[j]));
         }
       } else if (typeof val === 'string') {
-        addHolidayEntry(map, date, val);
+        addHolidayEntry(map, date, formatBilingualName('KR', val));
       }
     }
     return map;
@@ -290,9 +380,12 @@
       if (hasGlobal && (country === 'DE' || country === 'US') && item.global === false) {
         continue;
       }
-      var label = (country === 'KR' || country === 'JP' || country === 'CN' || country === 'DE')
-        ? (item.localName || item.name)
-        : (item.name || item.localName);
+      var label;
+      if (country === 'US' || country === 'IN') {
+        label = item.name || item.localName;
+      } else {
+        label = formatBilingualName(country, item.localName || item.name, item.name);
+      }
       addHolidayEntry(map, item.date, label);
     }
     return map;
@@ -303,7 +396,7 @@
     var map = Object.create(null);
     var dates = Object.keys(json || {});
     for (var i = 0; i < dates.length; i++) {
-      addHolidayEntry(map, dates[i], json[dates[i]]);
+      addHolidayEntry(map, dates[i], formatBilingualName('JP', json[dates[i]]));
     }
     if (Object.keys(map).length === 0) throw new Error('Empty holidays-jp response');
     return map;
@@ -338,6 +431,25 @@
     return map;
   }
 
+  // 5) 중국: 국무원 공식 발표 기반 오픈소스 NateScarlet/holiday-cn 파서
+  function parseHolidayCn(json) {
+    var days = json && json.days;
+    if (!Array.isArray(days) || days.length === 0) {
+      throw new Error('Empty holiday-cn response');
+    }
+    var map = Object.create(null);
+    for (var i = 0; i < days.length; i++) {
+      var item = days[i];
+      if (item && item.isOffDay === true && item.date && item.name) {
+        addHolidayEntry(map, item.date, formatBilingualName('CN', item.name));
+      }
+    }
+    if (Object.keys(map).length === 0) {
+      throw new Error('No off-days in holiday-cn response');
+    }
+    return map;
+  }
+
   function fetchFromOpenSource(country, year) {
     var nagerUrl = 'https://date.nager.at/api/v3/PublicHolidays/' + year + '/' + country;
 
@@ -346,6 +458,14 @@
         .then(parseHolidaysKr)
         .catch(function () {
           return fetchJson(nagerUrl).then(function (data) { return parseNagerDate(data, 'KR'); });
+        });
+    }
+
+    if (country === 'CN') {
+      return fetchJson('https://cdn.jsdelivr.net/gh/NateScarlet/holiday-cn@master/' + year + '.json')
+        .then(parseHolidayCn)
+        .catch(function () {
+          return fetchJson(nagerUrl).then(function (data) { return parseNagerDate(data, 'CN'); });
         });
     }
 
@@ -427,7 +547,9 @@
     var fb = FALLBACK_DATA[country];
     if (!fb) return null;
     var mmdd = dateOnly.slice(5, 10);
-    return mergeHolidayNames(fb.fixed[mmdd], fb.variable[dateOnly]);
+    var fixedName = fb.fixed[mmdd] ? formatBilingualName(country, fb.fixed[mmdd]) : null;
+    var varName = fb.variable[dateOnly] ? formatBilingualName(country, fb.variable[dateOnly]) : null;
+    return mergeHolidayNames(fixedName, varName);
   }
 
   function matchHoliday(country, dateObj) {
