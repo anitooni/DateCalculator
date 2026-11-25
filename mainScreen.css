@@ -13,7 +13,7 @@
     --cal-card-pad: 0px;
     --cal-card-shadow: none;
     --cal-row-gap: 24px;
-    --cal-td-pad: 6px;
+    --cal-td-pad: 7.5px;
     --border: #ced4da;
     --text: #343a40;
     --text-muted: #868e96;
@@ -53,7 +53,7 @@
     --cal-card-pad: 0px;
     --cal-card-shadow: none;
     --cal-row-gap: 24px;
-    --cal-td-pad: 6px;
+    --cal-td-pad: 7.5px;
     --border: #d9d9d9;
     --text: #111111;
     --text-muted: #666666;
@@ -200,7 +200,7 @@
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     --cal-row-gap: 24px;
-    --cal-td-pad: 5px;
+    --cal-td-pad: 6.5px;
     --border: #e2e8f0;
     --text: #0f172a;
     --text-muted: #64748b;
@@ -237,7 +237,7 @@
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: none;
     --cal-row-gap: 24px;
-    --cal-td-pad: 5px;
+    --cal-td-pad: 6.5px;
     --border: #2b3b5e;
     --text: #f1f5f9;
     --weekday-text: #f1f5f9;
@@ -276,7 +276,7 @@
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 3px rgba(38, 35, 32, 0.04);
     --cal-row-gap: 24px;
-    --cal-td-pad: 5px;
+    --cal-td-pad: 6.5px;
     --border: #e7e2da;
     --text: #262320;
     --text-muted: #78716c;
@@ -502,20 +502,20 @@
   #end_date_calculator{
     display: flex;
     align-items: stretch;
-    gap: 24px;
-    width: 1320px;
+    gap: 22px;
+    width: 1240px;
     flex-shrink: 0;
     transform-origin: center center;
   }
 
   #calculate{
-    flex: 0 0 280px;
+    flex: 0 0 248px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     font-weight: 500;
-    padding: 12px 10px 14px;
+    padding: 12px 8px 14px;
     border-radius: 8px;
     background-color: var(--sidebar-bg);
     border: 1px solid var(--sidebar-border);
@@ -825,7 +825,7 @@
 
   #selected_div {    
     text-align: left;
-    font-size: 1.45em;    
+    font-size: 1.38em;    
     font-weight: 500 !important;
     margin: 2px 4px 4px;
     border: 1px solid var(--card-border);
@@ -846,7 +846,7 @@
 
   #calculated_div {
     text-align: left;
-    font-size: 1.45em;
+    font-size: 1.38em;
     font-weight: 500 !important;
     border: 1px solid transparent;
     border-bottom: 1px solid var(--border);
@@ -939,7 +939,7 @@
     border-radius: 5px;
     font-family: var(--font-mono);
     font-size: 0.8em;
-    font-weight: 500;
+    font-weight: 700;
     background-color: var(--btn-bg);
     color: var(--btn-text);
     height: 25px;
