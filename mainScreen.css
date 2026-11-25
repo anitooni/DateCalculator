@@ -626,7 +626,7 @@
 
   .ncal-title {
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text);
     text-align: left;
     margin-bottom: 4px;
@@ -652,7 +652,7 @@
     font-family: var(--font-mono);
     padding: var(--cal-td-pad, 4px) 0;
     color: var(--weekday-text, #111111);
-    font-weight: 500;
+    font-weight: 700;
     border-radius: 4px;
     vertical-align: middle;
   }
@@ -662,6 +662,7 @@
   .ncal-table td.ncal-wk,
   .ncal-wk {
     font-size: 10px;
+    font-weight: 500;
     color: var(--text-muted);
     background-color: var(--wk-bg);
     border-radius: 4px;
