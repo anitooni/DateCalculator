@@ -192,11 +192,13 @@
   function fitActiveTabToViewport() {
     var isFitTab = currentTab === 'menu1' || currentTab === 'menu3';
     var is4yTab = currentTab === 'menu2';
-    document.body.classList.toggle('fit-viewport', isFitTab);
-    document.body.classList.toggle('tab-4y', is4yTab);
+    document.documentElement.classList.toggle('fit-viewport', isFitTab);
+    document.documentElement.classList.toggle('tab-4y', is4yTab);
 
     var availW = Math.max(320, window.innerWidth - 160);
     var availH = Math.max(320, window.innerHeight - 50 - 80);
+
+    var PROJECTION_RATIO = 0.9;
 
     if (is4yTab) {
       dom.endDatePanel.style.transform = '';
@@ -208,7 +210,7 @@
       var h4 = dom.cal4yPanel.offsetHeight;
       if (!w4 || !h4) return;
 
-      var scale4 = Math.max(0.45, Math.min(availW / w4, 1.55));
+      var scale4 = Math.max(0.45, Math.min(availW / w4, 1.55) * PROJECTION_RATIO);
       dom.cal4yPanel.style.transform = 'scale(' + scale4.toFixed(4) + ')';
       // scale 후 실제 시각 높이에 맞춰 하단 여백 보정 (빈 스크롤 제거 + 하단 여백 유지)
       dom.cal4yPanel.style.marginBottom = Math.round(h4 * (scale4 - 1)) + 'px';
@@ -226,7 +228,7 @@
     if (!naturalW || !naturalH) return;
 
     var maxScale = currentTab === 'menu1' ? 1.75 : 1.45;
-    var scale = Math.min(availW / naturalW, availH / naturalH, maxScale);
+    var scale = Math.min(availW / naturalW, availH / naturalH, maxScale) * PROJECTION_RATIO;
     scale = Math.max(0.45, scale);
 
     targetEl.style.transform = 'scale(' + scale.toFixed(4) + ')';

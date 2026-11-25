@@ -316,8 +316,10 @@
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  body.fit-viewport {
-    overflow: hidden;
+  html.fit-viewport,
+  html.fit-viewport body {
+    overflow: hidden !important;
+    height: 100%;
   }
 
   nav{
@@ -421,9 +423,10 @@
     box-sizing: border-box;
   }
 
-  body.fit-viewport #container {
+  html.fit-viewport #container {
     max-width: none;
     height: 100vh;
+    height: 100dvh;
     padding: 58px 80px 56px;
     display: flex;
     align-items: center;
@@ -431,7 +434,7 @@
     overflow: hidden;
   }
 
-  body.tab-4y #container {
+  html.tab-4y #container {
     max-width: none;
     padding: 66px 80px 72px;
     display: flex;
