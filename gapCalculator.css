@@ -92,7 +92,7 @@
 
 .npicker-month,
 .npicker-year {
-  font-family: 'Roboto', 'Noto Sans Display', sans-serif;
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: var(--text);
@@ -119,7 +119,7 @@
 }
 
 .ncal-picker .ncal-table {
-  font-size: 13.5px;
+  font-size: 11.5px;
 }
 
 .ncal-picker .ncal-table td {

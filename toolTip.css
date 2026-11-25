@@ -1,5 +1,5 @@
 #holiday-tooltip {
-  font-family: 'Nanum Gothic', 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   font-weight: 700;
   font-size: 0.8em;
   position: absolute;
@@ -33,7 +33,7 @@
   z-index: 9000;
   background: var(--toast-bg, #2f9e44);
   color: #fff;
-  font-family: 'Roboto', 'Nanum Gothic', sans-serif;
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   font-size: 0.9em;
   font-weight: 500;
   padding: 10px 20px;

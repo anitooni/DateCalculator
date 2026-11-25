@@ -12,7 +12,7 @@
     --cal-card-pad: 0px;
     --cal-card-shadow: none;
     --cal-row-gap: 14px;
-    --cal-td-pad: 4.5px;
+    --cal-td-pad: 4px;
     --border: #ced4da;
     --text: #343a40;
     --text-muted: #868e96;
@@ -52,7 +52,7 @@
     --cal-card-pad: 0px;
     --cal-card-shadow: none;
     --cal-row-gap: 14px;
-    --cal-td-pad: 4.5px;
+    --cal-td-pad: 4px;
     --border: #d9d9d9;
     --text: #111111;
     --text-muted: #666666;
@@ -199,7 +199,7 @@
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
     --cal-row-gap: 14px;
-    --cal-td-pad: 3.5px;
+    --cal-td-pad: 3px;
     --border: #e2e8f0;
     --text: #0f172a;
     --text-muted: #64748b;
@@ -236,7 +236,7 @@
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: none;
     --cal-row-gap: 14px;
-    --cal-td-pad: 3.5px;
+    --cal-td-pad: 3px;
     --border: #2b3b5e;
     --text: #f1f5f9;
     --text-muted: #94a3b8;
@@ -274,7 +274,7 @@
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 3px rgba(38, 35, 32, 0.04);
     --cal-row-gap: 14px;
-    --cal-td-pad: 3.5px;
+    --cal-td-pad: 3px;
     --border: #e7e2da;
     --text: #262320;
     --text-muted: #78716c;
@@ -305,7 +305,8 @@
     padding: 0;
     background-color: var(--bg);
     color: var(--text);
-    font-family: 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    font-variant-numeric: tabular-nums;
     font-weight: 500;
     text-align: center;
     overflow-x: hidden;
@@ -396,7 +397,7 @@
 
   #theme_selector,
   #region_selector {
-    font-family: 'Roboto', 'Nanum Gothic', sans-serif;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     font-size: 0.85em;
     font-weight: 500;
     color: var(--text);
@@ -446,8 +447,8 @@
   #end_date_calculator{
     display: flex;
     align-items: stretch;
-    gap: 20px;
-    width: 1256px;
+    gap: 24px;
+    width: 1360px;
     flex-shrink: 0;
     transform-origin: center center;
   }
@@ -522,8 +523,8 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    row-gap: var(--cal-row-gap, 20px);
-    column-gap: 16px;
+    row-gap: var(--cal-row-gap, 14px);
+    column-gap: 26px;
     align-items: start;
   }
 
@@ -579,8 +580,8 @@
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    font-size: 14.5px;
-    line-height: 1.2;
+    font-size: 12.5px;
+    line-height: 1.15;
   }
 
   .ncal-table th {
@@ -588,11 +589,11 @@
     color: var(--text-muted);
     font-weight: 500;
     padding: 3px 0;
-    font-size: 11px;
+    font-size: 10.5px;
   }
 
   .ncal-table td {
-    padding: var(--cal-td-pad, 4.5px) 0;
+    padding: var(--cal-td-pad, 4px) 0;
     font-weight: 500;
     border-radius: 4px;
     vertical-align: middle;
@@ -629,7 +630,6 @@
   }
 
   .ncal-today {
-    box-shadow: 0 0 0 2px var(--focus, #111111) inset;
     font-weight: 700;
   }
 
@@ -904,7 +904,7 @@
   }
 
   #holiday{
-    font-family: 'Nanum Gothic', 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     font-size: 0.7em;
     font-weight: 600;    
     padding-top: 2px;
