@@ -11,6 +11,8 @@
     --cal-card-border: transparent;
     --cal-card-pad: 0px;
     --cal-card-shadow: none;
+    --cal-row-gap: 14px;
+    --cal-td-pad: 4.5px;
     --border: #ced4da;
     --text: #343a40;
     --text-muted: #868e96;
@@ -49,6 +51,8 @@
     --cal-card-border: transparent;
     --cal-card-pad: 0px;
     --cal-card-shadow: none;
+    --cal-row-gap: 14px;
+    --cal-td-pad: 4.5px;
     --border: #d9d9d9;
     --text: #111111;
     --text-muted: #666666;
@@ -192,8 +196,10 @@
     --card-border: #e2e8f0;
     --cal-card-bg: #ffffff;
     --cal-card-border: #e2e8f0;
-    --cal-card-pad: 10px;
+    --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
+    --cal-row-gap: 14px;
+    --cal-td-pad: 3.5px;
     --border: #e2e8f0;
     --text: #0f172a;
     --text-muted: #64748b;
@@ -227,8 +233,10 @@
     --card-border: #2b3b5e;
     --cal-card-bg: #131c31;
     --cal-card-border: #24324f;
-    --cal-card-pad: 10px;
+    --cal-card-pad: 5px 8px;
     --cal-card-shadow: none;
+    --cal-row-gap: 14px;
+    --cal-td-pad: 3.5px;
     --border: #2b3b5e;
     --text: #f1f5f9;
     --text-muted: #94a3b8;
@@ -262,8 +270,10 @@
     --card-border: #e7e2da;
     --cal-card-bg: #ffffff;
     --cal-card-border: #e7e2da;
-    --cal-card-pad: 10px;
+    --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 3px rgba(38, 35, 32, 0.04);
+    --cal-row-gap: 14px;
+    --cal-td-pad: 3.5px;
     --border: #e7e2da;
     --text: #262320;
     --text-muted: #78716c;
@@ -288,19 +298,25 @@
   }
 
   html, body {
-    height: 98%;
-    width: 99%;
-    margin: 10px 10px 10px 10px;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     background-color: var(--bg);
     color: var(--text);
     font-family: 'Roboto', 'Noto Sans Display', Arial, 'Helvetica Neue', Helvetica, sans-serif;
     font-weight: 500;
     text-align: center;
+    overflow-x: hidden;
     overflow-y: auto;
     -webkit-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  body.fit-viewport {
+    overflow: hidden;
   }
 
   nav{
@@ -317,7 +333,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 1280px;
+    width: 100%;
+    max-width: 1600px;
+    padding: 0 24px;
+    box-sizing: border-box;
     height: 50px;
     margin: 0 auto;
   }
@@ -393,16 +412,31 @@
   }
 
   #container{
-    display: inline-block;
-    margin-top: 50px;
-    width: 1280px;
+    display: block;
+    margin: 0 auto;
+    padding: 56px 12px 12px;
+    width: 100%;
+    max-width: 1280px;
+    box-sizing: border-box;
+  }
+
+  body.fit-viewport #container {
+    max-width: none;
+    height: 100vh;
+    padding: 50px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
   #end_date_calculator{
     display: flex;
     align-items: stretch;
     gap: 20px;
-    padding-top: 6px;
+    width: 1256px;
+    flex-shrink: 0;
+    transform-origin: center center;
   }
 
   #calculate{
@@ -412,7 +446,7 @@
     flex-direction: column;
     justify-content: space-between;
     font-weight: 500;
-    padding: 10px 8px 12px;
+    padding: 8px 8px 10px;
     border-radius: 8px;
     background-color: var(--sidebar-bg);
     border: 1px solid var(--sidebar-border);
@@ -429,9 +463,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 2.4em;
+    font-size: 2.1em;
     font-weight: 500;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
 
   #yearSelector{
@@ -475,7 +509,8 @@
     width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px 16px;
+    row-gap: var(--cal-row-gap, 20px);
+    column-gap: 16px;
     align-items: start;
   }
 
@@ -524,26 +559,27 @@
     font-weight: 600;
     color: var(--text);
     text-align: left;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
 
   .ncal-table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    font-size: 13px;
+    font-size: 14.5px;
+    line-height: 1.2;
   }
 
   .ncal-table th {
     background-color: var(--th-bg);
     color: var(--text-muted);
     font-weight: 500;
-    padding: 4px 0;
+    padding: 3px 0;
     font-size: 11px;
   }
 
   .ncal-table td {
-    padding: 6px 0;
+    padding: var(--cal-td-pad, 4.5px) 0;
     font-weight: 500;
     border-radius: 4px;
     vertical-align: middle;
@@ -759,11 +795,11 @@
   }
 
   #direction_down1, #direction_down2{    
-    font-size: 1em;
+    font-size: 0.95em;
     color: var(--text-muted);
     text-align: center;
-    margin: 3px 8px;
-    padding: 2px 0;
+    margin: 1px 8px;
+    padding: 1px 0;
   }
 
   #direction_down1{
@@ -827,7 +863,7 @@
     font-weight: 500;
     background-color: var(--btn-bg);
     color: var(--btn-text);
-    height: 27px;
+    height: 25px;
     width: 94%;
     margin: 2px;
     padding: 0 3px;

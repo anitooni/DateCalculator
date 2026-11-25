@@ -63,7 +63,11 @@
   }
 
   function renderGlobalHolidays() {
-    var countries = global.HolidayService.REGION_ORDER;
+    var countries = [activeRegion].concat(
+      global.HolidayService.REGION_ORDER.filter(function (code) {
+        return code !== activeRegion;
+      })
+    );
 
     for (var i = 0; i < dom.globalRows.length; i++) {
       var code = countries[i];
@@ -182,7 +186,45 @@
     }
   }
 
+  var currentTab = 'menu1';
+  var resizeRafId = null;
+
+  function fitActiveTabToViewport() {
+    var isFitTab = currentTab === 'menu1' || currentTab === 'menu3';
+    document.body.classList.toggle('fit-viewport', isFitTab);
+
+    if (!isFitTab) {
+      dom.endDatePanel.style.transform = '';
+      dom.gapCalcPanel.style.transform = '';
+      return;
+    }
+
+    var targetEl = currentTab === 'menu1' ? dom.endDatePanel : dom.gapCalcPanel;
+    targetEl.style.transform = 'none';
+
+    var naturalW = targetEl.offsetWidth;
+    var naturalH = targetEl.offsetHeight;
+    if (!naturalW || !naturalH) return;
+
+    var availW = Math.max(320, window.innerWidth - 32);
+    var availH = Math.max(320, window.innerHeight - 50 - 24);
+    var maxScale = currentTab === 'menu1' ? 1.8 : 1.45;
+    var scale = Math.min(availW / naturalW, availH / naturalH, maxScale);
+    scale = Math.max(0.45, scale);
+
+    targetEl.style.transform = 'scale(' + scale.toFixed(4) + ')';
+  }
+
+  function scheduleFitViewport() {
+    if (resizeRafId) global.cancelAnimationFrame(resizeRafId);
+    resizeRafId = global.requestAnimationFrame(function () {
+      resizeRafId = null;
+      fitActiveTabToViewport();
+    });
+  }
+
   function switchTab(tabId) {
+    currentTab = tabId;
     global.CalendarCore.hideTooltip();
 
     dom.endDatePanel.style.display = tabId === 'menu1' ? 'flex' : 'none';
@@ -198,6 +240,8 @@
     } else if (tabId === 'menu3' && typeof global.initDurationCalculator === 'function') {
       global.initDurationCalculator(activeRegion);
     }
+
+    scheduleFitViewport();
   }
 
   function cacheDom() {
@@ -264,8 +308,11 @@
           global.localStorage.setItem('dc_theme', theme);
         } catch (_) {}
         showToast('Theme: ' + this.options[this.selectedIndex].text, 1000);
+        scheduleFitViewport();
       });
     }
+
+    window.addEventListener('resize', scheduleFitViewport);
 
     if (dom.regionSelector) {
       dom.regionSelector.addEventListener('change', function () {
@@ -352,6 +399,25 @@
     });
   }
 
+  function sortRegionDropdown(accessRegion) {
+    if (!dom.regionSelector) return;
+    var ordered = [accessRegion].concat(
+      global.HolidayService.REGION_ORDER.filter(function (code) {
+        return code !== accessRegion;
+      })
+    );
+    var optionsByValue = Object.create(null);
+    var opts = dom.regionSelector.options;
+    for (var i = 0; i < opts.length; i++) {
+      optionsByValue[opts[i].value] = opts[i];
+    }
+    for (var j = 0; j < ordered.length; j++) {
+      if (optionsByValue[ordered[j]]) {
+        dom.regionSelector.appendChild(optionsByValue[ordered[j]]);
+      }
+    }
+  }
+
   global.getActiveRegion = function () {
     return activeRegion;
   };
@@ -363,6 +429,8 @@
       var initialTheme = document.documentElement.getAttribute('data-theme') || 'classic';
       dom.themeSelector.value = initialTheme;
     }
+    var accessRegion = global.HolidayService.detectAccessRegion();
+    sortRegionDropdown(accessRegion);
     activeRegion = global.HolidayService.detectUserRegion();
     if (dom.regionSelector) {
       dom.regionSelector.value = activeRegion;
@@ -378,5 +446,6 @@
     renderYearCalendar();
     calculateDate();
     loadHolidaysForCalendarYear(currentYear);
+    fitActiveTabToViewport();
   });
 })(window);

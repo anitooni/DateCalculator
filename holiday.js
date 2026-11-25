@@ -462,15 +462,8 @@
     return events;
   }
 
-  // 접속 지역 자동 감지 (타임존 우선 -> 브라우저 언어 -> 기본 KR)
-  function detectUserRegion() {
-    try {
-      var saved = global.localStorage.getItem(REGION_STORAGE_KEY);
-      if (saved && SUPPORTED_REGIONS[saved]) {
-        return saved;
-      }
-    } catch (_) {}
-
+  // 순수 접속 지역 감지 (타임존 우선 -> 브라우저 언어 -> 기본 KR)
+  function detectAccessRegion() {
     try {
       var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
       if (tz) {
@@ -491,6 +484,18 @@
     }
 
     return 'KR';
+  }
+
+  // 저장된 사용자 설정 우선 -> 없으면 접속 지역 자동 감지
+  function detectUserRegion() {
+    try {
+      var saved = global.localStorage.getItem(REGION_STORAGE_KEY);
+      if (saved && SUPPORTED_REGIONS[saved]) {
+        return saved;
+      }
+    } catch (_) {}
+
+    return detectAccessRegion();
   }
 
   function saveUserRegion(regionCode) {
@@ -560,7 +565,8 @@
   var JP_WEEKDAYS = ['日', '月', '火', '水', '木', '金', '土'];
   var CN_WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
 
-  // 국가별 클립보드 복사 포맷 6종 (1번은 항상 국제표준 ISO 8601, includeYear로 연도 포함 여부 전환)
+  // 국가별 클립보드 복사 포맷 6종
+  // #1: Mmm dd (고정), #2: 슬래시(국가별 순서), #3: 점(국가별 순서), #4: ISO 8601, #5~#6: 국가별 표기
   function getCopyFormatsByRegion(date, regionCode, includeYear) {
     var y = date.getFullYear();
     var yy = String(y).slice(-2);
@@ -569,6 +575,9 @@
     var dNum = date.getDate();
     var d = pad2(dNum);
     var dow = date.getDay();
+
+    var mmmDd = EN_MONTHS[mNum - 1] + ' ' + d;
+    var mmmDdYear = EN_MONTHS[mNum - 1] + ' ' + d + ', ' + y;
     var isoFull = y + '-' + m + '-' + d;
     var isoShort = m + '-' + d;
 
@@ -576,66 +585,66 @@
       switch (regionCode) {
         case 'KR':
           return [
-            isoShort,
+            mmmDd,
+            m + '/' + d,
             m + '.' + d,
-            mNum + '/' + dNum,
-            mNum + '/' + dNum + ' (' + KO_WEEKDAYS[dow] + ')',
+            isoShort,
             mNum + '월 ' + dNum + '일',
             mNum + '월 ' + dNum + '일 (' + KO_WEEKDAYS[dow] + ')'
           ];
         case 'JP':
           return [
-            isoShort,
-            mNum + '/' + dNum,
+            mmmDd,
+            m + '/' + d,
             m + '.' + d,
-            mNum + '/' + dNum + ' (' + JP_WEEKDAYS[dow] + ')',
+            isoShort,
             mNum + '月' + dNum + '日',
             mNum + '月' + dNum + '日 (' + JP_WEEKDAYS[dow] + ')'
           ];
         case 'DE':
           return [
-            isoShort,
-            d + '.' + m + '.',
+            mmmDd,
             d + '/' + m,
-            DE_WEEKDAYS[dow] + ', ' + d + '.' + m + '.',
+            d + '.' + m + '.',
+            isoShort,
             dNum + '. ' + DE_MONTHS[mNum - 1],
-            DE_WEEKDAYS[dow] + ', ' + dNum + '. ' + DE_MONTHS[mNum - 1]
+            DE_WEEKDAYS[dow] + ', ' + d + '.' + m + '.'
           ];
         case 'US':
           return [
-            isoShort,
-            mNum + '/' + dNum,
+            mmmDd,
+            m + '/' + d,
             m + '.' + d,
-            EN_WEEKDAYS[dow] + ', ' + mNum + '/' + dNum,
-            EN_MONTHS[mNum - 1] + ' ' + dNum,
-            EN_WEEKDAYS[dow] + ', ' + EN_MONTHS[mNum - 1] + ' ' + dNum
+            isoShort,
+            EN_WEEKDAYS[dow] + ', ' + mmmDd,
+            EN_WEEKDAYS[dow] + ', ' + mNum + '/' + dNum
           ];
         case 'IN':
           return [
-            isoShort,
+            mmmDd,
             d + '/' + m,
-            d + '-' + m,
-            EN_WEEKDAYS[dow] + ', ' + d + '/' + m,
+            d + '.' + m,
+            isoShort,
             dNum + ' ' + EN_MONTHS[mNum - 1],
-            EN_WEEKDAYS[dow] + ', ' + dNum + ' ' + EN_MONTHS[mNum - 1]
+            EN_WEEKDAYS[dow] + ', ' + d + '/' + m
           ];
         case 'CN':
           return [
-            isoShort,
-            mNum + '/' + dNum,
+            mmmDd,
+            m + '/' + d,
             m + '.' + d,
-            mNum + '/' + dNum + ' (' + CN_WEEKDAYS[dow] + ')',
+            isoShort,
             mNum + '月' + dNum + '日',
             mNum + '月' + dNum + '日 (' + CN_WEEKDAYS[dow] + ')'
           ];
         default:
           return [
-            isoShort,
+            mmmDd,
             m + '/' + d,
             m + '.' + d,
-            EN_WEEKDAYS[dow] + ', ' + mNum + '/' + dNum,
-            dNum + ' ' + EN_MONTHS[mNum - 1],
-            EN_MONTHS[mNum - 1] + ' ' + dNum
+            isoShort,
+            EN_WEEKDAYS[dow] + ', ' + mmmDd,
+            dNum + ' ' + EN_MONTHS[mNum - 1]
           ];
       }
     }
@@ -643,66 +652,66 @@
     switch (regionCode) {
       case 'KR':
         return [
-          isoFull,
+          mmmDdYear,
+          y + '/' + m + '/' + d,
           y + '.' + m + '.' + d,
-          "'" + yy + '.' + mNum + '/' + dNum,
-          y + '.' + m + '.' + d + ' (' + KO_WEEKDAYS[dow] + ')',
+          isoFull,
           y + '년 ' + mNum + '월 ' + dNum + '일',
-          "'" + yy + '년 ' + mNum + '월 ' + dNum + '일'
+          "'" + yy + '.' + mNum + '/' + dNum
         ];
       case 'JP':
         return [
-          isoFull,
+          mmmDdYear,
           y + '/' + m + '/' + d,
-          "'" + yy + '.' + mNum + '/' + dNum,
-          y + '/' + m + '/' + d + ' (' + JP_WEEKDAYS[dow] + ')',
+          y + '.' + m + '.' + d,
+          isoFull,
           y + '年' + mNum + '月' + dNum + '日',
-          yy + '年' + mNum + '月' + dNum + '日 (' + JP_WEEKDAYS[dow] + ')'
+          "'" + yy + '.' + mNum + '/' + dNum
         ];
       case 'DE':
         return [
-          isoFull,
+          mmmDdYear,
+          d + '/' + m + '/' + y,
           d + '.' + m + '.' + y,
-          d + '.' + m + '.' + yy,
-          DE_WEEKDAYS[dow] + ', ' + d + '.' + m + '.' + yy,
+          isoFull,
           dNum + '. ' + DE_MONTHS[mNum - 1] + ' ' + y,
-          dNum + '. ' + DE_MONTHS[mNum - 1] + " '" + yy
+          DE_WEEKDAYS[dow] + ', ' + d + '.' + m + '.' + yy
         ];
       case 'US':
         return [
-          isoFull,
+          mmmDdYear,
           m + '/' + d + '/' + y,
+          m + '.' + d + '.' + y,
+          isoFull,
           mNum + '/' + dNum + '/' + yy,
-          "'" + yy + ' ' + mNum + '/' + dNum,
-          EN_MONTHS[mNum - 1] + ' ' + dNum + ', ' + y,
           EN_MONTHS[mNum - 1] + ' ' + dNum + ", '" + yy
         ];
       case 'IN':
         return [
-          isoFull,
+          mmmDdYear,
           d + '/' + m + '/' + y,
-          d + '-' + m + '-' + y,
-          d + '/' + m + '/' + yy,
+          d + '.' + m + '.' + y,
+          isoFull,
           dNum + ' ' + EN_MONTHS[mNum - 1] + ' ' + y,
-          dNum + ' ' + EN_MONTHS[mNum - 1] + " '" + yy
+          d + '-' + m + '-' + y
         ];
       case 'CN':
         return [
-          isoFull,
+          mmmDdYear,
           y + '/' + m + '/' + d,
           y + '.' + m + '.' + d,
-          y + '/' + m + '/' + d + ' (' + CN_WEEKDAYS[dow] + ')',
+          isoFull,
           y + '年' + mNum + '月' + dNum + '日',
           yy + '年' + mNum + '月' + dNum + '日 (' + CN_WEEKDAYS[dow] + ')'
         ];
       default:
         return [
-          isoFull,
+          mmmDdYear,
           y + '/' + m + '/' + d,
-          "'" + yy + '.' + mNum + '/' + dNum,
           y + '.' + m + '.' + d,
+          isoFull,
           dNum + ' ' + EN_MONTHS[mNum - 1] + ' ' + y,
-          dNum + ' ' + EN_MONTHS[mNum - 1] + " '" + yy
+          "'" + yy + '.' + mNum + '/' + dNum
         ];
     }
   }
@@ -710,6 +719,7 @@
   global.HolidayService = {
     SUPPORTED_REGIONS: SUPPORTED_REGIONS,
     REGION_ORDER: REGION_ORDER,
+    detectAccessRegion: detectAccessRegion,
     detectUserRegion: detectUserRegion,
     saveUserRegion: saveUserRegion,
     formatDateByRegion: formatDateByRegion,
