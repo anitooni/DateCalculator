@@ -2,12 +2,13 @@
   border: none;
   height: 1px;
   background-color: var(--border);
-  margin-top: 20px;
-  margin-bottom: 20px;
+  opacity: 0.65;
+  margin-top: 44px;
+  margin-bottom: 44px;
 }
 
 #cal_4y{
-  width: 1360px;
+  width: 1320px;
   flex-shrink: 0;
   display: block;
   transform-origin: top center;
@@ -15,54 +16,133 @@
 
 .year-row{
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: stretch;
   width: 100%;
   color: var(--text);
-  font-size: 2.5em;
-  font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  scroll-margin-top: 66px;
+}
+
+#year_1, #year_2, #year_3, #year_4{
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-align: left;
+  margin-bottom: 20px;
+  padding-left: 2px;
 }
 
 #viewCal_y1, #viewCal_y2, #viewCal_y3, #viewCal_y4{
-  height: 100%;
   width: 100%;
   display: grid;
-  align-items: flex-start;
-  grid-template-columns: repeat(6, 1fr);
-  font-size: 12px;
-  gap: 10px 14px;    
-  margin-left: 20px;
+  align-items: start;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 28px;
+  column-gap: 34px;
 }
 
-#year_1, #year_2, #year_3, #year_4{        
-  height: 100%;    
-  font-size: 0.7em;
-  color: var(--text);
-  min-width: 68px;
+#viewCal_y1 > div,
+#viewCal_y2 > div,
+#viewCal_y3 > div,
+#viewCal_y4 > div {
+  box-sizing: border-box;
+  background: var(--cal-card-bg);
+  border: 1px solid var(--cal-card-border);
+  border-radius: 10px;
+  padding: var(--cal-card-pad);
+  box-shadow: var(--cal-card-shadow);
+}
+
+html[data-theme="pure-edge"] #viewCal_y1 > div,
+html[data-theme="pure-edge"] #viewCal_y2 > div,
+html[data-theme="pure-edge"] #viewCal_y3 > div,
+html[data-theme="pure-edge"] #viewCal_y4 > div {
+  border-radius: 0 !important;
+}
+
+.year-scroll-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 34px 0 28px;
+}
+
+.year-scroll-wrap::before,
+.year-scroll-wrap::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--border);
+  opacity: 0.65;
+}
+
+.year-scroll-btns {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.year-scroll-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background-color: var(--card-bg);
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.year-scroll-btn:hover {
+  background-color: var(--focus, #111111);
+  border-color: var(--focus, #111111);
+  color: #ffffff;
+}
+
+.year-scroll-btn.scroll-down:hover {
+  transform: translateY(2px);
+}
+
+.year-scroll-btn.scroll-up:hover {
+  transform: translateY(-2px);
+}
+
+html[data-theme="pure-edge"] .year-scroll-btn {
+  border-radius: 0 !important;
 }
 
 .ncal-mini .ncal-title {
-  font-size: 13px;
-  margin-bottom: 4px;
+  font-size: 14.5px;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .ncal-mini .ncal-table {
-  font-size: 10.5px;
+  font-size: 12px;
+  line-height: 1.2;
 }
 
 .ncal-mini .ncal-table th {
-  padding: 2px 0;
-  font-size: 10px;
+  padding: 4px 0;
+  font-size: 10.5px;
 }
 
 .ncal-mini .ncal-table td {
-  padding: 3px 0;
+  padding: 5px 0;
 }
 
 .ncal-mini .ncal-wk-col {
-  width: 18px;
+  width: 22px;
 }
 
 .ncal-mini .ncal-wk {
-  font-size: 9px;
+  font-size: 9.5px;
 }

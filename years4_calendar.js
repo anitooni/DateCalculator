@@ -57,12 +57,27 @@
     loadAllFourYearsHolidays();
   };
 
+  function bindScrollButtons(containerEl) {
+    if (!containerEl) return;
+    containerEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('.year-scroll-btn');
+      if (!btn) return;
+      var targetId = btn.getAttribute('data-scroll-target');
+      var targetEl = document.getElementById(targetId);
+      if (!targetEl) return;
+
+      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
   global.initFourYearCalendar = function (startYear) {
     if (initialized) return;
     initialized = true;
 
     baseYearCache = startYear || new Date().getFullYear();
-    global.CalendarCore.bindDelegatedTooltip(document.getElementById('cal_4y'));
+    var containerEl = document.getElementById('cal_4y');
+    global.CalendarCore.bindDelegatedTooltip(containerEl);
+    bindScrollButtons(containerEl);
     renderAllFourYears();
     loadAllFourYearsHolidays();
   };

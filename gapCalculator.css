@@ -23,9 +23,10 @@
 }
 
 #start_datepicker, #end_datepicker{
+  font-family: var(--font-mono);
   text-align: center;
   width: 253px;
-  font-size: 1.5em;
+  font-size: 1.45em;
   font-weight: 600;
   color: var(--text);
   background: var(--input-bg);

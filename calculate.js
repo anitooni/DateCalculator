@@ -198,7 +198,7 @@
     var availW = Math.max(320, window.innerWidth - 160);
     var availH = Math.max(320, window.innerHeight - 50 - 80);
 
-    var PROJECTION_RATIO = 0.9;
+    var PROJECTION_RATIO = 1.0;
 
     if (is4yTab) {
       dom.endDatePanel.style.transform = '';
@@ -263,8 +263,24 @@
     scheduleFitViewport();
   }
 
+  var FONT_URLS = {
+    jetbrains: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap',
+    inter: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
+  };
+  var loadedFonts = Object.create(null);
+
+  function ensureFontLoaded(fontKey) {
+    if (!FONT_URLS[fontKey] || loadedFonts[fontKey]) return;
+    loadedFonts[fontKey] = true;
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = FONT_URLS[fontKey];
+    document.head.appendChild(link);
+  }
+
   function cacheDom() {
     dom.navLinks = document.querySelectorAll('nav a[data-tab]');
+    dom.fontSelector = document.getElementById('font_selector');
     dom.themeSelector = document.getElementById('theme_selector');
     dom.regionSelector = document.getElementById('region_selector');
     dom.endDatePanel = document.getElementById('end_date_calculator');
@@ -316,6 +332,18 @@
       dom.navLinks[i].addEventListener('click', function (e) {
         e.preventDefault();
         switchTab(this.getAttribute('data-tab'));
+      });
+    }
+
+    if (dom.fontSelector) {
+      dom.fontSelector.addEventListener('change', function () {
+        var fontKey = this.value;
+        ensureFontLoaded(fontKey);
+        document.documentElement.setAttribute('data-font', fontKey);
+        try {
+          global.localStorage.setItem('dc_font', fontKey);
+        } catch (_) {}
+        showToast('Font: ' + this.options[this.selectedIndex].text, 1000);
       });
     }
 
@@ -444,6 +472,11 @@
   document.addEventListener('DOMContentLoaded', function () {
     todayKey = global.CalendarCore.formatDateKey(now);
     cacheDom();
+    if (dom.fontSelector) {
+      var initialFont = document.documentElement.getAttribute('data-font') || 'plex';
+      ensureFontLoaded(initialFont);
+      dom.fontSelector.value = initialFont;
+    }
     if (dom.themeSelector) {
       var initialTheme = document.documentElement.getAttribute('data-theme') || 'classic';
       dom.themeSelector.value = initialTheme;

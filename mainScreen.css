@@ -1,5 +1,6 @@
   :root,
   html[data-theme="classic"] {
+    --font-mono: 'IBM Plex Sans', 'Pretendard Variable', 'Pretendard', sans-serif;
     --bg: #ffffff;
     --nav-bg: #f8f9fa;
     --nav-shadow: 0 0 5px rgba(0, 0, 0, 0.45);
@@ -11,8 +12,8 @@
     --cal-card-border: transparent;
     --cal-card-pad: 0px;
     --cal-card-shadow: none;
-    --cal-row-gap: 14px;
-    --cal-td-pad: 4px;
+    --cal-row-gap: 24px;
+    --cal-td-pad: 6px;
     --border: #ced4da;
     --text: #343a40;
     --text-muted: #868e96;
@@ -51,8 +52,8 @@
     --cal-card-border: transparent;
     --cal-card-pad: 0px;
     --cal-card-shadow: none;
-    --cal-row-gap: 14px;
-    --cal-td-pad: 4px;
+    --cal-row-gap: 24px;
+    --cal-td-pad: 6px;
     --border: #d9d9d9;
     --text: #111111;
     --text-muted: #666666;
@@ -89,6 +90,7 @@
   html[data-theme="pure-edge"] #yearCont,
   html[data-theme="pure-edge"] #weekCont,
   html[data-theme="pure-edge"] #dayCont,
+  html[data-theme="pure-edge"] #font_selector,
   html[data-theme="pure-edge"] #theme_selector,
   html[data-theme="pure-edge"] #region_selector,
   html[data-theme="pure-edge"] #showToday,
@@ -165,15 +167,14 @@
   }
 
   html[data-theme="classic"] #showToday {
-    background-color: #ffffff;
+    background-color: transparent;
     color: #111111;
-    border: 1px solid #d0d0d0;
+    border: none;
     border-radius: 0;
   }
 
   html[data-theme="classic"] #showToday:hover {
     background-color: #111111;
-    border-color: #111111;
     color: #ffffff;
   }
 
@@ -198,8 +199,8 @@
     --cal-card-border: #e2e8f0;
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 4px rgba(15, 23, 42, 0.05);
-    --cal-row-gap: 14px;
-    --cal-td-pad: 3px;
+    --cal-row-gap: 24px;
+    --cal-td-pad: 5px;
     --border: #e2e8f0;
     --text: #0f172a;
     --text-muted: #64748b;
@@ -235,10 +236,11 @@
     --cal-card-border: #24324f;
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: none;
-    --cal-row-gap: 14px;
-    --cal-td-pad: 3px;
+    --cal-row-gap: 24px;
+    --cal-td-pad: 5px;
     --border: #2b3b5e;
     --text: #f1f5f9;
+    --weekday-text: #f1f5f9;
     --text-muted: #94a3b8;
     --nav-inactive: #94a3b8;
     --accent: #f97316;
@@ -273,8 +275,8 @@
     --cal-card-border: #e7e2da;
     --cal-card-pad: 5px 8px;
     --cal-card-shadow: 0 1px 3px rgba(38, 35, 32, 0.04);
-    --cal-row-gap: 14px;
-    --cal-td-pad: 3px;
+    --cal-row-gap: 24px;
+    --cal-td-pad: 5px;
     --border: #e7e2da;
     --text: #262320;
     --text-muted: #78716c;
@@ -298,8 +300,59 @@
     --toast-bg: #262320;
   }
 
+  html[data-font="plex"] {
+    --font-mono: 'IBM Plex Sans', 'Pretendard Variable', 'Pretendard', sans-serif;
+  }
+
+  html[data-font="jetbrains"] {
+    --font-mono: 'JetBrains Mono', 'Pretendard Variable', 'Pretendard', monospace;
+  }
+
+  html[data-font="jetbrains"] #selected_date,
+  html[data-font="jetbrains"] #calculated_date {
+    font-size: 0.88em;
+    letter-spacing: -0.02em;
+  }
+
+  html[data-font="jetbrains"] #showToday {
+    font-size: 14.5px;
+  }
+
+  html[data-font="jetbrains"] .cBtn {
+    font-size: 0.73em;
+    letter-spacing: -0.03em;
+  }
+
+  html[data-font="inter"] {
+    --font-mono: 'Inter', 'Pretendard Variable', 'Pretendard', sans-serif;
+  }
+
+  html[data-font="inter"] .cBtn {
+    letter-spacing: -0.02em;
+    font-variant-numeric: proportional-nums;
+  }
+
+  html[data-font="inter"] #selected_date,
+  html[data-font="inter"] #calculated_date {
+    letter-spacing: -0.035em;
+    font-variant-numeric: proportional-nums;
+  }
+
+  html[data-font="inter"] #showToday {
+    letter-spacing: -0.025em;
+    font-variant-numeric: proportional-nums;
+  }
+
+  html[data-font="inter"] #selected_year,
+  html[data-font="inter"] #year_1,
+  html[data-font="inter"] #year_2,
+  html[data-font="inter"] #year_3,
+  html[data-font="inter"] #year_4 {
+    letter-spacing: -0.03em;
+  }
+
   html, body {
-    height: 100%;
+    min-height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -310,7 +363,6 @@
     font-weight: 500;
     text-align: center;
     overflow-x: hidden;
-    overflow-y: auto;
     -webkit-text-size-adjust: 100%;
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
@@ -387,6 +439,7 @@
     border-left: 1px solid var(--border);
   }
 
+  .font-control,
   .theme-control,
   .region-control {
     display: flex;
@@ -395,6 +448,7 @@
     color: var(--text-muted);
   }
 
+  #font_selector,
   #theme_selector,
   #region_selector {
     font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
@@ -410,6 +464,7 @@
     transition: border-color 0.15s ease;
   }
 
+  #font_selector:hover, #font_selector:focus,
   #theme_selector:hover, #theme_selector:focus,
   #region_selector:hover, #region_selector:focus {
     border-color: var(--focus, #111111);
@@ -448,19 +503,19 @@
     display: flex;
     align-items: stretch;
     gap: 24px;
-    width: 1360px;
+    width: 1320px;
     flex-shrink: 0;
     transform-origin: center center;
   }
 
   #calculate{
-    flex: 0 0 250px;
+    flex: 0 0 280px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     font-weight: 500;
-    padding: 8px 8px 10px;
+    padding: 12px 10px 14px;
     border-radius: 8px;
     background-color: var(--sidebar-bg);
     border: 1px solid var(--sidebar-border);
@@ -495,22 +550,22 @@
   }
 
   #showToday{
-    font-size: 0.36em;
+    font-family: var(--font-mono);
+    font-size: 15.5px;
     font-weight: 600;
     color: var(--text);
-    background-color: var(--btn-bg);
-    border: 1px solid var(--border);
+    background-color: transparent;
+    border: none;
     padding: 7px 14px;
     text-align: center;
     cursor: pointer;
     border-radius: 6px;
     user-select: none;
-    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
   }
    
   #showToday:hover{
-    background-color: var(--accent);
-    border-color: var(--accent);
+    background-color: var(--focus, #111111);
     color: #ffffff;
   }
 
@@ -541,6 +596,7 @@
   }
 
   #selected_year{
+    font-family: var(--font-mono);
     user-select: none;
   }
 
@@ -586,14 +642,16 @@
 
   .ncal-table th {
     background-color: var(--th-bg);
-    color: var(--text-muted);
+    color: var(--weekday-text, #111111);
     font-weight: 500;
     padding: 3px 0;
     font-size: 10.5px;
   }
 
   .ncal-table td {
+    font-family: var(--font-mono);
     padding: var(--cal-td-pad, 4px) 0;
+    color: var(--weekday-text, #111111);
     font-weight: 500;
     border-radius: 4px;
     vertical-align: middle;
@@ -601,6 +659,7 @@
 
   .ncal-wk-col { width: 22px; }
 
+  .ncal-table td.ncal-wk,
   .ncal-wk {
     font-size: 10px;
     color: var(--text-muted);
@@ -609,8 +668,10 @@
   }
 
   .ncal-table th.ncal-sun,
+  .ncal-table td.ncal-sun,
   .ncal-sun { color: var(--sun); }
   .ncal-table th.ncal-sat,
+  .ncal-table td.ncal-sat,
   .ncal-sat { color: var(--sat); }
   .ncal-other { opacity: 0.28; }
 
@@ -639,6 +700,7 @@
     font-weight: 700;
   }
 
+  .ncal-table td.ncal-holiday,
   .ncal-holiday {
     background-color: var(--holiday-bg, rgba(240, 62, 62, 0.12));
     color: var(--holiday);
@@ -698,8 +760,8 @@
   }
 
   #yearCont, #weekCont, #dayCont{
-    font-family: inherit;
-    font-size: 0.98em;
+    font-family: var(--font-mono);
+    font-size: 0.95em;
     font-weight: 600;
     width: 100%;
     min-width: 0;
@@ -795,6 +857,9 @@
   }
 
   #selected_date, #calculated_date{
+    font-family: var(--font-mono);
+    font-size: 0.96em;
+    letter-spacing: -0.01em;
     white-space: nowrap;
   }
 
@@ -872,6 +937,7 @@
   .cBtn{
     display: table;
     border-radius: 5px;
+    font-family: var(--font-mono);
     font-size: 0.8em;
     font-weight: 500;
     background-color: var(--btn-bg);
