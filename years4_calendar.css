@@ -7,10 +7,10 @@
 }
 
 #cal_4y{
-  width: 100%;
-  height: 100%;
-  display: block;    
-  margin-bottom: 10px;
+  width: 1256px;
+  flex-shrink: 0;
+  display: block;
+  transform-origin: top center;
 }
 
 .year-row{
