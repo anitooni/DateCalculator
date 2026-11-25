@@ -146,3 +146,75 @@ html[data-theme="pure-edge"] .year-scroll-btn {
 .ncal-mini .ncal-wk {
   font-size: 9.5px;
 }
+
+
+@media (max-width: 768px) {
+  #cal_4y {
+    width: 100%;
+  }
+
+  #mobile_4y_nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    position: sticky;
+    top: 50px;
+    z-index: 20;
+    padding: 8px 0 10px;
+    background: var(--bg);
+    margin-bottom: 10px;
+  }
+
+  #mobile_4y_nav .year-chip {
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  #mobile_4y_nav .year-chip:active {
+    background: var(--focus, #111111);
+    color: #ffffff;
+  }
+
+  .year-row {
+    scroll-margin-top: 106px;
+  }
+
+  #year_1, #year_2, #year_3, #year_4 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  #viewCal_y1, #viewCal_y2, #viewCal_y3, #viewCal_y4 {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 14px;
+    column-gap: 10px;
+  }
+
+  .ncal-mini .ncal-title {
+    font-size: 12.5px;
+    margin-bottom: 4px;
+  }
+
+  .ncal-mini .ncal-table {
+    font-size: 10.5px;
+  }
+
+  .ncal-mini .ncal-table td {
+    padding: 4px 0;
+  }
+
+  .ncal-mini .ncal-wk-col {
+    width: 16px;
+  }
+
+  .year-scroll-wrap {
+    margin: 22px 0 18px;
+  }
+}

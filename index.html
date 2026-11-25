@@ -10,7 +10,7 @@
 <meta property="og:image" content="https://anitooni.github.io/DateCalculator/dateCalculator.jpg">
 <meta property="og:url" content="https://anitooni.github.io/DateCalculator/">
 
-<meta name="viewport" content="width=device-width, initial-scale=0.45, minimum-scale=0.45, maximum-scale=1.5, user-scalable=yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
 
 <script>
@@ -47,13 +47,14 @@
 <body>
   <nav>
     <div class="nav-inner">
+      <div class="mobile-brand mobile-only">Date Calculator</div>
       <div class="nav-tabs">
-        <a href="#end-date" class="on" id="menu1" data-tab="menu1"><span>End Date Calculator</span></a>
-        <a href="#4-years" id="menu2" data-tab="menu2"><span>4-Years Calendar</span></a>
-        <a href="#duration" id="menu3" data-tab="menu3"><span>Duration Calculator</span></a>
+        <a href="#end-date" class="on" id="menu1" data-tab="menu1"><i class="fa-regular fa-calendar mobile-only"></i><span>End Date Calculator</span></a>
+        <a href="#4-years" id="menu2" data-tab="menu2"><i class="fa-solid fa-calendar-days mobile-only"></i><span>4-Years Calendar</span></a>
+        <a href="#duration" id="menu3" data-tab="menu3"><i class="fa-solid fa-hourglass-half mobile-only"></i><span>Duration Calculator</span></a>
         <span class="nav-indicator"></span>
       </div>
-      <div class="nav-controls">
+      <div class="nav-controls" id="nav_controls">
         <div class="font-control">
           <i class="fa-solid fa-font" aria-hidden="true"></i>
           <select id="font_selector" aria-label="Number Font">
@@ -84,6 +85,7 @@
           </select>
         </div>
       </div>
+      <button type="button" id="mobile_settings_btn" class="mobile-only" aria-label="Display Settings"><i class="fa-solid fa-sliders"></i></button>
     </div>
   </nav>
 
@@ -197,6 +199,13 @@
           </div>
         </div>
 
+        <div id="mobile_month_nav" class="mobile-only">
+          <button type="button" id="mobile_prev_month" aria-label="Previous Month"><i class="fa-solid fa-chevron-left"></i></button>
+          <div id="mobile_month_label"></div>
+          <button type="button" id="mobile_next_month" aria-label="Next Month"><i class="fa-solid fa-chevron-right"></i></button>
+          <button type="button" id="mobile_today_btn">Today</button>
+        </div>
+
         <div id="viewCal">
           <div id="Jan"></div> <div id="Feb"></div> <div id="Mar"></div> <div id="Apr"></div>
           <div id="May"></div> <div id="Jun"></div> <div id="Jul"></div> <div id="Aug"></div>
@@ -206,6 +215,12 @@
     </div>
 
     <div id="cal_4y">
+      <div id="mobile_4y_nav" class="mobile-only">
+        <button type="button" class="year-chip" data-scroll-target="year_row_1"></button>
+        <button type="button" class="year-chip" data-scroll-target="year_row_2"></button>
+        <button type="button" class="year-chip" data-scroll-target="year_row_3"></button>
+        <button type="button" class="year-chip" data-scroll-target="year_row_4"></button>
+      </div>
       <div class="year-row" id="year_row_1">
         <div id="year_1"></div>
         <div id="viewCal_y1">

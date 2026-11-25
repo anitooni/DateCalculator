@@ -375,5 +375,16 @@
 
     bindManualInput(dom.startInput, true);
     bindManualInput(dom.endInput, false);
+
+    // 모바일에서는 활성 입력창의 피커 1개만 펼쳐 공간 절약
+    function setActiveMobilePicker(which) {
+      dom.startPickerBox.classList.toggle('mobile-picker-open', which === 'start');
+      dom.endPickerBox.classList.toggle('mobile-picker-open', which === 'end');
+    }
+    setActiveMobilePicker('start');
+    dom.startInput.addEventListener('focus', function () { setActiveMobilePicker('start'); });
+    dom.startInput.addEventListener('click', function () { setActiveMobilePicker('start'); });
+    dom.endInput.addEventListener('focus', function () { setActiveMobilePicker('end'); });
+    dom.endInput.addEventListener('click', function () { setActiveMobilePicker('end'); });
   };
 })(window);

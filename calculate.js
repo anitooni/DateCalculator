@@ -7,6 +7,7 @@
   var now = new Date();
   var todayKey = '';
   var currentYear = now.getFullYear();
+  var mobileMonth = now.getMonth();
   var activeRegion = 'KR';
   var startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   var endDate = new Date(startDate.getTime());
@@ -188,8 +189,52 @@
 
   var currentTab = 'menu1';
   var resizeRafId = null;
+  var MOBILE_BREAKPOINT = 768;
+
+  function isMobileViewport() {
+    return window.innerWidth <= MOBILE_BREAKPOINT;
+  }
+
+  function updateMobileMonthView() {
+    if (!dom.monthEls || !dom.monthEls.length) return;
+    for (var i = 0; i < dom.monthEls.length; i++) {
+      dom.monthEls[i].classList.toggle('mobile-active-month', i === mobileMonth);
+    }
+    if (dom.mobileMonthLabel) {
+      dom.mobileMonthLabel.textContent = currentYear + '. ' + global.CalendarCore.pad2(mobileMonth + 1);
+    }
+  }
+
+  function shiftMobileMonth(delta) {
+    mobileMonth += delta;
+    if (mobileMonth < 0) {
+      mobileMonth = 11;
+      updateCalendarYear(currentYear - 1);
+    } else if (mobileMonth > 11) {
+      mobileMonth = 0;
+      updateCalendarYear(currentYear + 1);
+    }
+    updateMobileMonthView();
+  }
 
   function fitActiveTabToViewport() {
+    var mobile = isMobileViewport();
+    document.documentElement.classList.toggle('is-mobile', mobile);
+
+    if (mobile) {
+      document.documentElement.classList.remove('fit-viewport', 'tab-4y');
+      dom.endDatePanel.style.transform = '';
+      dom.gapCalcPanel.style.transform = '';
+      dom.cal4yPanel.style.transform = '';
+      dom.cal4yPanel.style.marginBottom = '';
+      updateMobileMonthView();
+      return;
+    }
+
+    if (dom.navControls) {
+      dom.navControls.classList.remove('mobile-open');
+    }
+
     var isFitTab = currentTab === 'menu1' || currentTab === 'menu3';
     var is4yTab = currentTab === 'menu2';
     document.documentElement.classList.toggle('fit-viewport', isFitTab);
@@ -280,6 +325,12 @@
 
   function cacheDom() {
     dom.navLinks = document.querySelectorAll('nav a[data-tab]');
+    dom.navControls = document.getElementById('nav_controls');
+    dom.mobileSettingsBtn = document.getElementById('mobile_settings_btn');
+    dom.mobilePrevMonth = document.getElementById('mobile_prev_month');
+    dom.mobileNextMonth = document.getElementById('mobile_next_month');
+    dom.mobileTodayBtn = document.getElementById('mobile_today_btn');
+    dom.mobileMonthLabel = document.getElementById('mobile_month_label');
     dom.fontSelector = document.getElementById('font_selector');
     dom.themeSelector = document.getElementById('theme_selector');
     dom.regionSelector = document.getElementById('region_selector');
@@ -391,8 +442,39 @@
     });
 
     dom.showToday.addEventListener('click', function () {
+      mobileMonth = now.getMonth();
       updateCalendarYear(now.getFullYear());
+      updateMobileMonthView();
     });
+
+    if (dom.mobilePrevMonth) {
+      dom.mobilePrevMonth.addEventListener('click', function () { shiftMobileMonth(-1); });
+    }
+    if (dom.mobileNextMonth) {
+      dom.mobileNextMonth.addEventListener('click', function () { shiftMobileMonth(1); });
+    }
+    if (dom.mobileTodayBtn) {
+      dom.mobileTodayBtn.addEventListener('click', function () {
+        mobileMonth = now.getMonth();
+        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        updateCalendarYear(now.getFullYear());
+        updateMobileMonthView();
+        updateSelectedCellHighlight();
+        calculateDate();
+      });
+    }
+    if (dom.mobileSettingsBtn && dom.navControls) {
+      dom.mobileSettingsBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        dom.navControls.classList.toggle('mobile-open');
+      });
+      document.addEventListener('click', function (e) {
+        if (!dom.navControls.classList.contains('mobile-open')) return;
+        if (!e.target.closest('#nav_controls') && !e.target.closest('#mobile_settings_btn')) {
+          dom.navControls.classList.remove('mobile-open');
+        }
+      });
+    }
 
     // 단일 이벤트 위임으로 12개월 모든 날짜 클릭 처리
     dom.viewCal.addEventListener('click', function (e) {
@@ -400,9 +482,13 @@
       if (!cell) return;
       var parts = cell.getAttribute('data-date').split('-');
       startDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      mobileMonth = startDate.getMonth();
       blinkSelectedDate();
       updateSelectedCellHighlight();
       calculateDate();
+      if (isMobileViewport() && cell.getAttribute('data-holiday')) {
+        showToast(cell.getAttribute('data-holiday'), 1400);
+      }
     });
 
     global.CalendarCore.bindDelegatedTooltip(dom.viewCal);
@@ -414,10 +500,13 @@
       dom.weekCont.value = 0;
       dom.dayCont.value = 0;
       if (startDate.getFullYear() !== currentYear) {
+        mobileMonth = startDate.getMonth();
         updateCalendarYear(startDate.getFullYear());
       } else {
+        mobileMonth = startDate.getMonth();
         updateSelectedCellHighlight();
       }
+      updateMobileMonthView();
       calculateDate();
       showToast('END DATE is moved to START DATE.', 1800);
     });

@@ -12,6 +12,7 @@
     var region = getRegion();
     var todayKey = global.CalendarCore.formatDateKey(new Date());
     var monthIds = global.CalendarCore.MONTH_IDS;
+    var chips = document.querySelectorAll('#mobile_4y_nav .year-chip');
 
     for (var offset = 0; offset < 4; offset++) {
       var yearNum = baseYearCache + offset;
@@ -19,6 +20,9 @@
       var yearLabel = document.getElementById('year_' + (offset + 1));
       if (yearLabel) {
         yearLabel.textContent = yearNum;
+      }
+      if (chips[offset]) {
+        chips[offset].textContent = yearNum;
       }
 
       var holidayMap = global.CalendarCore.buildYearHolidayLookup(region, yearNum);
@@ -60,13 +64,28 @@
   function bindScrollButtons(containerEl) {
     if (!containerEl) return;
     containerEl.addEventListener('click', function (e) {
-      var btn = e.target.closest('.year-scroll-btn');
-      if (!btn) return;
-      var targetId = btn.getAttribute('data-scroll-target');
-      var targetEl = document.getElementById(targetId);
-      if (!targetEl) return;
+      var btn = e.target.closest('.year-scroll-btn, .year-chip');
+      if (btn) {
+        var targetId = btn.getAttribute('data-scroll-target');
+        var targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
 
-      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // 모바일 터치 시 공휴일명 토스트 표시
+      if (window.innerWidth <= 768) {
+        var holidayCell = e.target.closest('td[data-holiday]');
+        if (holidayCell) {
+          var toast = document.getElementById('toast-container');
+          if (toast) {
+            toast.textContent = holidayCell.getAttribute('data-holiday');
+            toast.classList.add('show');
+            clearTimeout(toast._t);
+            toast._t = setTimeout(function () { toast.classList.remove('show'); }, 1400);
+          }
+        }
+      }
     });
   }
 

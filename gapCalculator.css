@@ -126,3 +126,73 @@
 .ncal-picker .ncal-table td {
   padding: 5px 0;
 }
+
+
+@media (max-width: 768px) {
+  #gap_calculate {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px 0 16px;
+    gap: 16px;
+  }
+
+  #start_to_end {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #minus {
+    display: none;
+  }
+
+  #startDate_div,
+  #endDate_div {
+    width: 100%;
+  }
+
+  #start_datepicker,
+  #end_datepicker {
+    width: 100%;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  #start_picker_box,
+  #end_picker_box {
+    display: none;
+  }
+
+  #start_picker_box.mobile-picker-open,
+  #end_picker_box.mobile-picker-open {
+    display: block;
+  }
+
+  .npicker {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .ncal-picker .ncal-table {
+    font-size: 14px;
+  }
+
+  .ncal-picker .ncal-table td {
+    padding: 8px 0;
+  }
+
+  #cal_result {
+    width: 100%;
+    margin-left: 0;
+    font-size: 1.25em;
+    padding: 14px 16px;
+    box-sizing: border-box;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    background: var(--card-bg);
+  }
+
+  #result-all, #result-month, #result-week, #result-day {
+    margin: 8px 0;
+  }
+}
