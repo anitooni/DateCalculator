@@ -115,12 +115,16 @@
     };
   }
 
+  function pluralize(value, singular) {
+    return value + ' ' + (value === 1 ? singular : singular + 's');
+  }
+
   function renderGap(d1, d2) {
     var diff = computePreciseDiff(d1, d2);
-    dom.resultAll.textContent = '= ' + diff.years + ' year(s), ' + diff.months + ' month(s), ' + diff.days + ' day(s)';
-    dom.resultMonth.textContent = '= ' + diff.totalMonths + ' month(s), ' + diff.days + ' day(s)';
-    dom.resultWeek.textContent = '= ' + diff.totalWeeks + ' week(s), ' + diff.remainWeekDays + ' day(s)';
-    dom.resultDay.textContent = '= ' + diff.totalDays + ' day(s)';
+    dom.resultAll.textContent = '= ' + pluralize(diff.years, 'year') + ', ' + pluralize(diff.months, 'month') + ', ' + pluralize(diff.days, 'day');
+    dom.resultMonth.textContent = '= ' + pluralize(diff.totalMonths, 'month') + ', ' + pluralize(diff.days, 'day');
+    dom.resultWeek.textContent = '= ' + pluralize(diff.totalWeeks, 'week') + ', ' + pluralize(diff.remainWeekDays, 'day');
+    dom.resultDay.textContent = '= ' + pluralize(diff.totalDays, 'day');
   }
 
   function updatePlaceholders() {
