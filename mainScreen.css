@@ -290,19 +290,19 @@
     margin-bottom: 10px;
   }
 
-  #indicator{
+  .indicator{
     font-size: 0.45em;
     text-align: left;    
   }
 
-  #copyButton{
+  .copyButton{
     display:grid;
     grid-template-columns: 1fr 1fr;
     justify-items: center;
     width: 100%;    
   }
 
-  #btn_info{
+  .btn_info{
     font-size: 0.7em;
     font-weight: 400;
     text-align: left;
@@ -310,7 +310,7 @@
     padding-bottom: 4px;
   }
 
-  #cBtn{
+  .cBtn{
     display: table;
     border-radius: 5px;
     font-weight: 500;
@@ -318,14 +318,25 @@
     height: 30px;
     width: 90%;
     margin: 2px 2px 2px 2px;
+    cursor: pointer;
   }
 
-  #cBtn:hover{
+  .cBtn:hover{
     background-color: #adb5bd;
   }
 
-  #cBtn:active{
+  .cBtn:active{
     background-color: #868e96;
+  }
+
+  @keyframes blinkFade {
+    0%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0.15; }
+    50% { opacity: 1; }
+  }
+
+  .blink {
+    animation: blinkFade 0.6s ease;
   }
 
   .txt{

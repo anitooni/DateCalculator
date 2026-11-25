@@ -1,11 +1,9 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getDatabase, ref, update, increment } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const PAGE_NAME = "DateCalculator";
+
 const firebaseConfig = {
   apiKey: "AIzaSyA7s95oaj498XdArjo9cT_8watLVw4JK3M",
   authDomain: "aptrank-cc61b.firebaseapp.com",
@@ -17,38 +15,21 @@ const firebaseConfig = {
   databaseURL: "https://aptrank-cc61b-default-rtdb.firebaseio.com"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);    
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const database = firebase.database()  
-const dbRef = firebase.database().ref();
-
-export function checkCounter(pageName){
-  dbRef.child(today_str).get().then((snapshot) => {
-    if (snapshot.exists()) {
-      countUp(pageName)
-    } else {
-      addDB()
-    }
-  }).catch((error) => {
-    console.error(error);
-  });
+function getTodayString() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
-function addDB(){
-    // 데이터 저장  
-  database.ref("DailyConnection/" + today_str+"/DateCalculator").set({
-    "DayCount": 0,    
-  })  
-}
+try {
+  const app = initializeApp(firebaseConfig);
+  getAnalytics(app);
 
-export function countUp(pageName) {
-  const updates = {};  
-  updates["DailyConnection/" + today_str + "/" + pageName + "/DayCount"] = firebase.database.ServerValue.increment(1);    
-  firebase.database().ref().update(updates);
+  const database = getDatabase(app);
+  const path = `DailyConnection/${getTodayString()}/${PAGE_NAME}/DayCount`;
+  update(ref(database), { [path]: increment(1) }).catch(() => {});
+} catch (_) {
+  // 오프라인 또는 차단 환경에서도 메인 앱 동작에 영향을 주지 않음
 }
-
-checkCounter(pageName)

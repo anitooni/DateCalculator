@@ -1,477 +1,332 @@
-var now = new Date();
-var current_year = now.getFullYear();
-var initial_date = new Date(current_year, 0, 1);
-var startDate = new Date(now);
-var endDate = new Date(now);
+(function (global) {
+  'use strict';
 
-var monthName = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-var monthCal = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var MONTH_IDS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var COUNTRIES = [
+    { key: 'cn', rowId: 'CN_holiday', resultId: 'CN_result' },
+    { key: 'ge', rowId: 'GE_holiday', resultId: 'GE_result' },
+    { key: 'jp', rowId: 'JP_holiday', resultId: 'JP_result' },
+    { key: 'uk', rowId: 'UK_holiday', resultId: 'UK_result' },
+    { key: 'us', rowId: 'US_holiday', resultId: 'US_result' }
+  ];
+  var COPY_FORMATS = ['DMmm', 'DMmmYY', 'MD', 'YYMD', 'YYYYMMDD'];
 
-$(document).ready(function(){
-  $('nav a').on('click',function(){
-    $(this).addClass('on');
-    $(this).siblings().removeClass('on');
-  });
-});
+  var now = new Date();
+  var currentYear = now.getFullYear();
+  var startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var endDate = new Date(startDate.getTime());
+  var calendars = [];
+  var toastTimer = null;
 
-function screenOnOff(id){
-  if(id == "menu1"){        
-    document.getElementById('end_date_calculator').style.display = 'block';
-    document.getElementById('cal_4y').style.display = 'none';
-    document.getElementById('gap_calculate').style.display = 'none';
+  var dom = {};
+
+  function pad2(n) {
+    return n < 10 ? '0' + n : String(n);
   }
-  else if(id == "menu2"){
-    document.getElementById('end_date_calculator').style.display = 'none';
-    document.getElementById('cal_4y').style.display = 'block';
-    document.getElementById('gap_calculate').style.display = 'none';
+
+  function formatDisplayDate(date) {
+    return (
+      date.getFullYear() + '-' +
+      pad2(date.getMonth() + 1) + '-' +
+      pad2(date.getDate()) +
+      ' (' + WEEKDAYS[date.getDay()] + ')'
+    );
   }
-  else if(id == "menu3"){
-    document.getElementById('end_date_calculator').style.display = 'none';
-    document.getElementById('cal_4y').style.display = 'none';
-    document.getElementById('gap_calculate').style.display = 'flex';
-  }  
-}
 
-//최초 실행 시, FullCalendar로부터 오늘 날짜 기준의 1년치 달력을 불러오는 함수
-function initialzeCalendar(initial_date){
-  document.addEventListener('DOMContentLoaded', function() { 
-    for (var i = 0; i < monthCal.length; i++){
-      monthCal[i] = new FullCalendar.Calendar(document.getElementById(monthName[i]), {          
-        initialDate: initial_date.setMonth(i),
+  function formatTodayLabel(date) {
+    return (
+      'Today: ' +
+      date.getFullYear() + '-' +
+      pad2(date.getMonth() + 1) + '-' +
+      pad2(date.getDate())
+    );
+  }
 
-        headerToolbar:{
-          start: 'title',
-          center: '',
-          end: ''
-        },
+  function formatCopyDate(date, type) {
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var day = date.getDate();
 
-        titleFormat:{month:"long"},
-        aspectRatio: 1,
-        contentHeight: "auto",
-        nowIndicator: true,
-        editable: false,
-        selectable: false,
-        weekNumbers: true,
-        weekText: "",
-        showNonCurrentDates: true,
-        
-        googleCalendarApiKey: 'AIzaSyCTyUto2el2DJ1oJ0hjk72AlPPA8xgDivw',
-        eventSources: [
-          {
-            googleCalendarId: 'qduatr3seur835pk4aolok2900@group.calendar.google.com',
-            overlap: false,
-            display: 'background',
-            className: 'ko_holiday',              
-          }
-        ],
-        eventDidMount: function(info) {
-          var tooltip = new Tooltip(info.el, {
-            title: info.event.title,
-            placement: 'top',
-            trigger: 'hover',
-            container: 'body'
-          });
-         },
+    switch (type) {
+      case 'DMmm':
+        return day + ' ' + MONTH_IDS[month] + (month === 4 ? '' : '.');
+      case 'DMmmYY':
+        return day + ' ' + MONTH_IDS[month] + (month === 4 ? '' : '.') + ' ' + String(year).slice(-2);
+      case 'MD':
+        return (month + 1) + '/' + day;
+      case 'YYMD':
+        return "'" + String(year).slice(-2) + '.' + (month + 1) + '/' + day;
+      case 'YYYYMMDD':
+        return year + '-' + pad2(month + 1) + '-' + pad2(day);
+      default:
+        return '';
+    }
+  }
 
-        //날짜 선택 시, 시작날짜/종료날짜 모두 수정
-        dateClick: function(info) {          
-          blink_text();          
-          document.getElementById("selected_date").innerHTML = changeDateFormat(info.date);
-          startDate = info.date;
-          calculateDate();          
-        },
-      })        
+  function showToast(message, durationMs) {
+    if (!dom.toast) return;
+    dom.toast.textContent = message;
+    dom.toast.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      dom.toast.classList.remove('show');
+    }, durationMs || 800);
+  }
+
+  function showTooltip(targetEl, text) {
+    var tip = dom.tooltip;
+    if (!tip || !text) return;
+    tip.textContent = text;
+    tip.classList.add('visible');
+
+    var rect = targetEl.getBoundingClientRect();
+    var tipRect = tip.getBoundingClientRect();
+    var left = rect.left + (rect.width - tipRect.width) / 2 + window.scrollX;
+    var top = rect.top - tipRect.height - 8 + window.scrollY;
+
+    if (left < 4) left = 4;
+    if (top < 4) top = rect.bottom + 8 + window.scrollY;
+
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+  }
+
+  function hideTooltip() {
+    if (dom.tooltip) {
+      dom.tooltip.classList.remove('visible');
+    }
+  }
+
+  function blinkSelectedDate() {
+    var el = dom.selectedDate;
+    if (!el) return;
+    el.classList.remove('blink');
+    // Reflow to restart CSS animation cleanly
+    void el.offsetWidth;
+    el.classList.add('blink');
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(function () {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    var textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+  }
+
+  function calculateDate() {
+    var yOffset = parseInt(dom.yearCont.value, 10) || 0;
+    var wOffset = (parseInt(dom.weekCont.value, 10) || 0) * 7;
+    var dOffset = parseInt(dom.dayCont.value, 10) || 0;
+
+    endDate = new Date(startDate.getFullYear() + yOffset, startDate.getMonth(), startDate.getDate() + wOffset + dOffset);
+
+    var endDateFormatted = formatDisplayDate(endDate);
+    dom.calculatedDate.textContent = endDateFormatted;
+
+    for (var i = 0; i < COPY_FORMATS.length; i++) {
+      var fmt = COPY_FORMATS[i];
+      dom.startCopyBtns[i].textContent = formatCopyDate(startDate, fmt);
+      dom.endCopyBtns[i].textContent = formatCopyDate(endDate, fmt);
     }
 
-    for (let i = 0; i < monthCal.length; i++){        
-      monthCal[i].render();
-      var eventList = monthCal[i].getEventSources();        
-   }     
+    var koHoliday = global.HolidayService.match('ko', endDateFormatted);
+    dom.holiday.textContent = koHoliday;
+    var koColor = koHoliday !== 'Working day' ? '#f03e3e' : '#4263eb';
+    dom.holiday.style.color = koColor;
+    dom.calculatedDate.style.color = koColor;
 
-   calculateDate();
-  })
-}
+    for (var c = 0; c < dom.countryNodes.length; c++) {
+      var item = dom.countryNodes[c];
+      var hName = global.HolidayService.match(item.key, endDateFormatted);
+      item.resultEl.textContent = hName;
+      item.rowEl.style.color = hName !== 'Working day' ? '#f03e3e' : '#343a40';
+    }
+  }
 
-function blink_text() {
-  $('#selected_date').fadeOut(150);
-  $('#selected_date').fadeIn(150);
-  $('#selected_date').fadeOut(150);
-  $('#selected_date').fadeIn(150);
-}
+  function updateCalendarYear(targetYear) {
+    if (targetYear === currentYear && calendars.length === 12) return;
+    currentYear = targetYear;
+    dom.selectedYear.textContent = currentYear;
+    hideTooltip();
 
-function sleep(ms) {
-  const wakeUpTime = Date.now() + ms;
-  while (Date.now() < wakeUpTime) {}
-}
+    for (var i = 0; i < calendars.length; i++) {
+      calendars[i].gotoDate(new Date(currentYear, i, 1));
+    }
+  }
 
-//년도 변경 시, 달력 전체 재생성
-function generateCalendar(initial_date){
-    for (var i = 0; i < monthCal.length; i++){
-      monthCal[i] = new FullCalendar.Calendar(document.getElementById(monthName[i]), {
-        initialDate: initial_date.setMonth(i),
+  function initCalendars() {
+    var holidayEventsSource = function (fetchInfo, successCallback) {
+      successCallback(global.HolidayService.getKoreanHolidayEvents(fetchInfo.start, fetchInfo.end));
+    };
 
-        headerToolbar:{
-          start: 'title',
-          center: '',
-          end: ''
-        },
-
-        titleFormat:{month:"long"},
+    for (var i = 0; i < MONTH_IDS.length; i++) {
+      var cal = new FullCalendar.Calendar(document.getElementById(MONTH_IDS[i]), {
+        initialDate: new Date(currentYear, i, 1),
+        headerToolbar: { start: 'title', center: '', end: '' },
+        titleFormat: { month: 'long' },
         aspectRatio: 1,
-        contentHeight: "auto",
+        contentHeight: 'auto',
         nowIndicator: true,
         editable: false,
         selectable: false,
         weekNumbers: true,
-        weekText: "",
+        weekText: '',
         showNonCurrentDates: true,
-        
-        googleCalendarApiKey: 'AIzaSyCTyUto2el2DJ1oJ0hjk72AlPPA8xgDivw',
-        eventSources: [
-          {
-            googleCalendarId: 'qduatr3seur835pk4aolok2900@group.calendar.google.com',
-            overlap: false,
-            display: 'background',
-            className: 'ko_holiday',              
-          }
-        ],
-        eventDidMount: function(info) {
-          var tooltip = new Tooltip(info.el, {
-            title: info.event.title,
-            placement: 'top',
-            trigger: 'hover',
-            container: 'body'
+        events: holidayEventsSource,
+        eventDidMount: function (info) {
+          var title = info.event.title;
+          info.el.addEventListener('mouseenter', function () {
+            showTooltip(info.el, title);
           });
-         },
-
-        //날짜 선택 시, 시작날짜/종료날짜 모두 수정
-        dateClick: function(info) {
-          blink_text();          
-          document.getElementById("selected_date").innerHTML = changeDateFormat(info.date);
-          startDate = info.date;          
-          calculateDate();      
+          info.el.addEventListener('mouseleave', hideTooltip);
+        },
+        dateClick: function (info) {
+          blinkSelectedDate();
+          startDate = new Date(info.date.getFullYear(), info.date.getMonth(), info.date.getDate());
+          dom.selectedDate.textContent = formatDisplayDate(startDate);
+          calculateDate();
         }
-      })        
+      });
+      calendars.push(cal);
     }
 
-    for (let i = 0; i < monthCal.length; i++){
-      monthCal[i].render(); 
-   }
+    for (var j = 0; j < calendars.length; j++) {
+      calendars[j].render();
+    }
 
-   calculateDate();
-}
-
-//생성된 달력 모두 삭제 (안 하면, 메모리에 쌓임)
-function destroyCalendar(){
-  for (let i = 0; i < monthCal.length; i++){        
-      monthCal[i].destroy();
-   }
-}
-
-//완료 날짜 계산해서 업데이트 하는 함수
-function calculateDate(){
-  var y_offset = document.getElementById("yearCont").value * 1;
-  var w_offset = document.getElementById("weekCont").value * 7;
-  var d_offset = document.getElementById("dayCont").value * 1;
-
-  console.log(w_offset);
-
-  endDate = new Date(startDate);
-  endDate.setYear(startDate.getFullYear() + y_offset);    
-  endDate.setDate(startDate.getDate() + (w_offset + d_offset));    
-
-  document.getElementById("calculated_date").innerHTML = changeDateFormat(endDate);
-  
-  //날짜 계산할 때, 복사 버튼의 텍스트도 모두 업데이트함
-  btn1_1 = copyDateFormat(startDate, "DMmm");    
-  document.getElementById("f1-1").innerHTML = btn1_1;
-
-  btn1_2 = copyDateFormat(startDate, "DMmmYY");    
-  document.getElementById("f1-2").innerHTML = btn1_2;
-
-  btn1_3 = copyDateFormat(startDate, "MD");    
-  document.getElementById("f1-3").innerHTML = btn1_3;
-
-  btn1_4 = copyDateFormat(startDate, "YYMD");
-  document.getElementById("f1-4").innerHTML = btn1_4;
-
-  btn1_5 = copyDateFormat(startDate, "YYYYMMDD");
-  document.getElementById("f1-5").innerHTML = btn1_5;
-
-  btn2_1 = copyDateFormat(endDate, "DMmm");
-  document.getElementById("f2-1").innerHTML = btn2_1;
-
-  btn2_2 = copyDateFormat(endDate, "DMmmYY");
-  document.getElementById("f2-2").innerHTML = btn2_2;
-
-  btn2_3 = copyDateFormat(endDate, "MD");
-  document.getElementById("f2-3").innerHTML = btn2_3;
-
-  btn2_4 = copyDateFormat(endDate, "YYMD");
-  document.getElementById("f2-4").innerHTML = btn2_4;
-
-  btn2_5 = copyDateFormat(endDate, "YYYYMMDD");
-  document.getElementById("f2-5").innerHTML = btn2_5;
-
-  //공휴일 여부 파악하여 화면에 표시
-  var dateformat = changeDateFormat(endDate);
-  var holidayName = holidayMatching_ko(dateformat);
-  document.getElementById("holiday").innerHTML = holidayName;
-  if(holidayName != "Working day"){
-    document.getElementById("holiday").style.color = "#f03e3e";
-    document.getElementById("calculated_date").style.color = "#f03e3e";
-  }
-  else{
-    document.getElementById("holiday").style.color = "#4263eb";
-    document.getElementById("calculated_date").style.color = "#4263eb";
+    calculateDate();
   }
 
-  //중국 공휴일 여부 파악하여 화면에 표시
-  holidayName = holidayMatching_cn(dateformat);
-  document.getElementById("CN_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("CN_holiday").style.color = "#f03e3e"; }
-  else{ document.getElementById("CN_holiday").style.color = "#343a40"; }
+  function switchTab(tabId) {
+    hideTooltip();
 
-  //독일 공휴일 여부 파악하여 화면에 표시
-  holidayName = holidayMatching_ge(dateformat);
-  document.getElementById("GE_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("GE_holiday").style.color = "#f03e3e"; }
-  else{ document.getElementById("GE_holiday").style.color = "#343a40"; }
+    dom.endDatePanel.style.display = tabId === 'menu1' ? 'block' : 'none';
+    dom.cal4yPanel.style.display = tabId === 'menu2' ? 'block' : 'none';
+    dom.gapCalcPanel.style.display = tabId === 'menu3' ? 'flex' : 'none';
 
-  //일본 공휴일 여부 파악하여 화면에 표시
-  holidayName = holidayMatching_jp(dateformat);
-  document.getElementById("JP_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("JP_holiday").style.color = "#f03e3e"; }
-  else{ document.getElementById("JP_holiday").style.color = "#343a40"; }
+    for (var i = 0; i < dom.navLinks.length; i++) {
+      dom.navLinks[i].classList.toggle('on', dom.navLinks[i].id === tabId);
+    }
 
-  //영국 공휴일 여부 파악하여 화면에 표시
-  holidayName = holidayMatching_uk(dateformat);
-  document.getElementById("UK_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("UK_holiday").style.color = "#f03e3e"; }
-  else{ document.getElementById("UK_holiday").style.color = "#343a40"; }
-  
-  //미국 공휴일 여부 파악하여 화면에 표시
-  holidayName = holidayMatching_us(dateformat);
-  document.getElementById("US_result").innerHTML = holidayName;
-  if(holidayName != "Working day"){ document.getElementById("US_holiday").style.color = "#f03e3e"; }
-  else{ document.getElementById("US_holiday").style.color = "#343a40"; }
-}
-
-document.getElementById("selected_year").innerHTML = current_year;
-document.getElementById("selected_date").innerHTML = changeDateFormat(now);
-document.getElementById("calculated_date").innerHTML = changeDateFormat(now);
-document.getElementById("showToday").innerHTML = showToday(now);
-document.getElementById('gap_calculate').style.display = 'none';
-document.getElementById('cal_4y').style.display = 'none';
-
-//이전 년도 버튼을 눌렀을 때 실행하는 함수
-var btnPrev = document.getElementById('prev');
-btnPrev.addEventListener('click', function(){
-  //년도를 1년 전으로 보낸 뒤,
-  current_year -= 1;
-  //'selected_year' 텍스트를 1년 전으로 업데이트
-  document.getElementById("selected_year").innerHTML = current_year;
-  //초기화 하는 날짜를, 1년 전으로 보낸 년도의 1월 1일로 설정
-  initial_date = new Date(current_year, 0, 1)
-  //1년 전으로 보낸 년도의 1월 1일의 달력으로 갱신
-  generateCalendar(initial_date);
-})
-
-//다음 년도 버튼을 눌렀을 때 실행하는 함수
-var btnNext = document.getElementById('next');
-btnNext.addEventListener('click', function(){
-  //년도를 1년 후로 보낸 뒤,
-  current_year += 1;
-  //'selected_year' 텍스트를 1년 후로 업데이트
-  document.getElementById("selected_year").innerHTML = current_year;
-  //초기화 하는 날짜를, 1년 후로 보낸 년도의 1월 1일로 설정
-  initial_date = new Date(current_year, 0, 1);
-  //1년 후로 보낸 년도의 1월 1일의 달력으로 갱신
-  generateCalendar(initial_date);
-})
-
-//시작 날짜 복사 버튼 누를 시, 클립보드로 카피하는 이벤트 함수
-var sCopy1 = document.getElementById('f1-1');
-sCopy1.addEventListener('click', function(){
-  CopyToClipboard('f1-1');
-})
-var sCopy2 = document.getElementById('f1-2');
-sCopy2.addEventListener('click', function(){
-  CopyToClipboard('f1-2');
-})
-var sCopy3 = document.getElementById('f1-3');
-sCopy3.addEventListener('click', function(){
-  CopyToClipboard('f1-3');
-})
-var sCopy4 = document.getElementById('f1-4');
-sCopy4.addEventListener('click', function(){
-  CopyToClipboard('f1-4');
-})
-var sCopy5 = document.getElementById('f1-5');
-sCopy5.addEventListener('click', function(){
-  CopyToClipboard('f1-5');
-})
-
-//종료 날짜 복사 버튼 누를 시, 클립보드로 카피하는 이벤트 함수
-var cCopy1 = document.getElementById('f2-1');
-cCopy1.addEventListener('click', function(){
-  CopyToClipboard('f2-1');
-})
-var cCopy2 = document.getElementById('f2-2');
-cCopy2.addEventListener('click', function(){
-  CopyToClipboard('f2-2');
-})
-var cCopy3 = document.getElementById('f2-3');
-cCopy3.addEventListener('click', function(){
-  CopyToClipboard('f2-3');
-})
-var cCopy4 = document.getElementById('f2-4');
-cCopy4.addEventListener('click', function(){
-  CopyToClipboard('f2-4');
-})
-var cCopy5 = document.getElementById('f2-5');
-cCopy5.addEventListener('click', function(){
-  CopyToClipboard('f2-5');
-})  
-
-//오늘 날짜 누를 시, 해당 년도로 이동
-var goToday = document.getElementById('showToday');
-goToday.addEventListener('click', function(){
-  var nYear = now.getFullYear();    
-  if(nYear == current_year){}
-  else{
-    initial_date = new Date(nYear, 0, 1)
-    current_year = nYear;
-    document.getElementById("selected_year").innerHTML = current_year;
-    generateCalendar(initial_date);
-  }
-})
-
-//End Date 누를 시, Start Date로 변경
-var end_date_to_start_date = document.getElementById('calculated_div');
-end_date_to_start_date.addEventListener('click', function(){
-  blink_text();
-  var end_date = document.getElementById("calculated_date").innerHTML
-  document.getElementById("selected_date").innerHTML = end_date
-  document.getElementById("yearCont").value = 0;
-  document.getElementById("weekCont").value = 0;
-  document.getElementById("dayCont").value = 0;
-  startDate = new Date(end_date)
-  var eYear = end_date.substr(0,4)
-  if(eYear == current_year){}
-  else{
-    initial_date = new Date(eYear, 0, 1)
-    current_year = eYear;
-    document.getElementById("selected_year").innerHTML = current_year;
-    generateCalendar(initial_date);
-  }  
-  calculateDate();
-})
-
-//날짜 포맷 변경하여 'selected_date' 또는 'calculated_date'에 표시하기 위해 리턴: YYYY-MM-DD (weekday)
-function changeDateFormat(date){
-  var year = date.getFullYear();
-  var month = ('0' + (date.getMonth() + 1)).slice(-2);
-  var day = ('0' + date.getDate()).slice(-2);
-
-  var dateString = year + '-' + month  + '-' + day + " (" + weekday[date.getDay()] +")";
-
-  return dateString;
-}
-
-//오늘 날짜 계산해서 YYYY-MM-DD 포맷으로 리턴
-function showToday(date){
-  var year = date.getFullYear();
-  var month = ('0' + (date.getMonth() + 1)).slice(-2);
-  var day = ('0' + date.getDate()).slice(-2);
-
-  var dateString = "Today: " + year + '-' + month  + '-' + day;
-
-  return dateString;
-}
-
-//Copy 버튼 눌렀을 시, 클립보드로 복사하는 함수: 가상의 textarea를 생성한 후, textarea에 변경 포맷의 날짜를 넣은 뒤, 전체 복사
-function CopyToClipboard(id){
-  var txt = document.getElementById(id).innerText;
-  console.log(txt);
-  const t = document.createElement("textarea");
-  document.body.appendChild(t);
-  t.value = txt;
-  t.select();
-  document.execCommand('copy');
-  document.body.removeChild(t);
-}
-
-//copy 버튼 눌렀을 때 토스트 팝업 띄우는 함수
-$(".txt").click(function(){
-  var selection = $(this).text();
-  toastr.options = {
-      closeButton: false,
-      progressBar: false,
-      showMethod: 'fadeIn',
-      closeMethod: 'fadeOut',
-      positionClass: "toast-bottom-center",
-      timeOut: 500
-  };
-  output = "'" + selection + "'" + "   is copied"
-  toastr.success(output);
-});
-
-$("#calculated_div").click(function(){
-  toastr.options = {
-      closeButton: false,
-      progressBar: false,
-      showMethod: 'fadeIn',
-      closeMethod: 'fadeOut',
-      positionClass: "toast-bottom-center",
-      timeOut: 2000
-  };
-  output = "END DATE is moved to START DATE."
-  toastr.success(output);
-});
-
-//Copy 버튼에 표시되는 날짜 포맷으로 변환하여 리턴하는 함수
-function copyDateFormat(date, type){
-  var year = date.getFullYear();
-  var month = date.getMonth();
-  var day = date.getDate();
-  var dateString = '';
-
-  if(type == "DMmm"){
-    dateString = day + " " + monthName[month];
-    if(month == 4){}
-    else{
-      dateString = dateString + ".";
+    // 지연 초기화: 사용자가 해당 탭을 처음 열 때만 무거운 4년 달력 / 피커를 생성
+    if (tabId === 'menu2' && typeof global.initFourYearCalendar === 'function') {
+      global.initFourYearCalendar(now.getFullYear());
+    } else if (tabId === 'menu3' && typeof global.initDurationCalculator === 'function') {
+      global.initDurationCalculator();
     }
   }
 
-  if(type == "DMmmYY"){
-    dateString = day + " " + monthName[month];
+  function cacheDom() {
+    dom.navLinks = document.querySelectorAll('nav a[data-tab]');
+    dom.endDatePanel = document.getElementById('end_date_calculator');
+    dom.cal4yPanel = document.getElementById('cal_4y');
+    dom.gapCalcPanel = document.getElementById('gap_calculate');
 
-    if(month == 4){}
-    else{
-      dateString += ".";
+    dom.selectedYear = document.getElementById('selected_year');
+    dom.selectedDate = document.getElementById('selected_date');
+    dom.calculatedDate = document.getElementById('calculated_date');
+    dom.calculatedDiv = document.getElementById('calculated_div');
+    dom.showToday = document.getElementById('showToday');
+    dom.holiday = document.getElementById('holiday');
+
+    dom.yearCont = document.getElementById('yearCont');
+    dom.weekCont = document.getElementById('weekCont');
+    dom.dayCont = document.getElementById('dayCont');
+
+    dom.btnPrev = document.getElementById('prev');
+    dom.btnNext = document.getElementById('next');
+    dom.calculateSidebar = document.getElementById('calculate');
+    dom.toast = document.getElementById('toast-container');
+    dom.tooltip = document.getElementById('holiday-tooltip');
+
+    dom.startCopyBtns = [];
+    dom.endCopyBtns = [];
+    for (var i = 1; i <= COPY_FORMATS.length; i++) {
+      dom.startCopyBtns.push(document.getElementById('f1-' + i));
+      dom.endCopyBtns.push(document.getElementById('f2-' + i));
     }
-    dateString += " " + year.toString().substr(-2);
+
+    dom.countryNodes = COUNTRIES.map(function (c) {
+      return {
+        key: c.key,
+        rowEl: document.getElementById(c.rowId),
+        resultEl: document.getElementById(c.resultId)
+      };
+    });
   }
 
-  if(type == "MD"){
-    dateString = (month + 1) + "/" + day;      
+  function bindEvents() {
+    for (var i = 0; i < dom.navLinks.length; i++) {
+      dom.navLinks[i].addEventListener('click', function (e) {
+        e.preventDefault();
+        switchTab(this.getAttribute('data-tab'));
+      });
+    }
+
+    dom.yearCont.addEventListener('input', calculateDate);
+    dom.weekCont.addEventListener('input', calculateDate);
+    dom.dayCont.addEventListener('input', calculateDate);
+
+    dom.btnPrev.addEventListener('click', function () {
+      updateCalendarYear(currentYear - 1);
+    });
+
+    dom.btnNext.addEventListener('click', function () {
+      updateCalendarYear(currentYear + 1);
+    });
+
+    dom.showToday.addEventListener('click', function () {
+      updateCalendarYear(now.getFullYear());
+    });
+
+    dom.calculatedDiv.addEventListener('click', function () {
+      blinkSelectedDate();
+      startDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      dom.selectedDate.textContent = formatDisplayDate(startDate);
+      dom.yearCont.value = 0;
+      dom.weekCont.value = 0;
+      dom.dayCont.value = 0;
+      updateCalendarYear(startDate.getFullYear());
+      calculateDate();
+      showToast('END DATE is moved to START DATE.', 1800);
+    });
+
+    // 이벤트 위임으로 복사 버튼 10개를 단일 리스너로 처리
+    dom.calculateSidebar.addEventListener('click', function (e) {
+      var btn = e.target.closest('.txt');
+      if (!btn) return;
+      var text = btn.textContent.trim();
+      copyToClipboard(text);
+      showToast("'" + text + "' is copied", 700);
+    });
   }
 
-  if(type == "YYMD"){
-    dateString = "'" + year.toString().substr(-2) + "." + (month + 1) + "/" + day;      
-  }
+  document.addEventListener('DOMContentLoaded', function () {
+    cacheDom();
+    dom.selectedYear.textContent = currentYear;
+    dom.selectedDate.textContent = formatDisplayDate(startDate);
+    dom.calculatedDate.textContent = formatDisplayDate(endDate);
+    dom.showToday.textContent = formatTodayLabel(now);
+    dom.gapCalcPanel.style.display = 'none';
+    dom.cal4yPanel.style.display = 'none';
 
-  if(type == "YYYYMMDD"){
-    month = ('0' + (month + 1)).slice(-2);
-    day = ('0' + day).slice(-2);
-    dateString = year + '-' + month  + '-' + day;      
-  }
-
-  dateString = dateString.replace(/(\r\n|\n|\r)/gm, "");
-  return dateString;
-}
-
-initialzeCalendar(initial_date);
+    bindEvents();
+    initCalendars();
+  });
+})(window);

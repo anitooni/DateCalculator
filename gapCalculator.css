@@ -11,8 +11,9 @@
   display: flex;    
 }
 
-#gap_indicator{
+.gap_indicator{
   font-size: 0.8em;
+  width: 80px;
 }
 
 #startDate_div,#endDate_div{
@@ -30,10 +31,6 @@
   border-right: 0px;
   border-bottom: 1px solid #ced4da;
   pointer-events:none;
-}
-
-#gap_indicator{
-  width: 80px;
 }
 
 #minus{

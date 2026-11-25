@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <title>Date Calculator - 날짜계산기</title>
-<meta charset='utf-8' />
+<meta charset="utf-8" />
 <meta name="google-site-verification" content="o3ldpgTrVPqeu0HAA0WNDLqamEzIwvIK1zevYZ5WQjQ" />
-<meta property="og:type" content="website"> 
+<meta property="og:type" content="website">
 <meta property="og:title" content="Date Calculator for PM">
 <meta property="og:description" content="You can calculate the date in years, weeks and days.">
 <meta property="og:image" content="https://anitooni.github.io/DateCalculator/dateCalculator.jpg">
@@ -13,173 +13,160 @@
 <meta name="viewport" content="width=device-width, initial-scale=0.45, minimum-scale=0.45, maximum-scale=1.5, user-scalable=yes">
 <meta http-equiv="ScreenOrientation" content="autoRotate:disabled">
 
-<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet'>
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
-<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment-precise-range-plugin@1.3.0/moment-precise-range.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Noto+Sans+Display:wght@300;600&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+<link href="./mainScreen.css" rel="stylesheet">
+<link href="./gapCalculator.css" rel="stylesheet">
+<link href="./toolTip.css" rel="stylesheet">
+<link href="./years4_calendar.css" rel="stylesheet">
 
-<script src='./holiday.js'></script>
-
-<link href='./mainScreen.css' rel='stylesheet'>
-<link href='./gapCalculator.css' rel='stylesheet'>
-<link href='./toolTip.css' rel='stylesheet'>
-<link href='./years4_calendar.css' rel='stylesheet'>
-<link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
-
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@300;600&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js" defer></script>
+<script src="./holiday.js" defer></script>
+<script src="./years4_calendar.js" defer></script>
+<script src="./datePicker.js" defer></script>
+<script src="./calculate.js" defer></script>
+<script type="module" src="./con_counter.js"></script>
 </head>
 
 <body>
   <nav>
-    <div>        
-      <a href="javascript:screenOnOff('menu1')" class="on" id="menu1"> <span>End Date Calculator</span></a>
-      <a href="javascript:screenOnOff('menu2')" id="menu2"> <span>4-Years Calendar</span></a>
-      <a href="javascript:screenOnOff('menu3')" id="menu3"> <span>Duration Calculator</span></a>
-      <span></span>        
+    <div>
+      <a href="#end-date" class="on" id="menu1" data-tab="menu1"><span>End Date Calculator</span></a>
+      <a href="#4-years" id="menu2" data-tab="menu2"><span>4-Years Calendar</span></a>
+      <a href="#duration" id="menu3" data-tab="menu3"><span>Duration Calculator</span></a>
+      <span></span>
     </div>
   </nav>
 
   <div id="container">
     <div id="end_date_calculator">
-
-      <div id="calculate">      
+      <div id="calculate">
         <div id="selected_div">
-          <div id="indicator"> START DATE </div>
-          <div> <label id="selected_date"></label></div>
+          <div class="indicator">START DATE</div>
+          <div><label id="selected_date"></label></div>
         </div>
 
-        
-        <div id="btn_info">Button click : Copy to clipboard</div>
-        <div id="copyButton">          
-          <div id = "cBtn"> <div class="txt" id="f1-1" data-clipboard-target="#f1-1" >(D Mmm)</div> </div>
-          <div id = "cBtn"> <div class="txt" id="f1-2">(D Mmm, YY)</div> </div>
-          <div id = "cBtn"> <div class="txt" id="f1-3">(M/D)</div> </div>
-          <div id = "cBtn"> <div class="txt" id="f1-4">('YY.M/D)</div> </div>
-          <div id = "cBtn"> <div class="txt" id="f1-5">(YYYY-MM-DD)</div></div>
+        <div class="btn_info">Button click : Copy to clipboard</div>
+        <div class="copyButton">
+          <div class="cBtn"><div class="txt" id="f1-1">(D Mmm)</div></div>
+          <div class="cBtn"><div class="txt" id="f1-2">(D Mmm, YY)</div></div>
+          <div class="cBtn"><div class="txt" id="f1-3">(M/D)</div></div>
+          <div class="cBtn"><div class="txt" id="f1-4">('YY.M/D)</div></div>
+          <div class="cBtn"><div class="txt" id="f1-5">(YYYY-MM-DD)</div></div>
         </div>
 
         <div id="direction_down1"><i class="fas fa-chevron-circle-down"></i></div>
-        <div id="yearCont_div"> + <input type="number" id="yearCont" min="-30" max="30" value="0" oninput="calculateDate()"></input> year(s) </div>
-        <div id="weekCont_div"> + <input type="number" id="weekCont" min="-200" max="200" value="0" oninput="calculateDate()"></input> week(s) </div>
-        <div id="dayCont_div"> + <input type="number" id="dayCont" min="-3000" max="3000" value="0" oninput="calculateDate()"></input> day(s) </div>
-        <div id="direction_down2"><i class="fas fa-chevron-circle-down"></i></div>      
+        <div id="yearCont_div"> + <input type="number" id="yearCont" min="-30" max="30" value="0"> year(s) </div>
+        <div id="weekCont_div"> + <input type="number" id="weekCont" min="-200" max="200" value="0"> week(s) </div>
+        <div id="dayCont_div"> + <input type="number" id="dayCont" min="-3000" max="3000" value="0"> day(s) </div>
+        <div id="direction_down2"><i class="fas fa-chevron-circle-down"></i></div>
 
         <div id="calculated_div">
-          <div id="indicator"> END DATE </div>
+          <div class="indicator">END DATE</div>
           <div><label id="calculated_date"></label></div>
-          <div id = "holiday"> Working day</div>        
+          <div id="holiday">Working day</div>
         </div>
 
-        <div id="btn_info">Button click : Copy to clipboard</div>
-        <div id="copyButton">          
-          <div id = "cBtn"> <div class="txt" id="f2-1">(D Mmm)</div> </div>
-          <div id = "cBtn"> <div class="txt" id="f2-2">(D Mmm, YY)</div> </div>
-          <div id = "cBtn"> <div class="txt" id="f2-3">(M/D)</div> </div>
-          <div id = "cBtn"> <div class="txt" id="f2-4">('YY.M/D)</div> </div>
-          <div id = "cBtn"> <div class="txt" id="f2-5">(YYYY-MM-DD)</div></div>
-        </div>    
+        <div class="btn_info">Button click : Copy to clipboard</div>
+        <div class="copyButton">
+          <div class="cBtn"><div class="txt" id="f2-1">(D Mmm)</div></div>
+          <div class="cBtn"><div class="txt" id="f2-2">(D Mmm, YY)</div></div>
+          <div class="cBtn"><div class="txt" id="f2-3">(M/D)</div></div>
+          <div class="cBtn"><div class="txt" id="f2-4">('YY.M/D)</div></div>
+          <div class="cBtn"><div class="txt" id="f2-5">(YYYY-MM-DD)</div></div>
+        </div>
 
         <div id="global_holiday">
-          <div id = "CN_holiday"> <div>CN:</div> <div id="CN_result">Working day</div> </div>
-          <div id = "GE_holiday"> <div>GE:</div> <div id="GE_result">Working day</div> </div>
-          <div id = "JP_holiday"> <div>JP:</div> <div id="JP_result">Working day</div> </div>
-          <div id = "UK_holiday"> <div>UK:</div> <div id="UK_result">Working day</div> </div>
-          <div id = "US_holiday"> <div>US:</div> <div id="US_result">Working day</div> </div>
+          <div id="CN_holiday"><div>CN:</div><div id="CN_result">Working day</div></div>
+          <div id="GE_holiday"><div>GE:</div><div id="GE_result">Working day</div></div>
+          <div id="JP_holiday"><div>JP:</div><div id="JP_result">Working day</div></div>
+          <div id="UK_holiday"><div>UK:</div><div id="UK_result">Working day</div></div>
+          <div id="US_holiday"><div>US:</div><div id="US_result">Working day</div></div>
         </div>
       </div>
 
       <div id="calCanvas">
-
         <div id="year">
           <div id="yearSelector">
             <div id="prev"><i class="fa-solid fa-angles-left"></i></div>
             <div id="selected_year"></div>
             <div id="next"><i class="fa-solid fa-angles-right"></i></div>
-          </div>        
+          </div>
           <div id="viewToday">
-            <div id="showToday"> Today: YYYY-MM-DD </div>
+            <div id="showToday">Today: YYYY-MM-DD</div>
           </div>
         </div>
 
         <div id="viewCal">
-          <div id='Jan'></div> <div id='Feb'></div> <div id='Mar'></div> <div id='Apr'></div>
-          <div id='May'></div> <div id='Jun'></div> <div id='Jul'></div> <div id='Aug'></div>
-          <div id='Sep'></div> <div id='Oct'></div> <div id='Nov'></div> <div id='Dec'></div>
+          <div id="Jan"></div> <div id="Feb"></div> <div id="Mar"></div> <div id="Apr"></div>
+          <div id="May"></div> <div id="Jun"></div> <div id="Jul"></div> <div id="Aug"></div>
+          <div id="Sep"></div> <div id="Oct"></div> <div id="Nov"></div> <div id="Dec"></div>
         </div>
       </div>
-
     </div>
 
     <div id="cal_4y">
-
-      <div id="year">
+      <div class="year-row">
         <div id="year_1"></div>
         <div id="viewCal_y1">
-          <div id='Jan_y1'></div> <div id='Feb_y1'></div> <div id='Mar_y1'></div> <div id='Apr_y1'></div> <div id='May_y1'></div> <div id='Jun_y1'></div>
-          <div id='Jul_y1'></div> <div id='Aug_y1'></div> <div id='Sep_y1'></div> <div id='Oct_y1'></div> <div id='Nov_y1'></div> <div id='Dec_y1'></div>
-        </div>        
+          <div id="Jan_y1"></div> <div id="Feb_y1"></div> <div id="Mar_y1"></div> <div id="Apr_y1"></div> <div id="May_y1"></div> <div id="Jun_y1"></div>
+          <div id="Jul_y1"></div> <div id="Aug_y1"></div> <div id="Sep_y1"></div> <div id="Oct_y1"></div> <div id="Nov_y1"></div> <div id="Dec_y1"></div>
+        </div>
       </div>
 
       <div><hr class="separator"></div>
 
-      <div id="year">
+      <div class="year-row">
         <div id="year_2"></div>
-        <div id="viewCal_y2">          
-          <div id='Jan_y2'></div> <div id='Feb_y2'></div> <div id='Mar_y2'></div> <div id='Apr_y2'></div> <div id='May_y2'></div> <div id='Jun_y2'></div>
-          <div id='Jul_y2'></div> <div id='Aug_y2'></div> <div id='Sep_y2'></div> <div id='Oct_y2'></div> <div id='Nov_y2'></div> <div id='Dec_y2'></div>
+        <div id="viewCal_y2">
+          <div id="Jan_y2"></div> <div id="Feb_y2"></div> <div id="Mar_y2"></div> <div id="Apr_y2"></div> <div id="May_y2"></div> <div id="Jun_y2"></div>
+          <div id="Jul_y2"></div> <div id="Aug_y2"></div> <div id="Sep_y2"></div> <div id="Oct_y2"></div> <div id="Nov_y2"></div> <div id="Dec_y2"></div>
         </div>
       </div>
 
       <div><hr class="separator"></div>
 
-      <div id="year">
+      <div class="year-row">
         <div id="year_3"></div>
-        <div id="viewCal_y3">          
-          <div id='Jan_y3'></div> <div id='Feb_y3'></div> <div id='Mar_y3'></div> <div id='Apr_y3'></div> <div id='May_y3'></div> <div id='Jun_y3'></div>
-          <div id='Jul_y3'></div> <div id='Aug_y3'></div> <div id='Sep_y3'></div> <div id='Oct_y3'></div> <div id='Nov_y3'></div> <div id='Dec_y3'></div>
+        <div id="viewCal_y3">
+          <div id="Jan_y3"></div> <div id="Feb_y3"></div> <div id="Mar_y3"></div> <div id="Apr_y3"></div> <div id="May_y3"></div> <div id="Jun_y3"></div>
+          <div id="Jul_y3"></div> <div id="Aug_y3"></div> <div id="Sep_y3"></div> <div id="Oct_y3"></div> <div id="Nov_y3"></div> <div id="Dec_y3"></div>
         </div>
       </div>
 
       <div><hr class="separator"></div>
 
-      <div id="year">
+      <div class="year-row">
         <div id="year_4"></div>
-        <div id="viewCal_y4">          
-          <div id='Jan_y4'></div> <div id='Feb_y4'></div> <div id='Mar_y4'></div> <div id='Apr_y4'></div> <div id='May_y4'></div> <div id='Jun_y4'></div>
-          <div id='Jul_y4'></div> <div id='Aug_y4'></div> <div id='Sep_y4'></div> <div id='Oct_y4'></div> <div id='Nov_y4'></div> <div id='Dec_y4'></div>
+        <div id="viewCal_y4">
+          <div id="Jan_y4"></div> <div id="Feb_y4"></div> <div id="Mar_y4"></div> <div id="Apr_y4"></div> <div id="May_y4"></div> <div id="Jun_y4"></div>
+          <div id="Jul_y4"></div> <div id="Aug_y4"></div> <div id="Sep_y4"></div> <div id="Oct_y4"></div> <div id="Nov_y4"></div> <div id="Dec_y4"></div>
         </div>
       </div>
     </div>
-    
+
     <div id="gap_calculate">
-      <div id = "start_to_end">
+      <div id="start_to_end">
         <div id="startDate_div">
-          <div id="gap_indicator"> START DATE </div>
-          <div><input type="text" id = "start_datepicker" readonly/></div>
+          <div class="gap_indicator">START DATE</div>
+          <div><input type="text" id="start_datepicker" readonly></div>
         </div>
 
         <div id="minus"><i class="fas fa-minus"></i></div>
 
         <div id="endDate_div">
-          <div id="gap_indicator"> END DATE </div>
-          <div><input type="text" id="end_datepicker" readonly/></div>
+          <div class="gap_indicator">END DATE</div>
+          <div><input type="text" id="end_datepicker" readonly></div>
         </div>
       </div>
 
@@ -189,33 +176,10 @@
         <div id="result-week"></div>
         <div id="result-day"></div>
       </div>
+    </div>
+  </div>
 
-      </div>
-
-  </div>    
+  <div id="holiday-tooltip" role="tooltip"></div>
+  <div id="toast-container" aria-live="polite"></div>
 </body>
-
-<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script> 
-
-<script src='./calculate.js'></script>
-<script src='./datePicker.js'></script>
-<script src='./years4_calendar.js'></script>
-<script type="module" src="./con_counter.js"></script>
-<script>
-  var pageName = "DateCalculator"
-
-  var today = new Date();
-  var today_year = today.getFullYear();
-  var today_month = dateReturn(today.getMonth() + 1);
-  var today_day = dateReturn(today.getDate());
-  var today_num = Number("" + today_year + today_month + today_day);
-  var today_str = today_year + "-" + today_month + "-" + today_day;
-
-  function dateReturn(n) {
-    return n < 10 ? "0" + n : n;
-  }
-</script>
-
-
 </html>

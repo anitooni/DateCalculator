@@ -13,10 +13,14 @@
   margin-bottom: 10px;
 }
 
-#year{
+.year-row{
   display: flex;
-  align-items:flex-start;
+  align-items: flex-start;
   width: 100%;
+  color: #343a40;
+  font-size: 2.5em;
+  font-weight: 500;
+  margin-bottom: 10px;
 }
 
 #viewCal_y1, #viewCal_y2, #viewCal_y3, #viewCal_y4{
