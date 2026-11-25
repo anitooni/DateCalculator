@@ -132,10 +132,11 @@ html[data-theme="pure-edge"] .year-scroll-btn {
 
 .ncal-mini .ncal-table th {
   padding: 4px 0;
-  font-size: 10.5px;
+  font-size: 12px;
 }
 
 .ncal-mini .ncal-table td {
+  font-size: 13px;
   padding: 5px 0;
 }
 

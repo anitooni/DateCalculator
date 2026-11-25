@@ -315,7 +315,7 @@
   }
 
   html[data-font="jetbrains"] #showToday {
-    font-size: 14.5px;
+    font-size: 0.6em;
   }
 
   html[data-font="jetbrains"] .cBtn {
@@ -503,7 +503,7 @@
     display: flex;
     align-items: stretch;
     gap: 22px;
-    width: 1240px;
+    width: 1440px;
     flex-shrink: 0;
     transform-origin: center center;
   }
@@ -551,8 +551,8 @@
 
   #showToday{
     font-family: var(--font-mono);
-    font-size: 15.5px;
-    font-weight: 600;
+    font-size: 0.65em;
+    font-weight: 500;
     color: var(--text);
     background-color: transparent;
     border: none;
@@ -644,15 +644,16 @@
     background-color: var(--th-bg);
     color: var(--weekday-text, #111111);
     font-weight: 500;
-    padding: 3px 0;
-    font-size: 10.5px;
+    padding: 4px 0;
+    font-size: 12.5px;
   }
 
   .ncal-table td {
     font-family: var(--font-mono);
+    font-size: 13.5px;
     padding: var(--cal-td-pad, 4px) 0;
     color: var(--weekday-text, #111111);
-    font-weight: 700;
+    font-weight: 500;
     border-radius: 4px;
     vertical-align: middle;
   }

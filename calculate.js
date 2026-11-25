@@ -243,7 +243,7 @@
     var availW = Math.max(320, window.innerWidth - 160);
     var availH = Math.max(320, window.innerHeight - 50 - 80);
 
-    var PROJECTION_RATIO = 0.85;
+    var PROJECTION_RATIO = 0.95;
 
     if (is4yTab) {
       dom.endDatePanel.style.transform = '';
