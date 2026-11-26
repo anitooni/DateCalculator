@@ -315,7 +315,7 @@
 
     dom.addCitySelect.innerHTML =
       '<option value="">+ Add City...</option>' +
-      buildCityOptionsHtml([originTz].concat(targetTzs));
+      buildCityOptionsHtml(targetTzs);
     dom.addCitySelect.value = '';
   }
 
@@ -510,13 +510,7 @@
 
   function bindEvents() {
     dom.originSelect.addEventListener('change', function () {
-      var prevOrigin = originTz;
       originTz = this.value;
-      // 새로 선택한 오리진이 target에 있었다면 제거하고 기존 오리진을 유지
-      targetTzs = targetTzs.filter(function (id) { return id !== originTz; });
-      if (targetTzs.length === 0 && prevOrigin !== originTz) {
-        targetTzs.push(prevOrigin);
-      }
       saveState();
       refreshCityDropdowns();
       renderResults();
@@ -639,7 +633,7 @@
     dom.addCitySelect.addEventListener('change', function () {
       var tzId = this.value;
       if (!tzId || !CITY_MAP[tzId]) return;
-      if (targetTzs.indexOf(tzId) === -1 && tzId !== originTz) {
+      if (targetTzs.indexOf(tzId) === -1) {
         targetTzs.push(tzId);
         saveState();
         refreshCityDropdowns();
@@ -751,10 +745,7 @@
 
       if (e.target.closest('.tz-swap-btn')) {
         var epochMs = zonedWallTimeToUtc(originYear, originMonth, originDay, originHour, originMinute, originTz);
-        var prevOrigin = originTz;
-        var idx = targetTzs.indexOf(tzId);
         originTz = tzId;
-        if (idx !== -1) targetTzs[idx] = prevOrigin;
 
         var newParts = getZonedParts(epochMs, originTz);
         originYear = newParts.year;
