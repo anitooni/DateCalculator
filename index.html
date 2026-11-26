@@ -374,7 +374,11 @@
           <div class="tz-targets-title">Target Cities</div>
           <div class="tz-targets-controls">
             <select id="tz_add_city" aria-label="Add Target City"></select>
-            <button type="button" id="tz_format_toggle" title="Toggle 24H/12H">24H</button>
+            <button type="button" id="tz_format_toggle" class="tz-format-switch is-24h" role="switch" aria-checked="true" aria-label="Toggle 12H or 24H format" title="Toggle 12H/24H">
+              <span class="tz-format-thumb" aria-hidden="true"></span>
+              <span class="tz-format-opt" data-mode="12h">12H</span>
+              <span class="tz-format-opt" data-mode="24h">24H</span>
+            </button>
             <button type="button" id="tz_copy_all" title="Copy all time zones"><i class="fa-regular fa-copy"></i> Copy All</button>
           </div>
         </div>

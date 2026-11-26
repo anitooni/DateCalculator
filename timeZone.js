@@ -161,7 +161,7 @@
     }
     var period = hour >= 12 ? 'PM' : 'AM';
     var h12 = hour % 12 || 12;
-    return pad2(h12) + ':' + pad2(minute) + ' ' + period;
+    return h12 + ':' + pad2(minute) + ' ' + period;
   }
 
   function getWorkStatus(hour) {
@@ -338,13 +338,18 @@
     });
   }
 
+  function updateFormatToggleUi() {
+    dom.formatToggleBtn.classList.toggle('is-24h', use24Hour);
+    dom.formatToggleBtn.setAttribute('aria-checked', use24Hour ? 'true' : 'false');
+  }
+
   function syncOriginInputs() {
     var dateObj = new Date(originYear, originMonth - 1, originDay);
     dom.dateInput.value = global.HolidayService.formatDateByRegion(dateObj, getRegionCode());
     dom.hourInput.value = pad2(originHour);
     dom.minInput.value = pad2(originMinute);
     dom.timeSlider.value = String(originHour * 60 + originMinute);
-    dom.formatToggleBtn.textContent = use24Hour ? '24H' : '12H';
+    updateFormatToggleUi();
   }
 
   function renderResults() {
@@ -645,7 +650,7 @@
     dom.formatToggleBtn.addEventListener('click', function () {
       use24Hour = !use24Hour;
       saveState();
-      dom.formatToggleBtn.textContent = use24Hour ? '24H' : '12H';
+      updateFormatToggleUi();
       renderResults();
     });
 
