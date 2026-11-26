@@ -362,6 +362,45 @@ html[data-theme="classic"] .tz-card {
   background-color: var(--end-hover-bg);
 }
 
+.tz-card.tz-dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.tz-card.tz-drop-before {
+  box-shadow: 0 -2.5px 0 0 var(--focus, #111111);
+}
+
+.tz-card.tz-drop-after {
+  box-shadow: 0 2.5px 0 0 var(--focus, #111111);
+}
+
+.tz-card-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.tz-drag-handle {
+  color: var(--text-muted);
+  opacity: 0.45;
+  font-size: 14px;
+  padding: 6px 2px;
+  cursor: grab;
+  flex-shrink: 0;
+  transition: opacity 0.12s ease, color 0.12s ease;
+}
+
+.tz-card:hover .tz-drag-handle {
+  opacity: 0.9;
+  color: var(--text);
+}
+
+.tz-drag-handle:active {
+  cursor: grabbing;
+}
+
 .tz-card-left {
   display: flex;
   flex-direction: column;

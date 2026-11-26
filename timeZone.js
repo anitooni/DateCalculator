@@ -61,6 +61,8 @@
   var originMinute = 0;
   var calViewYear = 2026;
   var calViewMonth = 0; // 0..11
+  var draggingTz = null;
+  var justDragged = false;
   var toastTimer = null;
   var dom = {};
 
@@ -387,7 +389,7 @@
       var copyValue = info.city + ': ' + dateText + ' ' + timeText + ' (' + targetAbbr + ')';
 
       cards.push(
-        '<div class="tz-card" data-tz="' + tzId + '" data-copy="' + copyValue.replace(/"/g, '&quot;') + '">' +
+        '<div class="tz-card" draggable="true" data-tz="' + tzId + '" data-copy="' + copyValue.replace(/"/g, '&quot;') + '">' +
           '<div class="tz-card-left">' +
             '<div class="tz-city-line">' +
               '<span class="tz-flag">' + info.flag + '</span>' +
@@ -411,6 +413,7 @@
               '<button type="button" class="tz-icon-btn tz-swap-btn" title="Set as Origin"><i class="fa-solid fa-right-left"></i></button>' +
               '<button type="button" class="tz-icon-btn tz-remove-btn" title="Remove"><i class="fa-solid fa-xmark"></i></button>' +
             '</div>' +
+            '<span class="tz-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i></span>' +
           '</div>' +
         '</div>'
       );
@@ -658,7 +661,82 @@
       showToast('All time zones copied');
     });
 
+    function clearDropIndicators() {
+      var prev = dom.targetList.querySelectorAll('.tz-drop-before, .tz-drop-after');
+      for (var i = 0; i < prev.length; i++) {
+        prev[i].classList.remove('tz-drop-before', 'tz-drop-after');
+      }
+    }
+
+    dom.targetList.addEventListener('dragstart', function (e) {
+      var card = e.target.closest('.tz-card');
+      if (!card) return;
+      draggingTz = card.getAttribute('data-tz');
+      card.classList.add('tz-dragging');
+      if (e.dataTransfer) {
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', draggingTz);
+      }
+    });
+
+    dom.targetList.addEventListener('dragover', function (e) {
+      if (!draggingTz) return;
+      e.preventDefault();
+      if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+
+      var card = e.target.closest('.tz-card');
+      clearDropIndicators();
+      if (!card || card.getAttribute('data-tz') === draggingTz) return;
+
+      var rect = card.getBoundingClientRect();
+      var isBefore = e.clientY < rect.top + rect.height / 2;
+      card.classList.add(isBefore ? 'tz-drop-before' : 'tz-drop-after');
+    });
+
+    dom.targetList.addEventListener('dragleave', function (e) {
+      if (!dom.targetList.contains(e.relatedTarget)) {
+        clearDropIndicators();
+      }
+    });
+
+    dom.targetList.addEventListener('drop', function (e) {
+      if (!draggingTz) return;
+      e.preventDefault();
+
+      var card = e.target.closest('.tz-card');
+      var dropTz = card ? card.getAttribute('data-tz') : null;
+      var insertBefore = card ? card.classList.contains('tz-drop-before') : false;
+      clearDropIndicators();
+
+      if (dropTz && dropTz !== draggingTz) {
+        var fromIdx = targetTzs.indexOf(draggingTz);
+        if (fromIdx !== -1) {
+          targetTzs.splice(fromIdx, 1);
+          var toIdx = targetTzs.indexOf(dropTz);
+          if (toIdx !== -1) {
+            targetTzs.splice(insertBefore ? toIdx : toIdx + 1, 0, draggingTz);
+          } else {
+            targetTzs.push(draggingTz);
+          }
+          saveState();
+          renderResults();
+        }
+      }
+
+      justDragged = true;
+      setTimeout(function () { justDragged = false; }, 120);
+      draggingTz = null;
+    });
+
+    dom.targetList.addEventListener('dragend', function () {
+      clearDropIndicators();
+      var draggingEl = dom.targetList.querySelector('.tz-dragging');
+      if (draggingEl) draggingEl.classList.remove('tz-dragging');
+      draggingTz = null;
+    });
+
     dom.targetList.addEventListener('click', function (e) {
+      if (justDragged || e.target.closest('.tz-drag-handle')) return;
       var card = e.target.closest('.tz-card');
       if (!card) return;
       var tzId = card.getAttribute('data-tz');
