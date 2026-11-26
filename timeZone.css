@@ -439,10 +439,24 @@ html[data-theme="classic"] .tz-card {
   color: var(--text-muted);
   opacity: 0.45;
   font-size: 14px;
-  padding: 6px 2px;
+  padding: 6px 4px;
   cursor: grab;
   flex-shrink: 0;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
   transition: opacity 0.12s ease, color 0.12s ease;
+}
+
+.tz-touch-ghost {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.94;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+  border-color: var(--focus, #111111) !important;
+  margin: 0;
+  transition: none !important;
 }
 
 .tz-card:hover .tz-drag-handle {
@@ -693,5 +707,11 @@ html[data-theme="pure-edge"] .tz-origin-panel {
 
   .tz-time-str {
     font-size: 22px;
+  }
+
+  .tz-drag-handle {
+    padding: 8px 6px;
+    font-size: 16px;
+    opacity: 0.7;
   }
 }

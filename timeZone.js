@@ -667,6 +667,21 @@
       }
     }
 
+    function reorderTargetCity(fromTz, toTz, insertBefore) {
+      if (!fromTz || !toTz || fromTz === toTz) return;
+      var fromIdx = targetTzs.indexOf(fromTz);
+      if (fromIdx === -1) return;
+      targetTzs.splice(fromIdx, 1);
+      var toIdx = targetTzs.indexOf(toTz);
+      if (toIdx !== -1) {
+        targetTzs.splice(insertBefore ? toIdx : toIdx + 1, 0, fromTz);
+      } else {
+        targetTzs.push(fromTz);
+      }
+      saveState();
+      renderResults();
+    }
+
     dom.targetList.addEventListener('dragstart', function (e) {
       var card = e.target.closest('.tz-card');
       if (!card) return;
@@ -707,20 +722,7 @@
       var insertBefore = card ? card.classList.contains('tz-drop-before') : false;
       clearDropIndicators();
 
-      if (dropTz && dropTz !== draggingTz) {
-        var fromIdx = targetTzs.indexOf(draggingTz);
-        if (fromIdx !== -1) {
-          targetTzs.splice(fromIdx, 1);
-          var toIdx = targetTzs.indexOf(dropTz);
-          if (toIdx !== -1) {
-            targetTzs.splice(insertBefore ? toIdx : toIdx + 1, 0, draggingTz);
-          } else {
-            targetTzs.push(draggingTz);
-          }
-          saveState();
-          renderResults();
-        }
-      }
+      reorderTargetCity(draggingTz, dropTz, insertBefore);
 
       justDragged = true;
       setTimeout(function () { justDragged = false; }, 120);
@@ -732,6 +734,118 @@
       var draggingEl = dom.targetList.querySelector('.tz-dragging');
       if (draggingEl) draggingEl.classList.remove('tz-dragging');
       draggingTz = null;
+    });
+
+    // 모바일 터치 드래그 앤 드롭 (핸들러 전용)
+    var touchDragTz = null;
+    var touchDropTz = null;
+    var touchInsertBefore = false;
+    var touchGhost = null;
+    var touchOffsetY = 0;
+
+    function cleanupTouchDrag() {
+      clearDropIndicators();
+      if (touchGhost && touchGhost.parentNode) {
+        touchGhost.parentNode.removeChild(touchGhost);
+      }
+      var draggingEl = dom.targetList.querySelector('.tz-dragging');
+      if (draggingEl) draggingEl.classList.remove('tz-dragging');
+      touchGhost = null;
+      touchDragTz = null;
+      touchDropTz = null;
+      touchInsertBefore = false;
+    }
+
+    dom.targetList.addEventListener('touchstart', function (e) {
+      var handle = e.target.closest('.tz-drag-handle');
+      if (!handle || e.touches.length !== 1) return;
+      var card = handle.closest('.tz-card');
+      if (!card) return;
+
+      e.preventDefault();
+      var touch = e.touches[0];
+      var rect = card.getBoundingClientRect();
+
+      touchDragTz = card.getAttribute('data-tz');
+      touchDropTz = null;
+      touchInsertBefore = false;
+      touchOffsetY = touch.clientY - rect.top;
+
+      touchGhost = card.cloneNode(true);
+      touchGhost.classList.add('tz-touch-ghost');
+      touchGhost.style.width = rect.width + 'px';
+      touchGhost.style.height = rect.height + 'px';
+      touchGhost.style.left = rect.left + 'px';
+      touchGhost.style.top = rect.top + 'px';
+      document.body.appendChild(touchGhost);
+
+      card.classList.add('tz-dragging');
+    }, { passive: false });
+
+    document.addEventListener('touchmove', function (e) {
+      if (!touchDragTz || !touchGhost || e.touches.length !== 1) return;
+      e.preventDefault();
+
+      var touch = e.touches[0];
+      var clientY = touch.clientY;
+      touchGhost.style.top = (clientY - touchOffsetY) + 'px';
+
+      if (clientY < 60) {
+        window.scrollBy(0, -10);
+      } else if (clientY > window.innerHeight - 60) {
+        window.scrollBy(0, 10);
+      }
+
+      var cards = dom.targetList.querySelectorAll('.tz-card');
+      var targetCard = null;
+      var isBefore = false;
+
+      for (var i = 0; i < cards.length; i++) {
+        var c = cards[i];
+        var r = c.getBoundingClientRect();
+        if (clientY >= r.top - 10 && clientY <= r.bottom + 10) {
+          targetCard = c;
+          isBefore = clientY < r.top + r.height / 2;
+          break;
+        }
+      }
+
+      if (!targetCard && cards.length > 0) {
+        var firstRect = cards[0].getBoundingClientRect();
+        var lastRect = cards[cards.length - 1].getBoundingClientRect();
+        if (clientY < firstRect.top) {
+          targetCard = cards[0];
+          isBefore = true;
+        } else if (clientY > lastRect.bottom) {
+          targetCard = cards[cards.length - 1];
+          isBefore = false;
+        }
+      }
+
+      clearDropIndicators();
+      if (targetCard && targetCard.getAttribute('data-tz') !== touchDragTz) {
+        touchDropTz = targetCard.getAttribute('data-tz');
+        touchInsertBefore = isBefore;
+        targetCard.classList.add(isBefore ? 'tz-drop-before' : 'tz-drop-after');
+      } else {
+        touchDropTz = null;
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchend', function () {
+      if (!touchDragTz) return;
+      var fromTz = touchDragTz;
+      var toTz = touchDropTz;
+      var insertBefore = touchInsertBefore;
+      cleanupTouchDrag();
+      reorderTargetCity(fromTz, toTz, insertBefore);
+      justDragged = true;
+      setTimeout(function () { justDragged = false; }, 150);
+    });
+
+    document.addEventListener('touchcancel', function () {
+      if (!touchDragTz) return;
+      cleanupTouchDrag();
     });
 
     dom.targetList.addEventListener('click', function (e) {
