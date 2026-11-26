@@ -471,14 +471,15 @@
     bottom: 0;
     height: 3px;
     background: var(--accent);
-    width: 33.33%;
+    width: 25%;
     opacity: 0;
     transition: all 0.25s;
   }
 
   nav .nav-tabs a:nth-child(1).on ~ .nav-indicator{ left: 0; opacity: 1;}
-  nav .nav-tabs a:nth-child(2).on ~ .nav-indicator{ left: 33.33%; opacity: 1;}
-  nav .nav-tabs a:nth-child(3).on ~ .nav-indicator{ left: 66.66%; opacity: 1;}
+  nav .nav-tabs a:nth-child(2).on ~ .nav-indicator{ left: 25%; opacity: 1;}
+  nav .nav-tabs a:nth-child(3).on ~ .nav-indicator{ left: 50%; opacity: 1;}
+  nav .nav-tabs a:nth-child(4).on ~ .nav-indicator{ left: 75%; opacity: 1;}
 
   .nav-controls {
     display: flex;

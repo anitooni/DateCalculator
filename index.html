@@ -35,11 +35,13 @@
 <link href="./gapCalculator.css" rel="stylesheet">
 <link href="./toolTip.css" rel="stylesheet">
 <link href="./years4_calendar.css" rel="stylesheet">
+<link href="./timeZone.css" rel="stylesheet">
 
 <script src="./holiday.js" defer></script>
 <script src="./calendarCore.js" defer></script>
 <script src="./years4_calendar.js" defer></script>
 <script src="./datePicker.js" defer></script>
+<script src="./timeZone.js" defer></script>
 <script src="./calculate.js" defer></script>
 <script type="module" src="./con_counter.js"></script>
 </head>
@@ -52,6 +54,7 @@
         <a href="#end-date" class="on" id="menu1" data-tab="menu1"><i class="fa-regular fa-calendar mobile-only"></i><span>End Date Calculator</span></a>
         <a href="#4-years" id="menu2" data-tab="menu2"><i class="fa-solid fa-calendar-days mobile-only"></i><span>4-Years Calendar</span></a>
         <a href="#duration" id="menu3" data-tab="menu3"><i class="fa-solid fa-hourglass-half mobile-only"></i><span>Duration Calculator</span></a>
+        <a href="#time-zone" id="menu4" data-tab="menu4"><i class="fa-regular fa-clock mobile-only"></i><span>Time Zone Converter</span></a>
         <span class="nav-indicator"></span>
       </div>
       <div class="nav-controls" id="nav_controls">
@@ -305,6 +308,77 @@
         <div id="result-month"></div>
         <div id="result-week"></div>
         <div id="result-day"></div>
+      </div>
+    </div>
+
+    <div id="timezone_calculator">
+      <div class="tz-origin-panel">
+        <div>
+          <div class="tz-section-label"><span>ORIGIN CITY</span></div>
+          <select id="tz_origin_city" aria-label="Origin City"></select>
+          <div id="tz_origin_meta"></div>
+        </div>
+
+        <div>
+          <div class="tz-section-label"><span>DATE</span></div>
+          <div class="tz-date-row">
+            <input type="text" id="tz_origin_date" inputmode="numeric" autocomplete="off" aria-label="Origin Date">
+            <button type="button" id="tz_now_btn">Now</button>
+          </div>
+          <div class="tz-mini-cal">
+            <div class="tz-cal-header">
+              <button type="button" id="tz_cal_prev" class="tz-cal-nav" aria-label="Previous Month"><i class="fa-solid fa-chevron-left"></i></button>
+              <div id="tz_cal_month_label"></div>
+              <button type="button" id="tz_cal_next" class="tz-cal-nav" aria-label="Next Month"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div id="tz_cal_body"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="tz-section-label"><span>TIME</span></div>
+          <div class="tz-time-inputs">
+            <div class="num-stepper tz-time-stepper">
+              <input type="number" id="tz_hour_input" min="0" max="23" value="9" aria-label="Hour">
+              <div class="stepper-btns">
+                <button type="button" class="step-btn tz-step-btn" data-field="hour" data-step="1" aria-label="Increase hour"><i class="fa-solid fa-caret-up"></i></button>
+                <button type="button" class="step-btn tz-step-btn" data-field="hour" data-step="-1" aria-label="Decrease hour"><i class="fa-solid fa-caret-down"></i></button>
+              </div>
+            </div>
+            <span class="tz-time-colon">:</span>
+            <div class="num-stepper tz-time-stepper">
+              <input type="number" id="tz_min_input" min="0" max="59" value="0" aria-label="Minute">
+              <div class="stepper-btns">
+                <button type="button" class="step-btn tz-step-btn" data-field="min" data-step="15" aria-label="Increase 15 minutes"><i class="fa-solid fa-caret-up"></i></button>
+                <button type="button" class="step-btn tz-step-btn" data-field="min" data-step="-15" aria-label="Decrease 15 minutes"><i class="fa-solid fa-caret-down"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="tz-slider-wrap">
+            <input type="range" id="tz_time_slider" min="0" max="1425" step="15" value="540" aria-label="Time Slider">
+            <div class="tz-slider-ticks">
+              <span>00:00</span><span>06:00</span><span>12:00</span><span>18:00</span><span>23:45</span>
+            </div>
+          </div>
+          <div class="tz-quick-times" id="tz_quick_times">
+            <button type="button" data-time="09:00">09:00</button>
+            <button type="button" data-time="13:00">13:00</button>
+            <button type="button" data-time="18:00">18:00</button>
+            <button type="button" data-time="21:00">21:00</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tz-targets-panel">
+        <div class="tz-targets-header">
+          <div class="tz-targets-title">Target Cities</div>
+          <div class="tz-targets-controls">
+            <select id="tz_add_city" aria-label="Add Target City"></select>
+            <button type="button" id="tz_format_toggle" title="Toggle 24H/12H">24H</button>
+            <button type="button" id="tz_copy_all" title="Copy all time zones"><i class="fa-regular fa-copy"></i> Copy All</button>
+          </div>
+        </div>
+        <div id="tz_target_list"></div>
       </div>
     </div>
   </div>

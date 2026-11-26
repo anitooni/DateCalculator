@@ -182,6 +182,9 @@
     if (typeof global.onRegionChange === 'function') {
       global.onRegionChange(activeRegion);
     }
+    if (typeof global.onTimeZoneRegionChange === 'function') {
+      global.onTimeZoneRegionChange(activeRegion);
+    }
     if (typeof global.refreshFourYearCalendarHolidays === 'function') {
       global.refreshFourYearCalendarHolidays();
     }
@@ -227,6 +230,7 @@
       dom.gapCalcPanel.style.transform = '';
       dom.cal4yPanel.style.transform = '';
       dom.cal4yPanel.style.marginBottom = '';
+      if (dom.tzPanel) dom.tzPanel.style.transform = '';
       updateMobileMonthView();
       return;
     }
@@ -235,7 +239,7 @@
       dom.navControls.classList.remove('mobile-open');
     }
 
-    var isFitTab = currentTab === 'menu1' || currentTab === 'menu3';
+    var isFitTab = currentTab === 'menu1' || currentTab === 'menu3' || currentTab === 'menu4';
     var is4yTab = currentTab === 'menu2';
     document.documentElement.classList.toggle('fit-viewport', isFitTab);
     document.documentElement.classList.toggle('tab-4y', is4yTab);
@@ -248,6 +252,7 @@
     if (is4yTab) {
       dom.endDatePanel.style.transform = '';
       dom.gapCalcPanel.style.transform = '';
+      if (dom.tzPanel) dom.tzPanel.style.transform = '';
       dom.cal4yPanel.style.transform = 'none';
       dom.cal4yPanel.style.marginBottom = '0px';
 
@@ -265,7 +270,10 @@
     dom.cal4yPanel.style.transform = '';
     dom.cal4yPanel.style.marginBottom = '';
 
-    var targetEl = currentTab === 'menu1' ? dom.endDatePanel : dom.gapCalcPanel;
+    var targetEl = currentTab === 'menu1'
+      ? dom.endDatePanel
+      : (currentTab === 'menu3' ? dom.gapCalcPanel : dom.tzPanel);
+    if (!targetEl) return;
     targetEl.style.transform = 'none';
 
     var naturalW = targetEl.offsetWidth;
@@ -287,6 +295,8 @@
     });
   }
 
+  global.scheduleFitViewport = scheduleFitViewport;
+
   function switchTab(tabId) {
     currentTab = tabId;
     global.CalendarCore.hideTooltip();
@@ -294,6 +304,7 @@
     dom.endDatePanel.style.display = tabId === 'menu1' ? 'flex' : 'none';
     dom.cal4yPanel.style.display = tabId === 'menu2' ? 'block' : 'none';
     dom.gapCalcPanel.style.display = tabId === 'menu3' ? 'flex' : 'none';
+    if (dom.tzPanel) dom.tzPanel.style.display = tabId === 'menu4' ? 'flex' : 'none';
 
     for (var i = 0; i < dom.navLinks.length; i++) {
       dom.navLinks[i].classList.toggle('on', dom.navLinks[i].id === tabId);
@@ -303,6 +314,8 @@
       global.initFourYearCalendar(now.getFullYear());
     } else if (tabId === 'menu3' && typeof global.initDurationCalculator === 'function') {
       global.initDurationCalculator(activeRegion);
+    } else if (tabId === 'menu4' && typeof global.initTimeZoneCalculator === 'function') {
+      global.initTimeZoneCalculator();
     }
 
     scheduleFitViewport();
@@ -337,6 +350,7 @@
     dom.endDatePanel = document.getElementById('end_date_calculator');
     dom.cal4yPanel = document.getElementById('cal_4y');
     dom.gapCalcPanel = document.getElementById('gap_calculate');
+    dom.tzPanel = document.getElementById('timezone_calculator');
 
     dom.viewCal = document.getElementById('viewCal');
     dom.selectedYear = document.getElementById('selected_year');
@@ -586,6 +600,7 @@
     dom.endDatePanel.style.display = 'flex';
     dom.gapCalcPanel.style.display = 'none';
     dom.cal4yPanel.style.display = 'none';
+    if (dom.tzPanel) dom.tzPanel.style.display = 'none';
 
     bindEvents();
     renderYearCalendar();
